@@ -9,10 +9,33 @@
 <body>
 <div layout:fragment="content">
     <!-- Page header -->
-    <div class="mb-8">
-        <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Dashboard</h1>
-        <p class="text-sm text-gray-500 mt-1">Welcome to AI User Control</p>
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Dashboard</h1>
+            <p class="text-sm text-gray-500 mt-1">Welcome to AI User Control</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <button type="button"
+                    hx-post="/sync"
+                    hx-target="#sync-result-container"
+                    hx-swap="innerHTML"
+                    hx-indicator="#sync-spinner"
+                    hx-disabled-elt="this"
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182M2.985 19.644l3.181-3.182" />
+                </svg>
+                <span>Sincronizar</span>
+                <svg id="sync-spinner" class="htmx-indicator h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </button>
+        </div>
     </div>
+
+    <!-- Sync result container (HTMX target for toast) -->
+    <div id="sync-result-container"></div>
 
     <!-- Stats cards -->
     <div class="grid grid-cols-3 gap-4 mb-8">
@@ -26,7 +49,7 @@
         </div>
         <div class="bg-white rounded-lg border border-gray-200 p-5">
             <div class="text-xs font-medium text-gray-500 uppercase tracking-wider">Active Accounts</div>
-            <div class="mt-2 text-2xl font-semibold text-gray-900">0</div>
+            <div class="mt-2 text-2xl font-semibold text-gray-900" th:text="${activeAccountCount != null ? activeAccountCount : 0}">0</div>
         </div>
     </div>
 

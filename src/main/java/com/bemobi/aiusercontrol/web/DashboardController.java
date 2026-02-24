@@ -1,6 +1,8 @@
 package com.bemobi.aiusercontrol.web;
 
 import com.bemobi.aiusercontrol.aitool.service.AIToolService;
+import com.bemobi.aiusercontrol.enums.AccountStatus;
+import com.bemobi.aiusercontrol.user.repository.UserAIToolAccountRepository;
 import com.bemobi.aiusercontrol.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +13,13 @@ public class DashboardController {
 
     private final UserService userService;
     private final AIToolService aiToolService;
+    private final UserAIToolAccountRepository userAIToolAccountRepository;
 
-    public DashboardController(UserService userService, AIToolService aiToolService) {
+    public DashboardController(UserService userService, AIToolService aiToolService,
+                               UserAIToolAccountRepository userAIToolAccountRepository) {
         this.userService = userService;
         this.aiToolService = aiToolService;
+        this.userAIToolAccountRepository = userAIToolAccountRepository;
     }
 
     @GetMapping("/")
@@ -26,6 +31,7 @@ public class DashboardController {
     public String dashboard(Model model) {
         model.addAttribute("userCount", userService.count());
         model.addAttribute("toolCount", aiToolService.count());
+        model.addAttribute("activeAccountCount", userAIToolAccountRepository.countByStatus(AccountStatus.ACTIVE));
         return "dashboard";
     }
 }

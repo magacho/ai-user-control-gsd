@@ -70,7 +70,7 @@ class SyncOrchestratorTest {
     void testFullSync_createsNewUsersFromGWS() {
         // Given: GWS returns users not in DB
         GoogleWorkspaceService.GwsUser gwsUser = new GoogleWorkspaceService.GwsUser(
-                "john@bemobi.com", "John Doe", "https://photo.url/john", "johndoe");
+                "john@bemobi.com", "John Doe", "https://photo.url/john", "johndoe", "Engineering");
 
         when(googleWorkspaceService.fetchAllUsers()).thenReturn(List.of(gwsUser));
         when(userRepository.findByEmail("john@bemobi.com")).thenReturn(Optional.empty());
@@ -99,7 +99,7 @@ class SyncOrchestratorTest {
     void testFullSync_updatesExistingUsersFromGWS() {
         // Given: GWS returns user already in DB
         GoogleWorkspaceService.GwsUser gwsUser = new GoogleWorkspaceService.GwsUser(
-                "jane@bemobi.com", "Jane Updated", "https://photo.url/jane-new", "janegh");
+                "jane@bemobi.com", "Jane Updated", "https://photo.url/jane-new", "janegh", "Product");
 
         User existingUser = User.builder()
                 .id(1L)

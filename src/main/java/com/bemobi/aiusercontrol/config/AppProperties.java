@@ -18,7 +18,10 @@ public class AppProperties {
     }
 
     public void setAdminEmails(List<String> adminEmails) {
-        this.adminEmails = adminEmails;
+        this.adminEmails = adminEmails.stream()
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
     }
 
     public GoogleWorkspace getGoogleWorkspace() {
@@ -43,7 +46,7 @@ public class AppProperties {
         private String serviceAccountKeyPath;
         private String delegatedAdminEmail;
         private String domain;
-        private String customSchemaName = "Custom";
+        private String customSchemaName = "GitHub";
 
         public GoogleWorkspace() {
         }

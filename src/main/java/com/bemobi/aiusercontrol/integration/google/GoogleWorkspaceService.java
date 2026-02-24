@@ -94,7 +94,22 @@ public class GoogleWorkspaceService {
             }
         }
 
-        return new GwsUser(email, name, avatarUrl, githubUsername);
+        String department = null;
+        List<Map<String, Object>> organizations = (List<Map<String, Object>>) user.get("organizations");
+        if (organizations != null) {
+            for (Map<String, Object> org : organizations) {
+                Boolean primary = (Boolean) org.get("primary");
+                if (Boolean.TRUE.equals(primary)) {
+                    Object dept = org.get("department");
+                    if (dept != null) {
+                        department = dept.toString();
+                    }
+                    break;
+                }
+            }
+        }
+
+        return new GwsUser(email, name, avatarUrl, githubUsername, department);
     }
 
     public static class GwsUser {
@@ -103,12 +118,14 @@ public class GoogleWorkspaceService {
         private final String name;
         private final String avatarUrl;
         private final String githubUsername;
+        private final String department;
 
-        public GwsUser(String email, String name, String avatarUrl, String githubUsername) {
+        public GwsUser(String email, String name, String avatarUrl, String githubUsername, String department) {
             this.email = email;
             this.name = name;
             this.avatarUrl = avatarUrl;
             this.githubUsername = githubUsername;
+            this.department = department;
         }
 
         public String getEmail() {
@@ -125,6 +142,10 @@ public class GoogleWorkspaceService {
 
         public String getGithubUsername() {
             return githubUsername;
+        }
+
+        public String getDepartment() {
+            return department;
         }
 
         @Override
@@ -147,6 +168,7 @@ public class GoogleWorkspaceService {
                     ", name='" + name + '\'' +
                     ", avatarUrl='" + avatarUrl + '\'' +
                     ", githubUsername='" + githubUsername + '\'' +
+                    ", department='" + department + '\'' +
                     '}';
         }
     }

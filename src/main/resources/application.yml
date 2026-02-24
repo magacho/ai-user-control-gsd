@@ -110,8 +110,7 @@ app:
   version: 1.0.0
   description: Sistema de gestão e controle de uso de ferramentas de IA
 
-  admin-emails:
-    - ${ADMIN_EMAIL:admin@bemobi.com}
+  admin-emails: ${ADMIN_EMAIL:admin@bemobi.com}
 
   google-workspace:
     enabled: ${GWS_ENABLED:false}

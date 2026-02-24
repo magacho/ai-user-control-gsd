@@ -78,6 +78,7 @@ public class UserService {
                 .name(user.getName())
                 .department(user.getDepartment())
                 .avatarUrl(user.getAvatarUrl())
+                .githubUsername(user.getGithubUsername())
                 .status(user.getStatus() != null ? user.getStatus().name() : null)
                 .lastLoginAt(user.getLastLoginAt())
                 .createdAt(user.getCreatedAt())

@@ -14,6 +14,7 @@ public class UserResponse {
     private String name;
     private String department;
     private String avatarUrl;
+    private String githubUsername;
     private String status;
     private Instant lastLoginAt;
     private Instant createdAt;
@@ -22,12 +23,13 @@ public class UserResponse {
     }
 
     public UserResponse(Long id, String email, String name, String department, String avatarUrl,
-                        String status, Instant lastLoginAt, Instant createdAt) {
+                        String githubUsername, String status, Instant lastLoginAt, Instant createdAt) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.department = department;
         this.avatarUrl = avatarUrl;
+        this.githubUsername = githubUsername;
         this.status = status;
         this.lastLoginAt = lastLoginAt;
         this.createdAt = createdAt;
@@ -77,6 +79,14 @@ public class UserResponse {
         this.avatarUrl = avatarUrl;
     }
 
+    public String getGithubUsername() {
+        return githubUsername;
+    }
+
+    public void setGithubUsername(String githubUsername) {
+        this.githubUsername = githubUsername;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -111,6 +121,7 @@ public class UserResponse {
         private String name;
         private String department;
         private String avatarUrl;
+        private String githubUsername;
         private String status;
         private Instant lastLoginAt;
         private Instant createdAt;
@@ -140,6 +151,11 @@ public class UserResponse {
             return this;
         }
 
+        public Builder githubUsername(String githubUsername) {
+            this.githubUsername = githubUsername;
+            return this;
+        }
+
         public Builder status(String status) {
             this.status = status;
             return this;
@@ -156,7 +172,7 @@ public class UserResponse {
         }
 
         public UserResponse build() {
-            return new UserResponse(id, email, name, department, avatarUrl, status, lastLoginAt, createdAt);
+            return new UserResponse(id, email, name, department, avatarUrl, githubUsername, status, lastLoginAt, createdAt);
         }
     }
 }

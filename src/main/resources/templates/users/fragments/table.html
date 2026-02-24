@@ -21,6 +21,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Git Login</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
                 </tr>
@@ -44,6 +45,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${user.email}">email@example.com</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${user.department ?: '-'}">Department</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${user.githubUsername ?: '-'}">Git Login</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span th:if="${user.status == 'ACTIVE'}"
                               class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Active</span>

@@ -90,6 +90,7 @@ public class SyncOrchestrator {
                     // Update existing user - GWS is source of truth
                     User user = existingUser.get();
                     user.setName(gwsUser.getName());
+                    user.setDepartment(gwsUser.getDepartment());
                     user.setAvatarUrl(gwsUser.getAvatarUrl());
                     user.setGithubUsername(gwsUser.getGithubUsername());
                     if (user.getStatus() != UserStatus.OFFBOARDED) {
@@ -103,6 +104,7 @@ public class SyncOrchestrator {
                     User newUser = User.builder()
                             .email(gwsUser.getEmail().toLowerCase())
                             .name(gwsUser.getName())
+                            .department(gwsUser.getDepartment())
                             .avatarUrl(gwsUser.getAvatarUrl())
                             .githubUsername(gwsUser.getGithubUsername())
                             .status(UserStatus.ACTIVE)

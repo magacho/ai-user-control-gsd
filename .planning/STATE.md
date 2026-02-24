@@ -5,32 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** Transparent AI tool costs with zero wasted spending on orphaned accounts
-**Current focus:** Phase 1: Auth & User Management
+**Current focus:** Phase 2: Identity Resolution & Account Linking
 
 ## Current Position
 
-Phase: 1 of 8 (Auth & User Management) -- COMPLETE
-Plan: 3 of 3 in current phase
-Status: Phase Complete
-Last activity: 2026-02-24 — Completed 01-03-PLAN.md (Admin Dashboard UI)
+Phase: 2 of 8 (Identity Resolution & Account Linking)
+Plan: 1 of 3 in current phase
+Status: Executing
+Last activity: 2026-02-24 — Completed 02-01-PLAN.md (Data Foundation)
 
-Progress: [██░░░░░░░░] 15%
+Progress: [███░░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 4.7min
-- Total execution time: 0.23 hours
+- Total plans completed: 4
+- Average duration: 4.8min
+- Total execution time: 0.32 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 Auth & User Management | 3/3 | 14min | 4.7min |
+| 02 Identity Resolution | 1/3 | 5min | 5min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3min), 01-02 (4min), 01-03 (7min)
+- Last 5 plans: 01-01 (3min), 01-02 (4min), 01-03 (7min), 02-01 (5min)
 - Trend: Steady
 
 *Updated after each plan completion*
@@ -61,6 +62,11 @@ Recent decisions affecting current work:
 - [01-03]: HTMX modal overlay pattern for AI tool CRUD forms
 - [01-03]: UserResponse pre-formatted date field to avoid Thymeleaf #temporals.format Instant incompatibility
 - [01-03]: No Lombok in DTOs/services/controllers per CLAUDE.md (explicit builders, getters, setters)
+- [02-01]: V5 migration uses CREATE TABLE IF NOT EXISTS since V3 stub was empty and already applied by Flyway
+- [02-01]: API key masked in responses as ****<last4> for security
+- [02-01]: Update endpoint preserves existing API key when blank value submitted
+- [02-01]: GoogleWorkspaceConfig uses @ConditionalOnProperty for conditional loading
+- [02-01]: UserAIToolAccount has unique constraint on (ai_tool_id, account_identifier) for deduplication
 
 ### Pending Todos
 
@@ -74,5 +80,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 01-03-PLAN.md (Admin Dashboard UI) -- Phase 1 Complete
-Resume file: .planning/phases/01-auth-user-management/01-03-SUMMARY.md
+Stopped at: Completed 02-01-PLAN.md (Data Foundation)
+Resume file: .planning/phases/02-identity-resolution-account-linking/02-01-SUMMARY.md

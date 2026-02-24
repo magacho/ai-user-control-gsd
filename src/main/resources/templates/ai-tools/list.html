@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}"
+      lang="en">
+<head>
+    <title>AI Tools</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Page header -->
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-3">
+            <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">AI Tools</h1>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                  th:text="${toolCount}">0</span>
+        </div>
+        <button type="button"
+                hx-get="/ai-tools/new"
+                hx-target="#modal-container"
+                hx-swap="innerHTML"
+                class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors duration-150">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            Add AI Tool
+        </button>
+    </div>
+
+    <!-- Tool table (HTMX loaded) -->
+    <div id="tool-table" hx-get="/ai-tools/table" hx-trigger="load" hx-swap="innerHTML">
+        <!-- Loading skeleton -->
+        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="animate-pulse p-6 space-y-4">
+                <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+                <div class="space-y-3">
+                    <div class="h-10 bg-gray-100 rounded"></div>
+                    <div class="h-10 bg-gray-100 rounded"></div>
+                    <div class="h-10 bg-gray-100 rounded"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal container for HTMX-loaded forms -->
+    <div id="modal-container"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<body>
+<div th:fragment="toolForm">
+    <!-- Modal overlay -->
+    <div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center"
+         onclick="if(event.target===this)this.remove()">
+        <div class="fixed inset-0 bg-black bg-opacity-25"></div>
+
+        <!-- Modal content -->
+        <div class="modal-content relative bg-white rounded-xl shadow-lg border border-gray-200 w-full max-w-lg mx-4 p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-900"
+                    th:text="${editMode ? 'Edit AI Tool' : 'Add AI Tool'}">Add AI Tool</h3>
+                <button type="button" onclick="this.closest('.modal-overlay').remove()"
+                        class="text-gray-400 hover:text-gray-600 transition-colors duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form th:if="${editMode}"
+                  th:action="@{/ai-tools/{id}(id=${toolId})}"
+                  th:object="${aiToolRequest}"
+                  hx-put=""
+                  th:attr="hx-put=${'/ai-tools/' + toolId}"
+                  hx-target="#tool-table"
+                  hx-swap="innerHTML"
+                  class="space-y-4">
+
+                <input type="hidden" name="_method" value="PUT" />
+
+                <!-- Name -->
+                <div>
+                    <label for="name-edit" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                    <input type="text" id="name-edit" th:field="*{name}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                           placeholder="e.g. Claude for Teams">
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="mt-1 text-xs text-red-600">Error</p>
+                </div>
+
+                <!-- Tool Type -->
+                <div>
+                    <label for="toolType-edit" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <select id="toolType-edit" th:field="*{toolType}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white">
+                        <option value="">Select a type</option>
+                        <option th:each="type : ${toolTypes}" th:value="${type}" th:text="${type}">TYPE</option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('toolType')}" th:errors="*{toolType}" class="mt-1 text-xs text-red-600">Error</p>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label for="description-edit" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="description-edit" th:field="*{description}" rows="2"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+                              placeholder="Brief description of this tool"></textarea>
+                </div>
+
+                <!-- API Base URL -->
+                <div>
+                    <label for="apiBaseUrl-edit" class="block text-sm font-medium text-gray-700 mb-1">API Base URL</label>
+                    <input type="text" id="apiBaseUrl-edit" th:field="*{apiBaseUrl}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                           placeholder="https://api.example.com/v1">
+                </div>
+
+                <!-- Icon URL -->
+                <div>
+                    <label for="iconUrl-edit" class="block text-sm font-medium text-gray-700 mb-1">Icon URL</label>
+                    <input type="text" id="iconUrl-edit" th:field="*{iconUrl}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                           placeholder="https://example.com/icon.svg">
+                </div>
+
+                <!-- Enabled toggle -->
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="enabled-edit" th:field="*{enabled}"
+                           class="h-4 w-4 text-gray-900 rounded border-gray-300 focus:ring-gray-900">
+                    <label for="enabled-edit" class="text-sm font-medium text-gray-700">Enabled</label>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="this.closest('.modal-overlay').remove()"
+                            class="px-3.5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-150">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="px-3.5 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 transition-colors duration-150">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+
+            <form th:if="${!editMode}"
+                  th:action="@{/ai-tools}"
+                  th:object="${aiToolRequest}"
+                  hx-post="/ai-tools"
+                  hx-target="#tool-table"
+                  hx-swap="innerHTML"
+                  class="space-y-4">
+
+                <!-- Name -->
+                <div>
+                    <label for="name-new" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                    <input type="text" id="name-new" th:field="*{name}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                           placeholder="e.g. Claude for Teams">
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="mt-1 text-xs text-red-600">Error</p>
+                </div>
+
+                <!-- Tool Type -->
+                <div>
+                    <label for="toolType-new" class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                    <select id="toolType-new" th:field="*{toolType}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white">
+                        <option value="">Select a type</option>
+                        <option th:each="type : ${toolTypes}" th:value="${type}" th:text="${type}">TYPE</option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('toolType')}" th:errors="*{toolType}" class="mt-1 text-xs text-red-600">Error</p>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label for="description-new" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="description-new" th:field="*{description}" rows="2"
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent resize-none"
+                              placeholder="Brief description of this tool"></textarea>
+                </div>
+
+                <!-- API Base URL -->
+                <div>
+                    <label for="apiBaseUrl-new" class="block text-sm font-medium text-gray-700 mb-1">API Base URL</label>
+                    <input type="text" id="apiBaseUrl-new" th:field="*{apiBaseUrl}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                           placeholder="https://api.example.com/v1">
+                </div>
+
+                <!-- Icon URL -->
+                <div>
+                    <label for="iconUrl-new" class="block text-sm font-medium text-gray-700 mb-1">Icon URL</label>
+                    <input type="text" id="iconUrl-new" th:field="*{iconUrl}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                           placeholder="https://example.com/icon.svg">
+                </div>
+
+                <!-- Enabled toggle -->
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="enabled-new" th:field="*{enabled}"
+                           class="h-4 w-4 text-gray-900 rounded border-gray-300 focus:ring-gray-900">
+                    <label for="enabled-new" class="text-sm font-medium text-gray-700">Enabled</label>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="this.closest('.modal-overlay').remove()"
+                            class="px-3.5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-150">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="px-3.5 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 transition-colors duration-150">
+                        Create Tool
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

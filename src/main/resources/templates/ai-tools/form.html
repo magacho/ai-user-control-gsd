@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}"
+      lang="en">
+<head>
+    <title>AI Tool</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Redirect to list page - form is handled via HTMX modal -->
+    <script>window.location.href='/ai-tools';</script>
+</div>
+</body>
+</html>

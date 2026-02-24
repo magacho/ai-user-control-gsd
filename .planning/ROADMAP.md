@@ -151,8 +151,8 @@ Note: Phase 7 (Cursor) depends on Phase 3 (not Phase 6), so it could execute in 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Auth & User Management | 0/3 | Planning complete | - |
-| 2. Identity Resolution & Account Linking | 0/3 | Planning complete | - |
+| 1. Auth & User Management | 3/3 | Complete | 2026-02-24 |
+| 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
 | 3. Metrics Pipeline & Claude Integration | 0/3 | Not started | - |
 | 4. GitHub Copilot Integration | 0/2 | Not started | - |
 | 5. Cost Calculation & Inactive Detection | 0/2 | Not started | - |

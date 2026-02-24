@@ -36,7 +36,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ACCT-01**: Admin can link user email to Claude account identifier
 - [x] **ACCT-02**: Admin can link user email to Cursor account identifier
 - [x] **ACCT-03**: Admin can link user email to GitHub username via Google Workspace custom property
-- [ ] **ACCT-04**: Admin can view all tool accounts linked to a specific user
+- [x] **ACCT-04**: Admin can view all tool accounts linked to a specific user
 - [x] **ACCT-05**: Admin can unlink tool account from user
 - [x] **ACCT-06**: System tracks account status per tool (ACTIVE, SUSPENDED, REVOKED)
 - [x] **ACCT-07**: System handles multiple accounts per tool per user
@@ -202,7 +202,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACCT-01 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-02 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-03 | Phase 2: Identity Resolution & Account Linking | Complete |
-| ACCT-04 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-04 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-05 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-06 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-07 | Phase 2: Identity Resolution & Account Linking | Complete |

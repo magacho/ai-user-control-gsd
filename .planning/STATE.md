@@ -5,33 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** Transparent AI tool costs with zero wasted spending on orphaned accounts
-**Current focus:** Phase 2: Identity Resolution & Account Linking
+**Current focus:** Phase 3: Metrics Pipeline & Claude Integration
 
 ## Current Position
 
-Phase: 2 of 8 (Identity Resolution & Account Linking)
-Plan: 2 of 3 in current phase
-Status: Executing
-Last activity: 2026-02-24 — Completed 02-02-PLAN.md (Sync Service Layer)
+Phase: 3 of 8 (Metrics Pipeline & Claude Integration)
+Plan: 0 of 3 in current phase
+Status: Phase 2 complete, Phase 3 not started
+Last activity: 2026-02-24 — Completed 02-03-PLAN.md (Admin UI for Sync, User Detail, and Pending Accounts)
 
-Progress: [████░░░░░░] 25%
+Progress: [████████░░░░░░░░░░░░] 38%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: 5min
-- Total execution time: 0.42 hours
+- Total plans completed: 6
+- Average duration: 7min
+- Total execution time: 0.68 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 Auth & User Management | 3/3 | 14min | 4.7min |
-| 02 Identity Resolution | 2/3 | 11min | 5.5min |
+| 02 Identity Resolution | 3/3 | 26min | 8.7min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3min), 01-02 (4min), 01-03 (7min), 02-01 (5min), 02-02 (6min)
+- Last 5 plans: 01-02 (4min), 01-03 (7min), 02-01 (5min), 02-02 (6min), 02-03 (15min)
 - Trend: Steady
 
 *Updated after each plan completion*
@@ -73,6 +73,10 @@ Recent decisions affecting current work:
 - [02-02]: ClaudeApiClient/CursorApiClient return empty list on HTTP errors (graceful degradation)
 - [02-02]: SyncOrchestrator uses @Autowired(required=false) with setter methods for optional beans and testability
 - [02-02]: GitHub Copilot explicitly skipped during sync (deferred to Phase 4)
+- [02-03]: SidebarModelAdvice @ControllerAdvice provides pendingAccountsCount globally for all pages
+- [02-03]: OAuth2 prompt=select_account added to SecurityConfig for Google account selector on login
+- [02-03]: Pending accounts defined as: unmatched (user=null) OR belonging to OFFBOARDED users
+- [02-03]: Unlink action uses HTMX DELETE with hx-confirm for safety
 
 ### Pending Todos
 
@@ -86,5 +90,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 02-02-PLAN.md (Sync Service Layer)
-Resume file: .planning/phases/02-identity-resolution-account-linking/02-02-SUMMARY.md
+Stopped at: Completed 02-03-PLAN.md (Admin UI for Sync, User Detail, and Pending Accounts) -- Phase 2 complete
+Resume file: .planning/phases/02-identity-resolution-account-linking/02-03-SUMMARY.md

@@ -24,19 +24,19 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Auth & User Management
-**Goal**: Admins and developers can securely log in with appropriate access, and admins can manage the corporate user registry
+**Goal**: Admin-only access via Google SSO with corporate user registry (read-only) and extensible AI tool catalog
 **Depends on**: Nothing (first phase)
 **Requirements**: AUTH-01, AUTH-02, AUTH-03, AUTH-04, USER-01, USER-02, USER-03, USER-04, USER-05, USER-06
 **Success Criteria** (what must be TRUE):
-  1. Admin can log in and access system management features; developer can log in and is restricted to personal scope only
-  2. Admin can create, view, update, and deactivate users with @bemobi.com email validation enforced
-  3. User sessions persist securely across requests without re-authentication
-  4. System tracks and displays user status (ACTIVE, INACTIVE, OFFBOARDED) correctly
-**Plans**: TBD
+  1. Admin can log in via Google SSO and access all system features; platform is admin-only (developer login dropped)
+  2. Admin can view users (read-only), and manage AI tool catalog through the UI
+  3. User sessions persist securely across requests with 8-hour timeout
+  4. System tracks user status (ACTIVE, INACTIVE, OFFBOARDED) in data model
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md -- Foundation: OAuth2 deps, data models, Flyway migrations, security config, auth flow
+- [ ] 01-02-PLAN.md -- UI: Dashboard layout with sidebar, read-only user list, AI Tool CRUD with HTMX
 
 ### Phase 2: Identity Resolution & Account Linking
 **Goal**: System resolves corporate identities via Google Workspace and admins can link users to their AI tool accounts
@@ -155,7 +155,7 @@ Note: Phase 7 (Cursor) depends on Phase 3 (not Phase 6), so it could execute in 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Auth & User Management | 0/2 | Not started | - |
+| 1. Auth & User Management | 0/2 | Planning complete | - |
 | 2. Identity Resolution & Account Linking | 0/2 | Not started | - |
 | 3. Metrics Pipeline & Claude Integration | 0/3 | Not started | - |
 | 4. GitHub Copilot Integration | 0/2 | Not started | - |

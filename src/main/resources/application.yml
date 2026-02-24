@@ -113,6 +113,12 @@ app:
   admin-emails:
     - ${ADMIN_EMAIL:admin@bemobi.com}
 
+  google-workspace:
+    enabled: ${GWS_ENABLED:false}
+    service-account-key-path: ${GWS_SERVICE_ACCOUNT_KEY_PATH:}
+    delegated-admin-email: ${GWS_DELEGATED_ADMIN_EMAIL:}
+    domain: ${GWS_DOMAIN:bemobi.com}
+
   # AI Tools Integration
   integrations:
     claude:

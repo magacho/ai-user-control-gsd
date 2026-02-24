@@ -11,6 +11,7 @@ import java.util.List;
 public class AppProperties {
 
     private List<String> adminEmails = new ArrayList<>();
+    private GoogleWorkspace googleWorkspace = new GoogleWorkspace();
 
     public List<String> getAdminEmails() {
         return adminEmails;
@@ -20,10 +21,72 @@ public class AppProperties {
         this.adminEmails = adminEmails;
     }
 
+    public GoogleWorkspace getGoogleWorkspace() {
+        return googleWorkspace;
+    }
+
+    public void setGoogleWorkspace(GoogleWorkspace googleWorkspace) {
+        this.googleWorkspace = googleWorkspace;
+    }
+
     @Override
     public String toString() {
         return "AppProperties{" +
                 "adminEmails=" + adminEmails +
+                ", googleWorkspace=" + googleWorkspace +
                 '}';
+    }
+
+    public static class GoogleWorkspace {
+
+        private boolean enabled;
+        private String serviceAccountKeyPath;
+        private String delegatedAdminEmail;
+        private String domain;
+
+        public GoogleWorkspace() {
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getServiceAccountKeyPath() {
+            return serviceAccountKeyPath;
+        }
+
+        public void setServiceAccountKeyPath(String serviceAccountKeyPath) {
+            this.serviceAccountKeyPath = serviceAccountKeyPath;
+        }
+
+        public String getDelegatedAdminEmail() {
+            return delegatedAdminEmail;
+        }
+
+        public void setDelegatedAdminEmail(String delegatedAdminEmail) {
+            this.delegatedAdminEmail = delegatedAdminEmail;
+        }
+
+        public String getDomain() {
+            return domain;
+        }
+
+        public void setDomain(String domain) {
+            this.domain = domain;
+        }
+
+        @Override
+        public String toString() {
+            return "GoogleWorkspace{" +
+                    "enabled=" + enabled +
+                    ", serviceAccountKeyPath='" + serviceAccountKeyPath + '\'' +
+                    ", delegatedAdminEmail='" + delegatedAdminEmail + '\'' +
+                    ", domain='" + domain + '\'' +
+                    '}';
+        }
     }
 }

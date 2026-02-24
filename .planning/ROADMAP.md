@@ -19,24 +19,27 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 5: Cost Calculation & Inactive Detection** - Turn raw metrics into dollar costs and flag orphaned accounts
 - [ ] **Phase 6: Admin Dashboard** - Full visibility UI for admins across all users, tools, and costs
 - [ ] **Phase 7: Cursor Integration** - Third provider with fallback CSV import for API instability
-- [ ] **Phase 8: Developer Self-Service** - Personal usage dashboard restricted to own data
+- [x] **Phase 8: Developer Self-Service** - ~~Personal usage dashboard restricted to own data~~ **DROPPED** (admin-only platform)
 
 ## Phase Details
 
 ### Phase 1: Auth & User Management
 **Goal**: Admin-only access via Google SSO with corporate user registry (read-only) and extensible AI tool catalog
 **Depends on**: Nothing (first phase)
-**Requirements**: AUTH-01, AUTH-02, AUTH-03, AUTH-04, USER-01, USER-02, USER-03, USER-04, USER-05, USER-06
+**Requirements**: AUTH-01, AUTH-03, AUTH-04, USER-01, USER-05, USER-06
+**Dropped/Reframed**: AUTH-02 (dropped -- no developer login), USER-02 (reframed -- users from provider APIs), USER-03 (reframed -- read-only), USER-04 (reframed -- status automatic)
 **Success Criteria** (what must be TRUE):
   1. Admin can log in via Google SSO and access all system features; platform is admin-only (developer login dropped)
   2. Admin can view users (read-only), and manage AI tool catalog through the UI
   3. User sessions persist securely across requests with 8-hour timeout
   4. System tracks user status (ACTIVE, INACTIVE, OFFBOARDED) in data model
-**Plans**: 2 plans
+  5. Unit tests verify security-critical authentication validation logic
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- Foundation: OAuth2 deps, data models, Flyway migrations, security config, auth flow
-- [ ] 01-02-PLAN.md -- UI: Dashboard layout with sidebar, read-only user list, AI Tool CRUD with HTMX
+- [ ] 01-01-PLAN.md -- Data foundation: OAuth2 deps, Flyway migrations, JPA entities, repositories, config
+- [ ] 01-02-PLAN.md -- Auth flow: SecurityConfig, CustomOidcUserService, login page, unit tests
+- [ ] 01-03-PLAN.md -- UI: Dashboard layout with sidebar, read-only user list, AI Tool CRUD with HTMX
 
 ### Phase 2: Identity Resolution & Account Linking
 **Goal**: System resolves corporate identities via Google Workspace and admins can link users to their AI tool accounts
@@ -132,19 +135,11 @@ Plans:
 - [ ] 07-01: TBD
 - [ ] 07-02: TBD
 
-### Phase 8: Developer Self-Service
-**Goal**: Developers can view their own usage and costs without admin involvement
-**Depends on**: Phase 6
-**Requirements**: DEV-01, DEV-02, DEV-03, DEV-04, DEV-05
-**Success Criteria** (what must be TRUE):
-  1. Developer can view a personal dashboard showing only their own usage (no access to other users' data)
-  2. Developer can see their token consumption and estimated cost per tool
-  3. Developer can see their usage history for the last 90 days
-  4. Developer can see which tools they have active accounts for
-**Plans**: TBD
-
-Plans:
-- [ ] 08-01: TBD
+### Phase 8: Developer Self-Service -- DROPPED
+**Goal**: ~~Developers can view their own usage and costs without admin involvement~~
+**Status**: DROPPED per CONTEXT.md -- Platform is admin-only. Developers never log in. All DEV-01 through DEV-05 requirements dropped.
+**Requirements**: ~~DEV-01, DEV-02, DEV-03, DEV-04, DEV-05~~ (all dropped)
+**Plans**: None
 
 ## Progress
 
@@ -155,11 +150,11 @@ Note: Phase 7 (Cursor) depends on Phase 3 (not Phase 6), so it could execute in 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Auth & User Management | 0/2 | Planning complete | - |
+| 1. Auth & User Management | 0/3 | Planning complete | - |
 | 2. Identity Resolution & Account Linking | 0/2 | Not started | - |
 | 3. Metrics Pipeline & Claude Integration | 0/3 | Not started | - |
 | 4. GitHub Copilot Integration | 0/2 | Not started | - |
 | 5. Cost Calculation & Inactive Detection | 0/2 | Not started | - |
 | 6. Admin Dashboard | 0/2 | Not started | - |
 | 7. Cursor Integration | 0/2 | Not started | - |
-| 8. Developer Self-Service | 0/1 | Not started | - |
+| 8. Developer Self-Service | -- | DROPPED | - |

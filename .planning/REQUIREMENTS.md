@@ -9,17 +9,17 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication & Authorization
 
-- [ ] **AUTH-01**: Admin can log in with JWT token and access all system features
-- [ ] **AUTH-02**: Developer can log in with JWT token and access only personal usage data
-- [ ] **AUTH-03**: System enforces role-based access control (Admin vs Developer)
-- [ ] **AUTH-04**: User session persists securely across requests
+- [ ] **AUTH-01**: Admin can log in via Google SSO and access all system features
+- [ ] ~~**AUTH-02**: Developer can log in and access only personal usage data~~ **DROPPED** -- Platform is admin-only per CONTEXT.md; Phase 8 (Developer Self-Service) dropped entirely
+- [ ] **AUTH-03**: System enforces admin-only access control (all authenticated users are admins)
+- [ ] **AUTH-04**: User session persists securely across requests with 8-hour timeout
 
 ### User Management
 
 - [ ] **USER-01**: Admin can view list of all users with corporate email (@bemobi.com)
-- [ ] **USER-02**: Admin can create new user with email, name, department, status
-- [ ] **USER-03**: Admin can update user information (name, department, status)
-- [ ] **USER-04**: Admin can deactivate user (soft delete, preserves historical data)
+- [ ] ~~**USER-02**: Admin can create new user with email, name, department, status~~ **REFRAMED** -- Users are discovered from provider APIs, not manually created; data model supports the fields but no create endpoint exists
+- [ ] ~~**USER-03**: Admin can update user information (name, department, status)~~ **REFRAMED** -- User data is read-only in dashboard; profile data comes from Google Workspace and provider APIs, not manual edits
+- [ ] ~~**USER-04**: Admin can deactivate user (soft delete, preserves historical data)~~ **REFRAMED** -- User status is determined automatically from data (orphaned account detection), not manually set by admin
 - [ ] **USER-05**: System validates corporate email domain (@bemobi.com)
 - [ ] **USER-06**: System tracks user status (ACTIVE, INACTIVE, OFFBOARDED)
 
@@ -109,13 +109,15 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **DASH-07**: Dashboard shows cost breakdown by tool (Claude vs GitHub vs Cursor)
 - [ ] **DASH-08**: Dashboard uses Thymeleaf + HTMX (server-side rendering)
 
-### Developer Self-Service
+### Developer Self-Service -- DROPPED
 
-- [ ] **DEV-01**: Developer can view personal usage dashboard (no access to others)
-- [ ] **DEV-02**: Developer can see own token consumption per tool
-- [ ] **DEV-03**: Developer can see own cost estimate per tool
-- [ ] **DEV-04**: Developer can see own usage history (last 90 days)
-- [ ] **DEV-05**: Developer can see which tools they have active accounts for
+~~- [ ] **DEV-01**: Developer can view personal usage dashboard (no access to others)~~
+~~- [ ] **DEV-02**: Developer can see own token consumption per tool~~
+~~- [ ] **DEV-03**: Developer can see own cost estimate per tool~~
+~~- [ ] **DEV-04**: Developer can see own usage history (last 90 days)~~
+~~- [ ] **DEV-05**: Developer can see which tools they have active accounts for~~
+
+**DROPPED** -- Platform is admin-only per CONTEXT.md. Phase 8 (Developer Self-Service) dropped entirely. Developers never log in.
 
 ## v2 Requirements
 
@@ -183,13 +185,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | AUTH-01 | Phase 1: Auth & User Management | Pending |
-| AUTH-02 | Phase 1: Auth & User Management | Pending |
-| AUTH-03 | Phase 1: Auth & User Management | Pending |
+| AUTH-02 | -- | Dropped (admin-only platform, no developer login) |
+| AUTH-03 | Phase 1: Auth & User Management | Pending (reframed: admin-only access control) |
 | AUTH-04 | Phase 1: Auth & User Management | Pending |
 | USER-01 | Phase 1: Auth & User Management | Pending |
-| USER-02 | Phase 1: Auth & User Management | Pending |
-| USER-03 | Phase 1: Auth & User Management | Pending |
-| USER-04 | Phase 1: Auth & User Management | Pending |
+| USER-02 | -- | Reframed (users from provider APIs, not manual creation) |
+| USER-03 | -- | Reframed (read-only dashboard, no manual edits) |
+| USER-04 | -- | Reframed (status automatic from data, not manual action) |
 | USER-05 | Phase 1: Auth & User Management | Pending |
 | USER-06 | Phase 1: Auth & User Management | Pending |
 | GW-01 | Phase 2: Identity Resolution & Account Linking | Pending |
@@ -251,17 +253,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CURSOR-04 | Phase 7: Cursor Integration | Pending |
 | CURSOR-05 | Phase 7: Cursor Integration | Pending |
 | CURSOR-06 | Phase 7: Cursor Integration | Pending |
-| DEV-01 | Phase 8: Developer Self-Service | Pending |
-| DEV-02 | Phase 8: Developer Self-Service | Pending |
-| DEV-03 | Phase 8: Developer Self-Service | Pending |
-| DEV-04 | Phase 8: Developer Self-Service | Pending |
-| DEV-05 | Phase 8: Developer Self-Service | Pending |
+| DEV-01 | -- | Dropped (Phase 8 dropped, admin-only platform) |
+| DEV-02 | -- | Dropped (Phase 8 dropped, admin-only platform) |
+| DEV-03 | -- | Dropped (Phase 8 dropped, admin-only platform) |
+| DEV-04 | -- | Dropped (Phase 8 dropped, admin-only platform) |
+| DEV-05 | -- | Dropped (Phase 8 dropped, admin-only platform) |
 
 **Coverage:**
-- v1 requirements: 74 total
-- Mapped to phases: 74
+- v1 requirements: 74 total (68 active, 1 dropped, 5 reframed)
+- Dropped: AUTH-02, DEV-01 through DEV-05 (6 total -- platform is admin-only)
+- Reframed: USER-02, USER-03, USER-04 (users from provider APIs, read-only dashboard)
+- Active mapped to phases: 68
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after roadmap creation*
+*Last updated: 2026-02-24 after Phase 1 CONTEXT.md decisions*

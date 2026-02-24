@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<body>
+<header th:fragment="navbar" class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 flex-shrink-0">
+    <!-- Left: Page title area -->
+    <div class="flex items-center">
+        <h2 class="text-sm font-medium text-gray-500" layout:fragment="page-title"></h2>
+    </div>
+
+    <!-- Right: User info -->
+    <div sec:authorize="isAuthenticated()" class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
+            <img sec:authentication="principal.getAttribute('picture')"
+                 th:src="${#authentication.principal.getAttribute('picture')}"
+                 alt="Avatar"
+                 class="h-7 w-7 rounded-full object-cover"
+                 referrerpolicy="no-referrer"
+                 onerror="this.style.display='none'">
+            <span class="text-sm font-medium text-gray-700"
+                  th:text="${#authentication.principal.getAttribute('name')}">Admin</span>
+        </div>
+
+        <div class="w-px h-5 bg-gray-200"></div>
+
+        <form th:action="@{/logout}" method="post" class="inline">
+            <button type="submit"
+                    class="text-sm text-gray-400 hover:text-gray-700 transition-colors duration-150">
+                Sign out
+            </button>
+        </form>
+    </div>
+</header>
+</body>
+</html>

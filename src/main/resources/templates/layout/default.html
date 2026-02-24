@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title layout:title-pattern="$CONTENT_TITLE - AI User Control">AI User Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script th:src="@{/webjars/htmx.org/dist/htmx.min.js}"></script>
+    <link th:href="@{/css/custom.css}" rel="stylesheet">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            var csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+            document.body.addEventListener('htmx:configRequest', function(event) {
+                event.detail.headers[csrfHeader] = csrfToken;
+            });
+        });
+    </script>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+        <!-- Main content area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top navbar -->
+            <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+            <!-- Page content -->
+            <main class="flex-1 overflow-y-auto p-6">
+                <div layout:fragment="content"></div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

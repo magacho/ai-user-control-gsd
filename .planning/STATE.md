@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 ## Current Position
 
 Phase: 2 of 8 (Identity Resolution & Account Linking)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: Executing
-Last activity: 2026-02-24 — Completed 02-01-PLAN.md (Data Foundation)
+Last activity: 2026-02-24 — Completed 02-02-PLAN.md (Sync Service Layer)
 
-Progress: [███░░░░░░░] 20%
+Progress: [████░░░░░░] 25%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 4.8min
-- Total execution time: 0.32 hours
+- Total plans completed: 5
+- Average duration: 5min
+- Total execution time: 0.42 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 Auth & User Management | 3/3 | 14min | 4.7min |
-| 02 Identity Resolution | 1/3 | 5min | 5min |
+| 02 Identity Resolution | 2/3 | 11min | 5.5min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (3min), 01-02 (4min), 01-03 (7min), 02-01 (5min)
+- Last 5 plans: 01-01 (3min), 01-02 (4min), 01-03 (7min), 02-01 (5min), 02-02 (6min)
 - Trend: Steady
 
 *Updated after each plan completion*
@@ -67,6 +67,12 @@ Recent decisions affecting current work:
 - [02-01]: Update endpoint preserves existing API key when blank value submitted
 - [02-01]: GoogleWorkspaceConfig uses @ConditionalOnProperty for conditional loading
 - [02-01]: UserAIToolAccount has unique constraint on (ai_tool_id, account_identifier) for deduplication
+- [02-02]: V6 migration makes user_id nullable for unmatched tool accounts (user=null for non-corporate emails)
+- [02-02]: Account disappearance: ACTIVE -> SUSPENDED on first miss, SUSPENDED -> REVOKED on second consecutive miss
+- [02-02]: GoogleWorkspaceService uses configurable customSchemaName (default 'Custom') for github_username
+- [02-02]: ClaudeApiClient/CursorApiClient return empty list on HTTP errors (graceful degradation)
+- [02-02]: SyncOrchestrator uses @Autowired(required=false) with setter methods for optional beans and testability
+- [02-02]: GitHub Copilot explicitly skipped during sync (deferred to Phase 4)
 
 ### Pending Todos
 
@@ -80,5 +86,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Completed 02-01-PLAN.md (Data Foundation)
-Resume file: .planning/phases/02-identity-resolution-account-linking/02-01-SUMMARY.md
+Stopped at: Completed 02-02-PLAN.md (Sync Service Layer)
+Resume file: .planning/phases/02-identity-resolution-account-linking/02-02-SUMMARY.md

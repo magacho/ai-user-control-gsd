@@ -26,18 +26,18 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Google Workspace Integration
 
 - [x] **GW-01**: System connects to Google Workspace API with appropriate permissions
-- [ ] **GW-02**: System retrieves user list from Google Workspace directory
+- [x] **GW-02**: System retrieves user list from Google Workspace directory
 - [x] **GW-03**: System reads custom property `github_username` from Google Workspace user profiles
-- [ ] **GW-04**: System handles pagination when fetching large user lists
+- [x] **GW-04**: System handles pagination when fetching large user lists
 - [x] **GW-05**: System validates Google Workspace API credentials at startup
 
 ### Account Linking
 
-- [ ] **ACCT-01**: Admin can link user email to Claude account identifier
-- [ ] **ACCT-02**: Admin can link user email to Cursor account identifier
-- [ ] **ACCT-03**: Admin can link user email to GitHub username via Google Workspace custom property
+- [x] **ACCT-01**: Admin can link user email to Claude account identifier
+- [x] **ACCT-02**: Admin can link user email to Cursor account identifier
+- [x] **ACCT-03**: Admin can link user email to GitHub username via Google Workspace custom property
 - [ ] **ACCT-04**: Admin can view all tool accounts linked to a specific user
-- [ ] **ACCT-05**: Admin can unlink tool account from user
+- [x] **ACCT-05**: Admin can unlink tool account from user
 - [x] **ACCT-06**: System tracks account status per tool (ACTIVE, SUSPENDED, REVOKED)
 - [x] **ACCT-07**: System handles multiple accounts per tool per user
 
@@ -195,15 +195,15 @@ Which phases cover which requirements. Updated during roadmap creation.
 | USER-05 | Phase 1: Auth & User Management | Complete |
 | USER-06 | Phase 1: Auth & User Management | Complete |
 | GW-01 | Phase 2: Identity Resolution & Account Linking | Complete |
-| GW-02 | Phase 2: Identity Resolution & Account Linking | Pending |
+| GW-02 | Phase 2: Identity Resolution & Account Linking | Complete |
 | GW-03 | Phase 2: Identity Resolution & Account Linking | Complete |
-| GW-04 | Phase 2: Identity Resolution & Account Linking | Pending |
+| GW-04 | Phase 2: Identity Resolution & Account Linking | Complete |
 | GW-05 | Phase 2: Identity Resolution & Account Linking | Complete |
-| ACCT-01 | Phase 2: Identity Resolution & Account Linking | Pending |
-| ACCT-02 | Phase 2: Identity Resolution & Account Linking | Pending |
-| ACCT-03 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-01 | Phase 2: Identity Resolution & Account Linking | Complete |
+| ACCT-02 | Phase 2: Identity Resolution & Account Linking | Complete |
+| ACCT-03 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-04 | Phase 2: Identity Resolution & Account Linking | Pending |
-| ACCT-05 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-05 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-06 | Phase 2: Identity Resolution & Account Linking | Complete |
 | ACCT-07 | Phase 2: Identity Resolution & Account Linking | Complete |
 | CLAUDE-01 | Phase 3: Metrics Pipeline & Claude Integration | Pending |

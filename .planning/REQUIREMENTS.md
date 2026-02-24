@@ -182,13 +182,86 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (To be filled by roadmapper) | | |
+| AUTH-01 | Phase 1: Auth & User Management | Pending |
+| AUTH-02 | Phase 1: Auth & User Management | Pending |
+| AUTH-03 | Phase 1: Auth & User Management | Pending |
+| AUTH-04 | Phase 1: Auth & User Management | Pending |
+| USER-01 | Phase 1: Auth & User Management | Pending |
+| USER-02 | Phase 1: Auth & User Management | Pending |
+| USER-03 | Phase 1: Auth & User Management | Pending |
+| USER-04 | Phase 1: Auth & User Management | Pending |
+| USER-05 | Phase 1: Auth & User Management | Pending |
+| USER-06 | Phase 1: Auth & User Management | Pending |
+| GW-01 | Phase 2: Identity Resolution & Account Linking | Pending |
+| GW-02 | Phase 2: Identity Resolution & Account Linking | Pending |
+| GW-03 | Phase 2: Identity Resolution & Account Linking | Pending |
+| GW-04 | Phase 2: Identity Resolution & Account Linking | Pending |
+| GW-05 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-01 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-02 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-03 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-04 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-05 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-06 | Phase 2: Identity Resolution & Account Linking | Pending |
+| ACCT-07 | Phase 2: Identity Resolution & Account Linking | Pending |
+| CLAUDE-01 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| CLAUDE-02 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| CLAUDE-03 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| CLAUDE-04 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| CLAUDE-05 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| CLAUDE-06 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| CLAUDE-07 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| SCHED-01 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| SCHED-02 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| SCHED-03 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| SCHED-04 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| SCHED-05 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| SCHED-06 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| SCHED-07 | Phase 3: Metrics Pipeline & Claude Integration | Pending |
+| GITHUB-01 | Phase 4: GitHub Copilot Integration | Pending |
+| GITHUB-02 | Phase 4: GitHub Copilot Integration | Pending |
+| GITHUB-03 | Phase 4: GitHub Copilot Integration | Pending |
+| GITHUB-04 | Phase 4: GitHub Copilot Integration | Pending |
+| GITHUB-05 | Phase 4: GitHub Copilot Integration | Pending |
+| GITHUB-06 | Phase 4: GitHub Copilot Integration | Pending |
+| GITHUB-07 | Phase 4: GitHub Copilot Integration | Pending |
+| GITHUB-08 | Phase 4: GitHub Copilot Integration | Pending |
+| COST-01 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| COST-02 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| COST-03 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| COST-04 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| COST-05 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| COST-06 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| DETECT-01 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| DETECT-02 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| DETECT-03 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| DETECT-04 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| DETECT-05 | Phase 5: Cost Calculation & Inactive Detection | Pending |
+| DASH-01 | Phase 6: Admin Dashboard | Pending |
+| DASH-02 | Phase 6: Admin Dashboard | Pending |
+| DASH-03 | Phase 6: Admin Dashboard | Pending |
+| DASH-04 | Phase 6: Admin Dashboard | Pending |
+| DASH-05 | Phase 6: Admin Dashboard | Pending |
+| DASH-06 | Phase 6: Admin Dashboard | Pending |
+| DASH-07 | Phase 6: Admin Dashboard | Pending |
+| DASH-08 | Phase 6: Admin Dashboard | Pending |
+| CURSOR-01 | Phase 7: Cursor Integration | Pending |
+| CURSOR-02 | Phase 7: Cursor Integration | Pending |
+| CURSOR-03 | Phase 7: Cursor Integration | Pending |
+| CURSOR-04 | Phase 7: Cursor Integration | Pending |
+| CURSOR-05 | Phase 7: Cursor Integration | Pending |
+| CURSOR-06 | Phase 7: Cursor Integration | Pending |
+| DEV-01 | Phase 8: Developer Self-Service | Pending |
+| DEV-02 | Phase 8: Developer Self-Service | Pending |
+| DEV-03 | Phase 8: Developer Self-Service | Pending |
+| DEV-04 | Phase 8: Developer Self-Service | Pending |
+| DEV-05 | Phase 8: Developer Self-Service | Pending |
 
 **Coverage:**
-- v1 requirements: TBD total
-- Mapped to phases: TBD
-- Unmapped: TBD
+- v1 requirements: 74 total
+- Mapped to phases: 74
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-24*
-*Last updated: 2026-02-24 after research synthesis*
+*Last updated: 2026-02-24 after roadmap creation*

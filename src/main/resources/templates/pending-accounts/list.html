@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}"
+      lang="en">
+<head>
+    <title>Contas Pendentes</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Page header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <div class="flex items-center gap-3">
+                <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Contas Pendentes</h1>
+                <span th:if="${pendingCount != null && pendingCount > 0}"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"
+                      th:text="${pendingCount}">0</span>
+            </div>
+            <p class="text-sm text-gray-500 mt-1">
+                Contas de ferramentas de IA que precisam de atencao. Use esta lista como referencia para cancelar manualmente nas consoles de cada ferramenta.
+            </p>
+        </div>
+    </div>
+
+    <!-- Pending accounts table -->
+    <div id="pending-table">
+        <div th:replace="~{pending-accounts/fragments/table :: pendingAccountsTable}"></div>
+    </div>
+</div>
+</body>
+</html>

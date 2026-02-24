@@ -51,11 +51,12 @@ Plans:
   3. Admin can view all linked tool accounts for a user and unlink any account
   4. System tracks account status per tool (ACTIVE, SUSPENDED, REVOKED) and supports multiple accounts per tool per user
   5. System validates Google Workspace API credentials at startup and fails fast with clear error if misconfigured
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Data foundation: Google Admin SDK dep, V5 migration (accounts table, credentials, github_username), entities, repository, GWS config with startup validation
+- [ ] 02-02-PLAN.md -- Sync service: GoogleWorkspaceService with pagination, Claude/Cursor API user fetch, AccountLinkingService with email matching, SyncOrchestrator, unit tests
+- [ ] 02-03-PLAN.md -- UI: Sync button on dashboard with toast feedback, user detail page with linked accounts and unlink, "Contas Pendentes" page with sidebar badge
 
 ### Phase 3: Metrics Pipeline & Claude Integration
 **Goal**: System collects Claude usage data on a daily schedule with full resilience, storing normalized metrics ready for cost calculation
@@ -151,7 +152,7 @@ Note: Phase 7 (Cursor) depends on Phase 3 (not Phase 6), so it could execute in 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Auth & User Management | 0/3 | Planning complete | - |
-| 2. Identity Resolution & Account Linking | 0/2 | Not started | - |
+| 2. Identity Resolution & Account Linking | 0/3 | Planning complete | - |
 | 3. Metrics Pipeline & Claude Integration | 0/3 | Not started | - |
 | 4. GitHub Copilot Integration | 0/2 | Not started | - |
 | 5. Cost Calculation & Inactive Detection | 0/2 | Not started | - |

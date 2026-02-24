@@ -41,7 +41,7 @@ public class CustomOidcUserService extends OidcUserService {
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-        OidcUser oidcUser = super.loadUser(userRequest);
+        OidcUser oidcUser = loadOidcUser(userRequest);
 
         String email = oidcUser.getEmail();
 
@@ -97,6 +97,14 @@ public class CustomOidcUserService extends OidcUserService {
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
         return new DefaultOidcUser(authorities, oidcUser.getIdToken(), oidcUser.getUserInfo());
+    }
+
+    /**
+     * Delegates to the parent OidcUserService to load the user from the OIDC provider.
+     * Extracted as a protected method to allow test overriding.
+     */
+    protected OidcUser loadOidcUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+        return super.loadUser(userRequest);
     }
 
     private void validateDomain(String email, OidcUser oidcUser) {

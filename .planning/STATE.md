@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-24)
 Phase: 1 of 8 (Auth & User Management)
 Plan: 0 of 2 in current phase
 Status: Ready to plan
-Last activity: 2026-02-24 — Roadmap created with 8 phases covering 74 requirements
+Last activity: 2026-02-24 — Phase 1 context gathered with major scope clarifications
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -45,6 +45,12 @@ Recent decisions affecting current work:
 - [Roadmap]: 8-phase structure derived from 74 requirements across 12 categories
 - [Roadmap]: Claude integration first (Phase 3) to validate pipeline before GitHub/Cursor
 - [Roadmap]: Cursor deferred to Phase 7 due to API instability risk; CSV fallback planned
+- [Phase 1 Context]: Platform is admin-only forever — Phase 8 (Developer Self-Service) dropped
+- [Phase 1 Context]: Platform is read-only dashboard + history — no user CRUD operations
+- [Phase 1 Context]: Users discovered from provider APIs, not manually created
+- [Phase 1 Context]: Google SSO only, admin-only access, config-based admin bootstrap
+- [Phase 1 Context]: AI tool catalog is extensible via database + UI (admin creates tools)
+- [Phase 1 Context]: "Inactive" = exists in AI tools but NOT in Google Workspace (orphaned account)
 
 ### Pending Todos
 
@@ -58,5 +64,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-24
-Stopped at: Roadmap created, ready for Phase 1 planning
-Resume file: None
+Stopped at: Phase 1 context gathered, ready for planning
+Resume file: .planning/phases/01-auth-user-management/01-CONTEXT.md

@@ -66,12 +66,14 @@ public class AIToolController {
         request.setDescription(response.getDescription());
         request.setApiBaseUrl(response.getApiBaseUrl());
         request.setEnabled(response.isEnabled());
+        request.setApiOrgId(response.getApiOrgId());
         request.setIconUrl(response.getIconUrl());
 
         model.addAttribute("aiToolRequest", request);
         model.addAttribute("toolTypes", AIToolType.values());
         model.addAttribute("editMode", true);
         model.addAttribute("toolId", id);
+        model.addAttribute("hasApiKey", response.isHasApiKey());
         return "ai-tools/fragments/form-modal :: toolForm";
     }
 

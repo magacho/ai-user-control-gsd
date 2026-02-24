@@ -10,6 +10,9 @@ public class AIToolResponse {
     private String description;
     private String apiBaseUrl;
     private boolean enabled;
+    private String apiKey;
+    private String apiOrgId;
+    private boolean hasApiKey;
     private String iconUrl;
     private Instant createdAt;
     private Instant updatedAt;
@@ -18,13 +21,17 @@ public class AIToolResponse {
     }
 
     public AIToolResponse(Long id, String name, String toolType, String description, String apiBaseUrl,
-                          boolean enabled, String iconUrl, Instant createdAt, Instant updatedAt) {
+                          boolean enabled, String apiKey, String apiOrgId, boolean hasApiKey,
+                          String iconUrl, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;
         this.toolType = toolType;
         this.description = description;
         this.apiBaseUrl = apiBaseUrl;
         this.enabled = enabled;
+        this.apiKey = apiKey;
+        this.apiOrgId = apiOrgId;
+        this.hasApiKey = hasApiKey;
         this.iconUrl = iconUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -78,6 +85,30 @@ public class AIToolResponse {
         this.enabled = enabled;
     }
 
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public String getApiOrgId() {
+        return apiOrgId;
+    }
+
+    public void setApiOrgId(String apiOrgId) {
+        this.apiOrgId = apiOrgId;
+    }
+
+    public boolean isHasApiKey() {
+        return hasApiKey;
+    }
+
+    public void setHasApiKey(boolean hasApiKey) {
+        this.hasApiKey = hasApiKey;
+    }
+
     public String getIconUrl() {
         return iconUrl;
     }
@@ -113,6 +144,9 @@ public class AIToolResponse {
         private String description;
         private String apiBaseUrl;
         private boolean enabled;
+        private String apiKey;
+        private String apiOrgId;
+        private boolean hasApiKey;
         private String iconUrl;
         private Instant createdAt;
         private Instant updatedAt;
@@ -147,6 +181,21 @@ public class AIToolResponse {
             return this;
         }
 
+        public Builder apiKey(String apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder apiOrgId(String apiOrgId) {
+            this.apiOrgId = apiOrgId;
+            return this;
+        }
+
+        public Builder hasApiKey(boolean hasApiKey) {
+            this.hasApiKey = hasApiKey;
+            return this;
+        }
+
         public Builder iconUrl(String iconUrl) {
             this.iconUrl = iconUrl;
             return this;
@@ -163,7 +212,7 @@ public class AIToolResponse {
         }
 
         public AIToolResponse build() {
-            return new AIToolResponse(id, name, toolType, description, apiBaseUrl, enabled, iconUrl, createdAt, updatedAt);
+            return new AIToolResponse(id, name, toolType, description, apiBaseUrl, enabled, apiKey, apiOrgId, hasApiKey, iconUrl, createdAt, updatedAt);
         }
     }
 }

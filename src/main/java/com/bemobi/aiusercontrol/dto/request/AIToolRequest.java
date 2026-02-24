@@ -18,18 +18,24 @@ public class AIToolRequest {
 
     private boolean enabled = true;
 
+    private String apiKey;
+
+    private String apiOrgId;
+
     private String iconUrl;
 
     public AIToolRequest() {
     }
 
     public AIToolRequest(String name, AIToolType toolType, String description, String apiBaseUrl,
-                         boolean enabled, String iconUrl) {
+                         boolean enabled, String apiKey, String apiOrgId, String iconUrl) {
         this.name = name;
         this.toolType = toolType;
         this.description = description;
         this.apiBaseUrl = apiBaseUrl;
         this.enabled = enabled;
+        this.apiKey = apiKey;
+        this.apiOrgId = apiOrgId;
         this.iconUrl = iconUrl;
     }
 
@@ -71,6 +77,22 @@ public class AIToolRequest {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public String getApiOrgId() {
+        return apiOrgId;
+    }
+
+    public void setApiOrgId(String apiOrgId) {
+        this.apiOrgId = apiOrgId;
     }
 
     public String getIconUrl() {

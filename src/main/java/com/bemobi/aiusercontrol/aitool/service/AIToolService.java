@@ -46,6 +46,8 @@ public class AIToolService {
         tool.setDescription(request.getDescription());
         tool.setApiBaseUrl(request.getApiBaseUrl());
         tool.setEnabled(request.isEnabled());
+        tool.setApiKey(request.getApiKey());
+        tool.setApiOrgId(request.getApiOrgId());
         tool.setIconUrl(request.getIconUrl());
 
         AITool saved = aiToolRepository.save(tool);
@@ -66,6 +68,11 @@ public class AIToolService {
         tool.setDescription(request.getDescription());
         tool.setApiBaseUrl(request.getApiBaseUrl());
         tool.setEnabled(request.isEnabled());
+        // Only update API key if a new value is provided (non-blank)
+        if (request.getApiKey() != null && !request.getApiKey().isBlank()) {
+            tool.setApiKey(request.getApiKey());
+        }
+        tool.setApiOrgId(request.getApiOrgId());
         tool.setIconUrl(request.getIconUrl());
 
         AITool saved = aiToolRepository.save(tool);
@@ -84,6 +91,9 @@ public class AIToolService {
     }
 
     private AIToolResponse toResponse(AITool tool) {
+        boolean hasKey = tool.getApiKey() != null && !tool.getApiKey().isBlank();
+        String maskedKey = maskApiKey(tool.getApiKey());
+
         return AIToolResponse.builder()
                 .id(tool.getId())
                 .name(tool.getName())
@@ -91,9 +101,22 @@ public class AIToolService {
                 .description(tool.getDescription())
                 .apiBaseUrl(tool.getApiBaseUrl())
                 .enabled(tool.isEnabled())
+                .apiKey(maskedKey)
+                .apiOrgId(tool.getApiOrgId())
+                .hasApiKey(hasKey)
                 .iconUrl(tool.getIconUrl())
                 .createdAt(tool.getCreatedAt())
                 .updatedAt(tool.getUpdatedAt())
                 .build();
+    }
+
+    private String maskApiKey(String apiKey) {
+        if (apiKey == null || apiKey.isBlank()) {
+            return "";
+        }
+        if (apiKey.length() <= 4) {
+            return "****";
+        }
+        return "****" + apiKey.substring(apiKey.length() - 4);
     }
 }

@@ -127,3 +127,4 @@ tmp/
 
 # GSD planning files
 .planning/
+/google-workspace-key.json

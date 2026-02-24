@@ -1,15 +1,19 @@
 package com.bemobi.aiusercontrol.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    @ControllerAdvice
+    static class GlobalModelAttributes {
+
+        @ModelAttribute("currentPath")
+        public String currentPath(HttpServletRequest request) {
+            return request.getRequestURI();
+        }
     }
 }

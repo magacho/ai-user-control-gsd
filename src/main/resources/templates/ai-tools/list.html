@@ -44,6 +44,14 @@
 
     <!-- Modal container for HTMX-loaded forms -->
     <div id="modal-container"></div>
+
+    <script>
+        document.body.addEventListener('htmx:afterSwap', function(event) {
+            if (event.detail.target.id === 'tool-table') {
+                document.getElementById('modal-container').innerHTML = '';
+            }
+        });
+    </script>
 </div>
 </body>
 </html>

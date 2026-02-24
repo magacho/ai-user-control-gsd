@@ -11,7 +11,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **AUTH-01**: Admin can log in via Google SSO and access all system features
 - [ ] ~~**AUTH-02**: Developer can log in and access only personal usage data~~ **DROPPED** -- Platform is admin-only per CONTEXT.md; Phase 8 (Developer Self-Service) dropped entirely
-- [ ] **AUTH-03**: System enforces admin-only access control (all authenticated users are admins)
+- [x] **AUTH-03**: System enforces admin-only access control (all authenticated users are admins)
 - [x] **AUTH-04**: User session persists securely across requests with 8-hour timeout
 
 ### User Management

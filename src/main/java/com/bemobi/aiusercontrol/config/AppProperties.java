@@ -43,6 +43,7 @@ public class AppProperties {
         private String serviceAccountKeyPath;
         private String delegatedAdminEmail;
         private String domain;
+        private String customSchemaName = "Custom";
 
         public GoogleWorkspace() {
         }
@@ -79,6 +80,14 @@ public class AppProperties {
             this.domain = domain;
         }
 
+        public String getCustomSchemaName() {
+            return customSchemaName;
+        }
+
+        public void setCustomSchemaName(String customSchemaName) {
+            this.customSchemaName = customSchemaName;
+        }
+
         @Override
         public String toString() {
             return "GoogleWorkspace{" +
@@ -86,6 +95,7 @@ public class AppProperties {
                     ", serviceAccountKeyPath='" + serviceAccountKeyPath + '\'' +
                     ", delegatedAdminEmail='" + delegatedAdminEmail + '\'' +
                     ", domain='" + domain + '\'' +
+                    ", customSchemaName='" + customSchemaName + '\'' +
                     '}';
         }
     }

@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-24)
 
 **Core value:** Transparent AI tool costs with zero wasted spending on orphaned accounts
-**Current focus:** Phase 3: Metrics Pipeline & Claude Integration
+**Current focus:** Phase 3: Metrics Infrastructure
 
 ## Current Position
 
-Phase: 3 of 8 (Metrics Pipeline & Claude Integration)
-Plan: 0 of 3 in current phase
+Phase: 3 of 9 (Metrics Infrastructure)
+Plan: 0 of 1 in current phase
 Status: Phase 2 complete, Phase 3 not started
 Last activity: 2026-02-24 — Completed 02-03-PLAN.md (Admin UI for Sync, User Detail, and Pending Accounts)
 
-Progress: [████████░░░░░░░░░░░░] 38%
+Progress: [████████░░░░░░░░░░░░] 33%
 
 ## Performance Metrics
 
@@ -43,10 +43,12 @@ Progress: [████████░░░░░░░░░░░░] 38%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [Roadmap]: 8-phase structure derived from 74 requirements across 12 categories
-- [Roadmap]: Claude integration first (Phase 3) to validate pipeline before GitHub/Cursor
-- [Roadmap]: Cursor deferred to Phase 7 due to API instability risk; CSV fallback planned
-- [Phase 1 Context]: Platform is admin-only forever — Phase 8 (Developer Self-Service) dropped
+- [Roadmap]: 9-phase structure (Phase 9 dropped) — restructured to phase by integration
+- [Roadmap]: Metrics Infrastructure first (Phase 3) — shared infra before any provider
+- [Roadmap]: Integration order: Cursor (Phase 4) → Claude (Phase 5) → GitHub (Phase 6)
+- [Roadmap]: Cursor is API-only (no CSV fallback for now)
+- [Roadmap]: Cost Calculation + Inactive Detection in Phase 7, Admin Dashboard in Phase 8
+- [Phase 1 Context]: Platform is admin-only forever — Phase 9 (Developer Self-Service) dropped
 - [Phase 1 Context]: Platform is read-only dashboard + history — no user CRUD operations
 - [Phase 1 Context]: Users discovered from provider APIs, not manually created
 - [Phase 1 Context]: Google SSO only, admin-only access, config-based admin bootstrap
@@ -72,7 +74,7 @@ Recent decisions affecting current work:
 - [02-02]: GoogleWorkspaceService uses configurable customSchemaName (default 'Custom') for github_username
 - [02-02]: ClaudeApiClient/CursorApiClient return empty list on HTTP errors (graceful degradation)
 - [02-02]: SyncOrchestrator uses @Autowired(required=false) with setter methods for optional beans and testability
-- [02-02]: GitHub Copilot explicitly skipped during sync (deferred to Phase 4)
+- [02-02]: GitHub Copilot explicitly skipped during sync (deferred to Phase 6)
 - [02-03]: SidebarModelAdvice @ControllerAdvice provides pendingAccountsCount globally for all pages
 - [02-03]: OAuth2 prompt=select_account added to SecurityConfig for Google account selector on login
 - [02-03]: Pending accounts defined as: unmatched (user=null) OR belonging to OFFBOARDED users
@@ -84,8 +86,8 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 2]: Verify Google Workspace Admin SDK access and exact custom schema field name for github_username before planning
-- [Phase 7]: Cursor API availability is unknown; must research before Phase 7 planning (may pivot to CSV-only)
+- [Phase 6]: Verify Google Workspace Admin SDK access and exact custom schema field name for github_username before planning
+- [Phase 4]: Cursor API availability needs research before Phase 4 planning
 
 ## Session Continuity
 

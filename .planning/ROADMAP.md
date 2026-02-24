@@ -2,7 +2,7 @@
 
 ## Overview
 
-This roadmap delivers a centralized dashboard for tracking AI tool usage and costs across Bemobi's engineering organization. The journey starts with user identity and authentication (who are the users), progresses through provider API integrations (what are they using), adds cost analysis and inactive account detection (what does it cost and who left), and finishes with admin and developer dashboards (who sees what). Each phase delivers a coherent, verifiable capability that builds on the previous.
+This roadmap delivers a centralized dashboard for tracking AI tool usage and costs across Bemobi's engineering organization. The journey starts with user identity and authentication (who are the users), progresses through shared metrics infrastructure, then integrates each AI provider individually (Cursor, Claude, GitHub Copilot), adds cost analysis and inactive account detection, and finishes with the admin dashboard. Each phase delivers a coherent, verifiable capability that builds on the previous.
 
 ## Phases
 
@@ -12,14 +12,15 @@ This roadmap delivers a centralized dashboard for tracking AI tool usage and cos
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Auth & User Management** - Secure access with role-based control and corporate user registry
-- [ ] **Phase 2: Identity Resolution & Account Linking** - Google Workspace sync and tool account mapping per user
-- [ ] **Phase 3: Metrics Pipeline & Claude Integration** - Scheduling infrastructure and first provider collection end-to-end
-- [ ] **Phase 4: GitHub Copilot Integration** - Second provider with seat-based metrics and username mapping
-- [ ] **Phase 5: Cost Calculation & Inactive Detection** - Turn raw metrics into dollar costs and flag orphaned accounts
-- [ ] **Phase 6: Admin Dashboard** - Full visibility UI for admins across all users, tools, and costs
-- [ ] **Phase 7: Cursor Integration** - Third provider with fallback CSV import for API instability
-- [x] **Phase 8: Developer Self-Service** - ~~Personal usage dashboard restricted to own data~~ **DROPPED** (admin-only platform)
+- [x] **Phase 1: Auth & User Management** - Secure access with role-based control and corporate user registry
+- [x] **Phase 2: Identity Resolution & Account Linking** - Google Workspace sync and tool account mapping per user
+- [ ] **Phase 3: Metrics Infrastructure** - ShedLock, scheduling, persistence, circuit breaker, retry — shared infra for all providers
+- [ ] **Phase 4: Cursor Integration** - Collect Cursor usage metrics via API, scheduled job, normalized storage
+- [ ] **Phase 5: Claude Integration** - Collect Claude usage metrics via API, scheduled job, normalized storage
+- [ ] **Phase 6: GitHub Copilot Integration** - Collect GitHub Copilot metrics with username→email mapping via GWS
+- [ ] **Phase 7: Cost Calculation & Inactive Detection** - Pricing rules, cost calculation, inactive account flagging
+- [ ] **Phase 8: Admin Dashboard** - Full visibility UI for admins across all users, tools, and costs
+- [x] **Phase 9: Developer Self-Service** - ~~Personal usage dashboard restricted to own data~~ **DROPPED** (admin-only platform)
 
 ## Phase Details
 
@@ -37,9 +38,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- Data foundation: OAuth2 deps, Flyway migrations, JPA entities, repositories, config
-- [ ] 01-02-PLAN.md -- Auth flow: SecurityConfig, CustomOidcUserService, login page, unit tests
-- [ ] 01-03-PLAN.md -- UI: Dashboard layout with sidebar, read-only user list, AI Tool CRUD with HTMX
+- [x] 01-01-PLAN.md -- Data foundation: OAuth2 deps, Flyway migrations, JPA entities, repositories, config
+- [x] 01-02-PLAN.md -- Auth flow: SecurityConfig, CustomOidcUserService, login page, unit tests
+- [x] 01-03-PLAN.md -- UI: Dashboard layout with sidebar, read-only user list, AI Tool CRUD with HTMX
 
 ### Phase 2: Identity Resolution & Account Linking
 **Goal**: System resolves corporate identities via Google Workspace and admins can link users to their AI tool accounts
@@ -54,45 +55,74 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md -- Data foundation: Google Admin SDK dep, V5 migration (accounts table, credentials, github_username), entities, repository, GWS config with startup validation
-- [ ] 02-02-PLAN.md -- Sync service: GoogleWorkspaceService with pagination, Claude/Cursor API user fetch, AccountLinkingService with email matching, SyncOrchestrator, unit tests
-- [ ] 02-03-PLAN.md -- UI: Sync button on dashboard with toast feedback, user detail page with linked accounts and unlink, "Contas Pendentes" page with sidebar badge
+- [x] 02-01-PLAN.md -- Data foundation: Google Admin SDK dep, V5 migration (accounts table, credentials, github_username), entities, repository, GWS config with startup validation
+- [x] 02-02-PLAN.md -- Sync service: GoogleWorkspaceService with pagination, Claude/Cursor API user fetch, AccountLinkingService with email matching, SyncOrchestrator, unit tests
+- [x] 02-03-PLAN.md -- UI: Sync button on dashboard with toast feedback, user detail page with linked accounts and unlink, "Contas Pendentes" page with sidebar badge
 
-### Phase 3: Metrics Pipeline & Claude Integration
-**Goal**: System collects Claude usage data on a daily schedule with full resilience, storing normalized metrics ready for cost calculation
+### Phase 3: Metrics Infrastructure
+**Goal**: Shared infrastructure for metrics collection — scheduling with distributed locking, persistence with idempotency, circuit breaker and retry — ready for any provider
 **Depends on**: Phase 2
-**Requirements**: CLAUDE-01, CLAUDE-02, CLAUDE-03, CLAUDE-04, CLAUDE-05, CLAUDE-06, CLAUDE-07, SCHED-01, SCHED-02, SCHED-03, SCHED-04, SCHED-05, SCHED-06, SCHED-07
+**Requirements**: SCHED-01 to SCHED-07 (partial), metrics data model
 **Success Criteria** (what must be TRUE):
-  1. Scheduled job runs nightly (2 AM default) and collects token counts, request counts, and last access dates per Claude user
-  2. Collection is idempotent: re-running for the same date produces no duplicates and no data corruption
-  3. System handles Anthropic API rate limits with exponential backoff and circuit breaker; failures are logged with health status visible to admin
-  4. Admin can manually trigger metric collection for a specific date
-  5. ShedLock prevents duplicate job runs across multiple application instances
+  1. ShedLock prevents duplicate scheduled job runs across multiple application instances
+  2. Table `usage_metrics` accepts metrics from any provider with normalized schema
+  3. Unique constraint on (account, date, metric_type) guarantees idempotency
+  4. Circuit breaker and retry are configured and ready for provider integrations
+  5. Admin can manually trigger metric collection (even without providers implemented)
+  6. `mvn compile` + `mvn test` pass
 **Plans**: TBD
 
 Plans:
 - [ ] 03-01: TBD
-- [ ] 03-02: TBD
-- [ ] 03-03: TBD
 
-### Phase 4: GitHub Copilot Integration
-**Goal**: System collects GitHub Copilot usage data with seat-based metrics, mapping GitHub usernames to corporate users
+### Phase 4: Cursor Integration
+**Goal**: System collects Cursor usage data via API on a daily schedule, storing normalized metrics ready for cost calculation
 **Depends on**: Phase 3
-**Requirements**: GITHUB-01, GITHUB-02, GITHUB-03, GITHUB-04, GITHUB-05, GITHUB-06, GITHUB-07, GITHUB-08
+**Requirements**: CURSOR-01, CURSOR-02, CURSOR-03, CURSOR-04, CURSOR-05, CURSOR-06
 **Success Criteria** (what must be TRUE):
-  1. Scheduled job collects Copilot seat assignments, last activity dates, and suggestion metrics daily
-  2. System maps GitHub usernames to corporate emails via the Google Workspace github_username property established in Phase 2
-  3. System handles GitHub API rate limits with backoff and retry; Copilot-specific pagination works for large organizations
-  4. Raw GitHub metrics are stored in the same normalized format as Claude metrics, ready for cost calculation
+  1. Scheduled job collects usage metrics and last access date per Cursor user daily via API
+  2. Cursor metrics are stored in the same normalized format as other providers
+  3. Cursor integration failures do not block other provider collection (isolated circuit breaker)
+  4. Collection is idempotent: re-running for the same date produces no duplicates
 **Plans**: TBD
 
 Plans:
 - [ ] 04-01: TBD
 - [ ] 04-02: TBD
 
-### Phase 5: Cost Calculation & Inactive Detection
+### Phase 5: Claude Integration
+**Goal**: System collects Claude usage data via Anthropic API on a daily schedule with full resilience, storing normalized metrics
+**Depends on**: Phase 3
+**Requirements**: CLAUDE-01, CLAUDE-02, CLAUDE-03, CLAUDE-04, CLAUDE-05, CLAUDE-06, CLAUDE-07
+**Success Criteria** (what must be TRUE):
+  1. Scheduled job runs nightly and collects token counts, request counts, and last access dates per Claude user
+  2. Collection is idempotent: re-running for the same date produces no duplicates and no data corruption
+  3. System handles Anthropic API rate limits with exponential backoff and circuit breaker; failures are logged with health status visible to admin
+  4. Claude metrics are stored in the same normalized format as other providers
+**Plans**: TBD
+
+Plans:
+- [ ] 05-01: TBD
+- [ ] 05-02: TBD
+
+### Phase 6: GitHub Copilot Integration
+**Goal**: System collects GitHub Copilot usage data with seat-based metrics, mapping GitHub usernames to corporate users via GWS
+**Depends on**: Phase 3
+**Requirements**: GITHUB-01, GITHUB-02, GITHUB-03, GITHUB-04, GITHUB-05, GITHUB-06, GITHUB-07, GITHUB-08
+**Success Criteria** (what must be TRUE):
+  1. Scheduled job collects Copilot seat assignments, last activity dates, and suggestion metrics daily
+  2. System maps GitHub usernames to corporate emails via the Google Workspace github_username property established in Phase 2
+  3. System handles GitHub API rate limits with backoff and retry; Copilot-specific pagination works for large organizations
+  4. Raw GitHub metrics are stored in the same normalized format as other providers, ready for cost calculation
+**Plans**: TBD
+
+Plans:
+- [ ] 06-01: TBD
+- [ ] 06-02: TBD
+
+### Phase 7: Cost Calculation & Inactive Detection
 **Goal**: System translates raw metrics into dollar costs with configurable pricing and identifies accounts with no recent activity
-**Depends on**: Phase 4
+**Depends on**: Phases 4, 5, 6
 **Requirements**: COST-01, COST-02, COST-03, COST-04, COST-05, COST-06, DETECT-01, DETECT-02, DETECT-03, DETECT-04, DETECT-05
 **Success Criteria** (what must be TRUE):
   1. System calculates estimated cost per user per tool per month using configurable, versioned pricing rules (not hardcoded rates)
@@ -102,12 +132,12 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 07-01: TBD
+- [ ] 07-02: TBD
 
-### Phase 6: Admin Dashboard
+### Phase 8: Admin Dashboard
 **Goal**: Admins have full visibility into all users, tools, costs, and inactive accounts through a server-rendered dashboard
-**Depends on**: Phase 5
+**Depends on**: Phase 7
 **Requirements**: DASH-01, DASH-02, DASH-03, DASH-04, DASH-05, DASH-06, DASH-07, DASH-08
 **Success Criteria** (what must be TRUE):
   1. Admin can view a dashboard showing all users with their tools, costs, and status; filter by status, department, or tool; and sort by cost
@@ -118,25 +148,10 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 06-01: TBD
-- [ ] 06-02: TBD
+- [ ] 08-01: TBD
+- [ ] 08-02: TBD
 
-### Phase 7: Cursor Integration
-**Goal**: System collects Cursor usage data via API or manual CSV import, completing coverage of all three AI tools
-**Depends on**: Phase 3
-**Requirements**: CURSOR-01, CURSOR-02, CURSOR-03, CURSOR-04, CURSOR-05, CURSOR-06
-**Success Criteria** (what must be TRUE):
-  1. If Cursor API is available: scheduled job collects usage metrics and last access date per user daily
-  2. If Cursor API is unavailable: admin can upload a CSV file with Cursor usage data and the system imports it correctly
-  3. Cursor metrics are stored in the same normalized format as Claude and GitHub metrics
-  4. Cursor integration failures do not block or affect Claude/GitHub collection (isolated circuit breaker)
-**Plans**: TBD
-
-Plans:
-- [ ] 07-01: TBD
-- [ ] 07-02: TBD
-
-### Phase 8: Developer Self-Service -- DROPPED
+### Phase 9: Developer Self-Service -- DROPPED
 **Goal**: ~~Developers can view their own usage and costs without admin involvement~~
 **Status**: DROPPED per CONTEXT.md -- Platform is admin-only. Developers never log in. All DEV-01 through DEV-05 requirements dropped.
 **Requirements**: ~~DEV-01, DEV-02, DEV-03, DEV-04, DEV-05~~ (all dropped)
@@ -147,15 +162,16 @@ Plans:
 **Execution Order:**
 Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
-Note: Phase 7 (Cursor) depends on Phase 3 (not Phase 6), so it could execute in parallel with Phases 4-6 if needed.
+Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so they could execute in parallel if needed.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Auth & User Management | 3/3 | Complete | 2026-02-24 |
 | 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
-| 3. Metrics Pipeline & Claude Integration | 0/3 | Not started | - |
-| 4. GitHub Copilot Integration | 0/2 | Not started | - |
-| 5. Cost Calculation & Inactive Detection | 0/2 | Not started | - |
-| 6. Admin Dashboard | 0/2 | Not started | - |
-| 7. Cursor Integration | 0/2 | Not started | - |
-| 8. Developer Self-Service | -- | DROPPED | - |
+| 3. Metrics Infrastructure | 0/1 | Not started | - |
+| 4. Cursor Integration | 0/2 | Not started | - |
+| 5. Claude Integration | 0/2 | Not started | - |
+| 6. GitHub Copilot Integration | 0/2 | Not started | - |
+| 7. Cost Calculation & Inactive Detection | 0/2 | Not started | - |
+| 8. Admin Dashboard | 0/2 | Not started | - |
+| 9. Developer Self-Service | -- | DROPPED | - |

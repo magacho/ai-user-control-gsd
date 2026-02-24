@@ -153,6 +153,41 @@ app:
     from: ${EMAIL_FROM:noreply@bemobi.com}
     admin-recipients: ${EMAIL_ADMIN_RECIPIENTS:admin@bemobi.com}
 
+# Resilience4j
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 60s
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+    instances:
+      cursorMetrics:
+        baseConfig: default
+      claudeMetrics:
+        baseConfig: default
+      githubMetrics:
+        baseConfig: default
+
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 2s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+    instances:
+      cursorMetrics:
+        baseConfig: default
+      claudeMetrics:
+        baseConfig: default
+      githubMetrics:
+        baseConfig: default
+
 # Logging
 logging:
   level:

@@ -8,6 +8,10 @@ import com.bemobi.aiusercontrol.model.entity.User;
 import com.bemobi.aiusercontrol.model.entity.UserAIToolAccount;
 import com.bemobi.aiusercontrol.user.repository.UserAIToolAccountRepository;
 import com.bemobi.aiusercontrol.user.repository.UserRepository;
+import com.bemobi.aiusercontrol.user.repository.UserSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +45,15 @@ public class UserService {
 
     public long count() {
         return userRepository.count();
+    }
+
+    public Page<UserResponse> findFiltered(String name, String email, String department, String status, Pageable pageable) {
+        Specification<User> spec = UserSpecification.withFilters(name, email, department, status);
+        return userRepository.findAll(spec, pageable).map(this::toResponse);
+    }
+
+    public List<String> findAllDepartments() {
+        return userRepository.findDistinctDepartments();
     }
 
     public UserDetailResponse getUserDetail(Long userId) {

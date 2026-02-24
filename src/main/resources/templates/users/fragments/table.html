@@ -2,14 +2,75 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
 <div th:fragment="userTable">
+
+    <!-- Filters -->
+    <form id="user-filters" class="mb-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <input type="hidden" name="page" value="0" id="filter-page"/>
+        <div>
+            <label for="filter-name" class="block text-xs font-medium text-gray-500 mb-1">Name</label>
+            <input type="text" id="filter-name" name="name" th:value="${filterName}"
+                   placeholder="Search by name..."
+                   class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                   hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                   hx-trigger="keyup changed delay:300ms" hx-include="#user-filters"/>
+        </div>
+        <div>
+            <label for="filter-email" class="block text-xs font-medium text-gray-500 mb-1">Email</label>
+            <input type="text" id="filter-email" name="email" th:value="${filterEmail}"
+                   placeholder="Search by email..."
+                   class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                   hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                   hx-trigger="keyup changed delay:300ms" hx-include="#user-filters"/>
+        </div>
+        <div>
+            <label for="filter-department" class="block text-xs font-medium text-gray-500 mb-1">Department</label>
+            <select id="filter-department" name="department"
+                    class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                    hx-trigger="change" hx-include="#user-filters">
+                <option value="">All departments</option>
+                <option th:each="dept : ${departments}" th:value="${dept}" th:text="${dept}"
+                        th:selected="${dept == filterDepartment}">Dept</option>
+            </select>
+        </div>
+        <div>
+            <label for="filter-status" class="block text-xs font-medium text-gray-500 mb-1">Status</label>
+            <select id="filter-status" name="status"
+                    class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                    hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                    hx-trigger="change" hx-include="#user-filters">
+                <option value="">All statuses</option>
+                <option value="ACTIVE" th:selected="${filterStatus == 'ACTIVE'}">Active</option>
+                <option value="INACTIVE" th:selected="${filterStatus == 'INACTIVE'}">Inactive</option>
+                <option value="OFFBOARDED" th:selected="${filterStatus == 'OFFBOARDED'}">Offboarded</option>
+            </select>
+        </div>
+        <div class="flex items-end">
+            <button type="button"
+                    class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                    onclick="document.getElementById('filter-name').value='';document.getElementById('filter-email').value='';document.getElementById('filter-department').value='';document.getElementById('filter-status').value='';document.getElementById('filter-page').value='0';">
+                Clear
+            </button>
+        </div>
+    </form>
+
+    <!-- Summary -->
+    <div class="flex items-center justify-between mb-3">
+        <p class="text-sm text-gray-500">
+            Showing <span class="font-medium text-gray-700" th:text="${#lists.size(users)}">0</span>
+            of <span class="font-medium text-gray-700" th:text="${totalElements}">0</span> users
+        </p>
+    </div>
+
     <!-- Empty state -->
     <div th:if="${#lists.isEmpty(users)}" class="bg-white rounded-lg border border-gray-200 p-8 text-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
         </svg>
-        <h3 class="text-base font-medium text-gray-900 mb-1">No users discovered yet</h3>
+        <h3 class="text-base font-medium text-gray-900 mb-1">No users found</h3>
         <p class="text-sm text-gray-500 max-w-sm mx-auto">
-            Users will appear here once AI tool integrations are configured and synced.
+            Try adjusting your filters or clear them to see all users.
         </p>
     </div>
 
@@ -60,6 +121,71 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Pagination -->
+    <nav th:if="${totalPages > 1}" class="flex items-center justify-between mt-4" aria-label="Pagination">
+        <div class="text-sm text-gray-500">
+            Page <span class="font-medium" th:text="${currentPage + 1}">1</span>
+            of <span class="font-medium" th:text="${totalPages}">1</span>
+        </div>
+        <div class="flex gap-1">
+            <!-- Previous -->
+            <button th:disabled="${currentPage == 0}"
+                    th:classappend="${currentPage == 0} ? 'opacity-50 cursor-not-allowed' : ''"
+                    class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                    hx-include="#user-filters"
+                    th:hx-vals="${'{&quot;page&quot;:' + (currentPage - 1) + '}'}"
+                    type="button">
+                Previous
+            </button>
+
+            <!-- Page numbers -->
+            <th:block th:with="startPage=${currentPage > 2 ? currentPage - 2 : 0}, endPage=${(startPage + 4) < totalPages ? (startPage + 4) : totalPages - 1}">
+                <!-- First page + ellipsis -->
+                <button th:if="${startPage > 0}"
+                        class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                        hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                        hx-include="#user-filters"
+                        th:hx-vals="'{&quot;page&quot;:0}'"
+                        type="button">1</button>
+                <span th:if="${startPage > 1}" class="px-2 py-1.5 text-sm text-gray-500">...</span>
+
+                <!-- Visible pages -->
+                <th:block th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <button th:text="${i + 1}"
+                            th:classappend="${i == currentPage} ? 'bg-indigo-50 border-indigo-500 text-indigo-600' : ''"
+                            class="relative inline-flex items-center rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                            hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                            hx-include="#user-filters"
+                            th:hx-vals="${'{&quot;page&quot;:' + i + '}'}"
+                            type="button">1</button>
+                </th:block>
+
+                <!-- Last page + ellipsis -->
+                <span th:if="${endPage < totalPages - 2}" class="px-2 py-1.5 text-sm text-gray-500">...</span>
+                <button th:if="${endPage < totalPages - 1}"
+                        class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                        hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                        hx-include="#user-filters"
+                        th:hx-vals="${'{&quot;page&quot;:' + (totalPages - 1) + '}'}"
+                        th:text="${totalPages}"
+                        type="button">10</button>
+            </th:block>
+
+            <!-- Next -->
+            <button th:disabled="${currentPage + 1 >= totalPages}"
+                    th:classappend="${currentPage + 1 >= totalPages} ? 'opacity-50 cursor-not-allowed' : ''"
+                    class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
+                    hx-include="#user-filters"
+                    th:hx-vals="${'{&quot;page&quot;:' + (currentPage + 1) + '}'}"
+                    type="button">
+                Next
+            </button>
+        </div>
+    </nav>
+
 </div>
 </body>
 </html>

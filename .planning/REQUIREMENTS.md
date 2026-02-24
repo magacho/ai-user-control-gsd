@@ -16,7 +16,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### User Management
 
-- [ ] **USER-01**: Admin can view list of all users with corporate email (@bemobi.com)
+- [x] **USER-01**: Admin can view list of all users with corporate email (@bemobi.com)
 - [ ] ~~**USER-02**: Admin can create new user with email, name, department, status~~ **REFRAMED** -- Users are discovered from provider APIs, not manually created; data model supports the fields but no create endpoint exists
 - [ ] ~~**USER-03**: Admin can update user information (name, department, status)~~ **REFRAMED** -- User data is read-only in dashboard; profile data comes from Google Workspace and provider APIs, not manual edits
 - [ ] ~~**USER-04**: Admin can deactivate user (soft delete, preserves historical data)~~ **REFRAMED** -- User status is determined automatically from data (orphaned account detection), not manually set by admin
@@ -188,7 +188,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | -- | Dropped (admin-only platform, no developer login) |
 | AUTH-03 | Phase 1: Auth & User Management | Pending (reframed: admin-only access control) |
 | AUTH-04 | Phase 1: Auth & User Management | Complete |
-| USER-01 | Phase 1: Auth & User Management | Pending |
+| USER-01 | Phase 1: Auth & User Management | Complete |
 | USER-02 | -- | Reframed (users from provider APIs, not manual creation) |
 | USER-03 | -- | Reframed (read-only dashboard, no manual edits) |
 | USER-04 | -- | Reframed (status automatic from data, not manual action) |

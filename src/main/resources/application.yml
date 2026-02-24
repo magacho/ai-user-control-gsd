@@ -1,0 +1,166 @@
+spring:
+  application:
+    name: ai-user-control
+
+  profiles:
+    active: ${SPRING_PROFILE:dev}
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/aiusercontrol}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    validate-on-migrate: true
+
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
+  cache:
+    type: simple
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid, profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
+  servlet:
+    session:
+      timeout: 8h
+      cookie:
+        http-only: true
+        secure: false
+        same-site: lax
+
+# API Documentation
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+  show-actuator: true
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# Application Specific Configuration
+app:
+  name: AI User Control
+  version: 1.0.0
+  description: Sistema de gestão e controle de uso de ferramentas de IA
+
+  admin-emails:
+    - ${ADMIN_EMAIL:admin@bemobi.com}
+
+  # AI Tools Integration
+  integrations:
+    claude:
+      api-url: ${CLAUDE_API_URL:https://api.anthropic.com/v1}
+      api-key: ${CLAUDE_API_KEY:}
+      enabled: ${CLAUDE_INTEGRATION_ENABLED:false}
+
+    github-copilot:
+      api-url: ${GITHUB_API_URL:https://api.github.com}
+      api-token: ${GITHUB_API_TOKEN:}
+      organization: ${GITHUB_ORG:}
+      enabled: ${GITHUB_INTEGRATION_ENABLED:false}
+
+    cursor:
+      api-url: ${CURSOR_API_URL:}
+      api-key: ${CURSOR_API_KEY:}
+      enabled: ${CURSOR_INTEGRATION_ENABLED:false}
+
+  # Scheduled Tasks
+  scheduler:
+    usage-metrics-collection:
+      enabled: ${SCHEDULER_ENABLED:true}
+      cron: ${USAGE_METRICS_CRON:0 0 2 * * ?} # Daily at 2 AM
+
+    inactive-accounts-check:
+      enabled: ${SCHEDULER_ENABLED:true}
+      cron: ${INACTIVE_ACCOUNTS_CRON:0 0 3 * * ?} # Daily at 3 AM
+      inactive-days-threshold: ${INACTIVE_DAYS_THRESHOLD:30}
+
+  # Email Configuration (for notifications)
+  email:
+    enabled: ${EMAIL_ENABLED:false}
+    from: ${EMAIL_FROM:noreply@bemobi.com}
+    admin-recipients: ${EMAIL_ADMIN_RECIPIENTS:admin@bemobi.com}
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.bemobi.aiusercontrol: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/ai-user-control.log
+    max-size: 10MB
+    max-history: 30

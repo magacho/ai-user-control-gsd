@@ -39,6 +39,12 @@ public class AITool {
     @Column(nullable = false)
     private boolean enabled = true;
 
+    @Column(name = "api_key", length = 1024)
+    private String apiKey;
+
+    @Column(name = "api_org_id")
+    private String apiOrgId;
+
     @Column(name = "icon_url", length = 1024)
     private String iconUrl;
 
@@ -52,13 +58,16 @@ public class AITool {
     }
 
     public AITool(Long id, String name, AIToolType toolType, String description, String apiBaseUrl,
-                  boolean enabled, String iconUrl, Instant createdAt, Instant updatedAt) {
+                  boolean enabled, String apiKey, String apiOrgId, String iconUrl,
+                  Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;
         this.toolType = toolType;
         this.description = description;
         this.apiBaseUrl = apiBaseUrl;
         this.enabled = enabled;
+        this.apiKey = apiKey;
+        this.apiOrgId = apiOrgId;
         this.iconUrl = iconUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -124,6 +133,22 @@ public class AITool {
         this.enabled = enabled;
     }
 
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public String getApiOrgId() {
+        return apiOrgId;
+    }
+
+    public void setApiOrgId(String apiOrgId) {
+        this.apiOrgId = apiOrgId;
+    }
+
     public String getIconUrl() {
         return iconUrl;
     }
@@ -170,6 +195,7 @@ public class AITool {
                 ", description='" + description + '\'' +
                 ", apiBaseUrl='" + apiBaseUrl + '\'' +
                 ", enabled=" + enabled +
+                ", apiOrgId='" + apiOrgId + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
@@ -186,6 +212,8 @@ public class AITool {
         private String description;
         private String apiBaseUrl;
         private boolean enabled = true;
+        private String apiKey;
+        private String apiOrgId;
         private String iconUrl;
         private Instant createdAt;
         private Instant updatedAt;
@@ -220,6 +248,16 @@ public class AITool {
             return this;
         }
 
+        public Builder apiKey(String apiKey) {
+            this.apiKey = apiKey;
+            return this;
+        }
+
+        public Builder apiOrgId(String apiOrgId) {
+            this.apiOrgId = apiOrgId;
+            return this;
+        }
+
         public Builder iconUrl(String iconUrl) {
             this.iconUrl = iconUrl;
             return this;
@@ -236,7 +274,7 @@ public class AITool {
         }
 
         public AITool build() {
-            return new AITool(id, name, toolType, description, apiBaseUrl, enabled, iconUrl, createdAt, updatedAt);
+            return new AITool(id, name, toolType, description, apiBaseUrl, enabled, apiKey, apiOrgId, iconUrl, createdAt, updatedAt);
         }
     }
 }

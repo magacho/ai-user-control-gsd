@@ -35,6 +35,9 @@ public class User {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
+    @Column(name = "github_username")
+    private String githubUsername;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
@@ -52,12 +55,14 @@ public class User {
     }
 
     public User(Long id, String email, String name, String department, String avatarUrl,
-                UserStatus status, Instant lastLoginAt, Instant createdAt, Instant updatedAt) {
+                String githubUsername, UserStatus status, Instant lastLoginAt, Instant createdAt,
+                Instant updatedAt) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.department = department;
         this.avatarUrl = avatarUrl;
+        this.githubUsername = githubUsername;
         this.status = status;
         this.lastLoginAt = lastLoginAt;
         this.createdAt = createdAt;
@@ -116,6 +121,14 @@ public class User {
         this.avatarUrl = avatarUrl;
     }
 
+    public String getGithubUsername() {
+        return githubUsername;
+    }
+
+    public void setGithubUsername(String githubUsername) {
+        this.githubUsername = githubUsername;
+    }
+
     public UserStatus getStatus() {
         return status;
     }
@@ -168,6 +181,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", department='" + department + '\'' +
+                ", githubUsername='" + githubUsername + '\'' +
                 ", status=" + status +
                 ", lastLoginAt=" + lastLoginAt +
                 ", createdAt=" + createdAt +
@@ -185,6 +199,7 @@ public class User {
         private String name;
         private String department;
         private String avatarUrl;
+        private String githubUsername;
         private UserStatus status = UserStatus.ACTIVE;
         private Instant lastLoginAt;
         private Instant createdAt;
@@ -215,6 +230,11 @@ public class User {
             return this;
         }
 
+        public Builder githubUsername(String githubUsername) {
+            this.githubUsername = githubUsername;
+            return this;
+        }
+
         public Builder status(UserStatus status) {
             this.status = status;
             return this;
@@ -236,7 +256,7 @@ public class User {
         }
 
         public User build() {
-            return new User(id, email, name, department, avatarUrl, status, lastLoginAt, createdAt, updatedAt);
+            return new User(id, email, name, department, avatarUrl, githubUsername, status, lastLoginAt, createdAt, updatedAt);
         }
     }
 }

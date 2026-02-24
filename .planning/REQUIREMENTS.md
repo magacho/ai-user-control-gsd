@@ -1,0 +1,194 @@
+# Requirements: AI User Control
+
+**Defined:** 2026-02-24
+**Core Value:** Transparent AI tool costs with zero wasted spending on orphaned accounts
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Authentication & Authorization
+
+- [ ] **AUTH-01**: Admin can log in with JWT token and access all system features
+- [ ] **AUTH-02**: Developer can log in with JWT token and access only personal usage data
+- [ ] **AUTH-03**: System enforces role-based access control (Admin vs Developer)
+- [ ] **AUTH-04**: User session persists securely across requests
+
+### User Management
+
+- [ ] **USER-01**: Admin can view list of all users with corporate email (@bemobi.com)
+- [ ] **USER-02**: Admin can create new user with email, name, department, status
+- [ ] **USER-03**: Admin can update user information (name, department, status)
+- [ ] **USER-04**: Admin can deactivate user (soft delete, preserves historical data)
+- [ ] **USER-05**: System validates corporate email domain (@bemobi.com)
+- [ ] **USER-06**: System tracks user status (ACTIVE, INACTIVE, OFFBOARDED)
+
+### Google Workspace Integration
+
+- [ ] **GW-01**: System connects to Google Workspace API with appropriate permissions
+- [ ] **GW-02**: System retrieves user list from Google Workspace directory
+- [ ] **GW-03**: System reads custom property `github_username` from Google Workspace user profiles
+- [ ] **GW-04**: System handles pagination when fetching large user lists
+- [ ] **GW-05**: System validates Google Workspace API credentials at startup
+
+### Account Linking
+
+- [ ] **ACCT-01**: Admin can link user email to Claude account identifier
+- [ ] **ACCT-02**: Admin can link user email to Cursor account identifier
+- [ ] **ACCT-03**: Admin can link user email to GitHub username via Google Workspace custom property
+- [ ] **ACCT-04**: Admin can view all tool accounts linked to a specific user
+- [ ] **ACCT-05**: Admin can unlink tool account from user
+- [ ] **ACCT-06**: System tracks account status per tool (ACTIVE, SUSPENDED, REVOKED)
+- [ ] **ACCT-07**: System handles multiple accounts per tool per user
+
+### Metrics Collection - Claude
+
+- [ ] **CLAUDE-01**: System connects to Anthropic API with organization credentials
+- [ ] **CLAUDE-02**: Scheduled job collects Claude usage data daily (2 AM default)
+- [ ] **CLAUDE-03**: System retrieves token counts (input + output) per user per day
+- [ ] **CLAUDE-04**: System retrieves request counts per user per day
+- [ ] **CLAUDE-05**: System retrieves last access date per user
+- [ ] **CLAUDE-06**: System handles Anthropic API rate limits with backoff and retry
+- [ ] **CLAUDE-07**: System stores raw Claude metrics in normalized format
+
+### Metrics Collection - GitHub Copilot
+
+- [ ] **GITHUB-01**: System connects to GitHub API with organization token
+- [ ] **GITHUB-02**: Scheduled job collects GitHub Copilot usage data daily
+- [ ] **GITHUB-03**: System retrieves seat assignments per GitHub username
+- [ ] **GITHUB-04**: System retrieves last activity date per seat
+- [ ] **GITHUB-05**: System retrieves suggestion counts and acceptance rates (org-level)
+- [ ] **GITHUB-06**: System maps GitHub username to corporate email via Google Workspace
+- [ ] **GITHUB-07**: System handles GitHub API rate limits with backoff and retry
+- [ ] **GITHUB-08**: System stores raw GitHub metrics in normalized format
+
+### Metrics Collection - Cursor
+
+- [ ] **CURSOR-01**: System connects to Cursor API (or fallback: CSV import)
+- [ ] **CURSOR-02**: Scheduled job collects Cursor usage data daily (if API available)
+- [ ] **CURSOR-03**: System retrieves usage metrics per user per day
+- [ ] **CURSOR-04**: System retrieves last access date per user
+- [ ] **CURSOR-05**: Admin can manually upload Cursor usage CSV if API unavailable
+- [ ] **CURSOR-06**: System stores raw Cursor metrics in normalized format
+
+### Scheduled Jobs & Resilience
+
+- [ ] **SCHED-01**: System uses ShedLock for distributed scheduling (prevents duplicate runs)
+- [ ] **SCHED-02**: Scheduled jobs are idempotent (safe to re-run for same date)
+- [ ] **SCHED-03**: System implements circuit breaker pattern for external API calls
+- [ ] **SCHED-04**: System retries failed API calls with exponential backoff
+- [ ] **SCHED-05**: System logs collection health (last run, success/failure counts)
+- [ ] **SCHED-06**: Admin can manually trigger metric collection for specific date
+- [ ] **SCHED-07**: System caches API responses to avoid rate limit exhaustion
+
+### Cost Calculation
+
+- [ ] **COST-01**: System calculates estimated cost per user per tool per month
+- [ ] **COST-02**: System uses configurable pricing rules (not hardcoded rates)
+- [ ] **COST-03**: System supports versioned pricing with effective dates
+- [ ] **COST-04**: System converts tokens to costs using model-specific rates
+- [ ] **COST-05**: System aggregates costs by user, tool, department, and time period
+- [ ] **COST-06**: System stores aggregated costs (daily, monthly rollups)
+
+### Inactive Account Detection
+
+- [ ] **DETECT-01**: System identifies accounts with no usage in last 30 days
+- [ ] **DETECT-02**: System flags inactive accounts in admin dashboard
+- [ ] **DETECT-03**: System excludes accounts with known gaps (collection failures) from detection
+- [ ] **DETECT-04**: Admin can configure inactivity threshold (default 30 days)
+- [ ] **DETECT-05**: System tracks account lifecycle (first seen, last seen, inactive since)
+
+### Admin Dashboard
+
+- [ ] **DASH-01**: Admin can view dashboard showing all users, tools, and costs
+- [ ] **DASH-02**: Admin can filter users by status, department, or tool
+- [ ] **DASH-03**: Admin can sort users by cost (highest to lowest)
+- [ ] **DASH-04**: Admin can drill down into specific user to see detailed usage
+- [ ] **DASH-05**: Admin can view inactive accounts requiring attention
+- [ ] **DASH-06**: Dashboard shows total monthly cost across all tools
+- [ ] **DASH-07**: Dashboard shows cost breakdown by tool (Claude vs GitHub vs Cursor)
+- [ ] **DASH-08**: Dashboard uses Thymeleaf + HTMX (server-side rendering)
+
+### Developer Self-Service
+
+- [ ] **DEV-01**: Developer can view personal usage dashboard (no access to others)
+- [ ] **DEV-02**: Developer can see own token consumption per tool
+- [ ] **DEV-03**: Developer can see own cost estimate per tool
+- [ ] **DEV-04**: Developer can see own usage history (last 90 days)
+- [ ] **DEV-05**: Developer can see which tools they have active accounts for
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### Alerts & Notifications
+
+- **ALERT-01**: System sends email alert when account inactive for 30+ days
+- **ALERT-02**: System sends email alert when user cost exceeds threshold
+- **ALERT-03**: System sends email alert when collection job fails
+- **ALERT-04**: Admin can configure alert rules and recipients
+
+### Advanced Reporting
+
+- **REPORT-01**: Admin can generate usage trend reports (month-over-month)
+- **REPORT-02**: Admin can export cost reports to CSV
+- **REPORT-03**: Admin can view department-level cost aggregation
+- **REPORT-04**: Admin can view historical cost trends with charts
+
+### Google Workspace Automation
+
+- **GW-AUTO-01**: System auto-creates user when new employee added to Google Workspace
+- **GW-AUTO-02**: System auto-deactivates user when employee offboarded in Google Workspace
+- **GW-AUTO-03**: System syncs user data changes from Google Workspace daily
+
+### Bulk Operations
+
+- **BULK-01**: Admin can bulk import users from CSV
+- **BULK-02**: Admin can bulk link accounts from CSV
+- **BULK-03**: Admin can bulk deactivate multiple users at once
+
+### Audit Trail
+
+- **AUDIT-01**: System logs all admin actions (create, update, delete, link, unlink)
+- **AUDIT-02**: Admin can view audit log with timestamp, user, and action
+- **AUDIT-03**: System retains audit logs for 12 months minimum
+
+### API Extension
+
+- **API-01**: System exposes REST API for external integrations
+- **API-02**: System provides OpenAPI documentation for all endpoints
+- **API-03**: External systems can query usage data via API with authentication
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Real-time usage tracking | Daily batch collection is sufficient for cost control; real-time adds complexity without value |
+| Automatic account provisioning | Manual provisioning with centralized tracking is enough; auto-provisioning adds risk |
+| Automatic account deprovisioning | System detects inactive accounts but does not auto-disable; safety first, admin approval required |
+| Multi-tenancy for other companies | Built specifically for Bemobi's needs; single-tenant simplifies everything |
+| Mobile app | Web dashboard covers admin and developer use cases; mobile not justified |
+| AI tool configuration management | System tracks usage, not tool configuration (IDE settings, etc.) |
+| Code quality analysis | Measures quantity (tokens, requests), not quality; out of scope |
+| SPA frontend migration | Thymeleaf + HTMX decision made; no React/Vue/Angular complexity |
+| Cross-company benchmarking | No data source, not the problem we're solving |
+| Webhook integrations | API-first design deferred to v2; webhooks not needed for v1 |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| (To be filled by roadmapper) | | |
+
+**Coverage:**
+- v1 requirements: TBD total
+- Mapped to phases: TBD
+- Unmapped: TBD
+
+---
+*Requirements defined: 2026-02-24*
+*Last updated: 2026-02-24 after research synthesis*

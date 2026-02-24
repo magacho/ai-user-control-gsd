@@ -87,7 +87,7 @@ public class GoogleWorkspaceService {
         if (customSchemas != null) {
             Map<String, Object> schema = customSchemas.get(customSchemaName);
             if (schema != null) {
-                Object githubValue = schema.get("github_username");
+                Object githubValue = schema.get("git_name");
                 if (githubValue != null) {
                     githubUsername = githubValue.toString();
                 }

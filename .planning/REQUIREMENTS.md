@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication & Authorization
 
-- [ ] **AUTH-01**: Admin can log in via Google SSO and access all system features
+- [x] **AUTH-01**: Admin can log in via Google SSO and access all system features
 - [ ] ~~**AUTH-02**: Developer can log in and access only personal usage data~~ **DROPPED** -- Platform is admin-only per CONTEXT.md; Phase 8 (Developer Self-Service) dropped entirely
 - [ ] **AUTH-03**: System enforces admin-only access control (all authenticated users are admins)
-- [ ] **AUTH-04**: User session persists securely across requests with 8-hour timeout
+- [x] **AUTH-04**: User session persists securely across requests with 8-hour timeout
 
 ### User Management
 
@@ -20,8 +20,8 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] ~~**USER-02**: Admin can create new user with email, name, department, status~~ **REFRAMED** -- Users are discovered from provider APIs, not manually created; data model supports the fields but no create endpoint exists
 - [ ] ~~**USER-03**: Admin can update user information (name, department, status)~~ **REFRAMED** -- User data is read-only in dashboard; profile data comes from Google Workspace and provider APIs, not manual edits
 - [ ] ~~**USER-04**: Admin can deactivate user (soft delete, preserves historical data)~~ **REFRAMED** -- User status is determined automatically from data (orphaned account detection), not manually set by admin
-- [ ] **USER-05**: System validates corporate email domain (@bemobi.com)
-- [ ] **USER-06**: System tracks user status (ACTIVE, INACTIVE, OFFBOARDED)
+- [x] **USER-05**: System validates corporate email domain (@bemobi.com)
+- [x] **USER-06**: System tracks user status (ACTIVE, INACTIVE, OFFBOARDED)
 
 ### Google Workspace Integration
 
@@ -184,16 +184,16 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1: Auth & User Management | Pending |
+| AUTH-01 | Phase 1: Auth & User Management | Complete |
 | AUTH-02 | -- | Dropped (admin-only platform, no developer login) |
 | AUTH-03 | Phase 1: Auth & User Management | Pending (reframed: admin-only access control) |
-| AUTH-04 | Phase 1: Auth & User Management | Pending |
+| AUTH-04 | Phase 1: Auth & User Management | Complete |
 | USER-01 | Phase 1: Auth & User Management | Pending |
 | USER-02 | -- | Reframed (users from provider APIs, not manual creation) |
 | USER-03 | -- | Reframed (read-only dashboard, no manual edits) |
 | USER-04 | -- | Reframed (status automatic from data, not manual action) |
-| USER-05 | Phase 1: Auth & User Management | Pending |
-| USER-06 | Phase 1: Auth & User Management | Pending |
+| USER-05 | Phase 1: Auth & User Management | Complete |
+| USER-06 | Phase 1: Auth & User Management | Complete |
 | GW-01 | Phase 2: Identity Resolution & Account Linking | Pending |
 | GW-02 | Phase 2: Identity Resolution & Account Linking | Pending |
 | GW-03 | Phase 2: Identity Resolution & Account Linking | Pending |

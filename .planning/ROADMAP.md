@@ -59,6 +59,24 @@ Plans:
 - [x] 02-02-PLAN.md -- Sync service: GoogleWorkspaceService with pagination, Claude/Cursor API user fetch, AccountLinkingService with email matching, SyncOrchestrator, unit tests
 - [x] 02-03-PLAN.md -- UI: Sync button on dashboard with toast feedback, user detail page with linked accounts and unlink, "Contas Pendentes" page with sidebar badge
 
+### Phase 02.2: Validar integração Cursor API e testar sync end-to-end (INSERTED)
+
+**Goal:** Validate CursorApiClient against real Cursor Admin API, remove @ConditionalOnProperty from all tool clients (DB-driven enablement), and add per-tool sync result breakdown in UI toast
+**Depends on:** Phase 02.1
+**Requirements**: TBD (inserted urgent phase, no formal requirement IDs)
+**Success Criteria** (what must be TRUE):
+  1. CursorApiClient uses Cursor's real Admin API (Basic Auth, /teams/members, teamMembers response, isRemoved filtering)
+  2. All three API clients (Claude, Cursor, GitHub Copilot) are always-available Spring beans (no @ConditionalOnProperty)
+  3. DB tool registration is the sole source of truth for tool enablement (no YAML enabled flags)
+  4. Sync toast shows per-tool breakdown (seats found, linked, errors per tool)
+  5. CursorApiClient has dedicated unit tests
+  6. `mvn compile` + `mvn test` pass
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02.2-01-PLAN.md -- Rewrite CursorApiClient for real Cursor Admin API, remove @ConditionalOnProperty from all clients, clean up config
+- [ ] 02.2-02-PLAN.md -- Per-tool sync result details in SyncResultResponse and toast UI, CursorApiClient unit tests, SyncOrchestratorTest update
+
 ### Phase 02.1: Inverter fonte de usuários — IAs primeiro, GWS depois (INSERTED)
 
 **Goal:** Invert user discovery flow so AI tool seats/licenses are the primary user source, GWS becomes individual email lookup only, and admin has a report page for invalid/removable accounts
@@ -190,6 +208,7 @@ Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so
 | 1. Auth & User Management | 3/3 | Complete | 2026-02-24 |
 | 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
 | 02.1. Inverter fonte de usuarios | 3/3 | Complete    | 2026-02-26 |
+| 02.2. Validar Cursor API + sync E2E | 0/2 | Not started | - |
 | 3. Metrics Infrastructure | 0/1 | Not started | - |
 | 4. Cursor Integration | 0/2 | Not started | - |
 | 5. Claude Integration | 0/2 | Not started | - |

@@ -76,7 +76,7 @@ Plans:
 Plans:
 - [x] 02.2-01-PLAN.md -- Rewrite CursorApiClient for real Cursor Admin API, remove @ConditionalOnProperty from all clients, clean up config
 - [x] 02.2-02-PLAN.md -- Per-tool sync result details in SyncResultResponse and toast UI, CursorApiClient unit tests, SyncOrchestratorTest update
-- [ ] 02.2-03-PLAN.md -- Gap closure: Fix LazyInitializationException in PendingAccountsController with JOIN FETCH queries
+- [x] 02.2-03-PLAN.md -- Gap closure: Fix LazyInitializationException in PendingAccountsController with JOIN FETCH queries
 
 ### Phase 02.1: Inverter fonte de usuários — IAs primeiro, GWS depois (INSERTED)
 

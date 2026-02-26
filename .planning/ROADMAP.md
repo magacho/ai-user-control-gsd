@@ -59,6 +59,27 @@ Plans:
 - [x] 02-02-PLAN.md -- Sync service: GoogleWorkspaceService with pagination, Claude/Cursor API user fetch, AccountLinkingService with email matching, SyncOrchestrator, unit tests
 - [x] 02-03-PLAN.md -- UI: Sync button on dashboard with toast feedback, user detail page with linked accounts and unlink, "Contas Pendentes" page with sidebar badge
 
+### Phase 02.1: Inverter fonte de usuários — IAs primeiro, GWS depois (INSERTED)
+
+**Goal:** Invert user discovery flow so AI tool seats/licenses are the primary user source, GWS becomes individual email lookup only, and admin has a report page for invalid/removable accounts
+**Depends on:** Phase 2
+**Requirements**: INVERT-DATA, INVERT-GWS, INVERT-GHCLIENT, INVERT-FLOW, INVERT-PARALLEL, INVERT-VALIDATE, INVERT-DISAPPEAR, INVERT-LEGACY, INVERT-REMOVEGWS, INVERT-REPORT, INVERT-SIDEBAR
+**Success Criteria** (what must be TRUE):
+  1. SyncOrchestrator fetches AI tool seats first (Claude, Cursor, GitHub Copilot in parallel), then validates each email against GWS individually
+  2. Users are only created when their seat email is validated in GWS; non-corporate seats stay with user_id=NULL
+  3. Full GWS directory sync is removed; GWS is used only for per-email lookup
+  4. GitHub Copilot seats are fetched via API and matched to users by github_username
+  5. Disappeared seats (no longer returned by API) are marked SUSPENDED then REVOKED
+  6. Legacy users with no AI seats are archived as INACTIVE
+  7. Admin can view a report page with two sections: seats to remove and external/invalid seats
+  8. `mvn compile` + `mvn test` pass
+**Plans**: 3 plans
+
+Plans:
+- [ ] 02.1-01-PLAN.md -- Data foundation: V9 migration, User entity updates, GWS single-user lookup, GitHub Copilot client, repository queries
+- [ ] 02.1-02-PLAN.md -- SyncOrchestrator rewrite: AI-first flow with parallel seat fetch, GWS validation, GitHub matching, legacy cleanup, unit tests
+- [ ] 02.1-03-PLAN.md -- Admin report UI: Two-section report page (seats to remove + external seats), tool filter, sidebar update
+
 ### Phase 3: Metrics Infrastructure
 **Goal**: Shared infrastructure for metrics collection — scheduling with distributed locking, persistence with idempotency, circuit breaker and retry — ready for any provider
 **Depends on**: Phase 2
@@ -168,6 +189,7 @@ Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so
 |-------|----------------|--------|-----------|
 | 1. Auth & User Management | 3/3 | Complete | 2026-02-24 |
 | 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
+| 02.1. Inverter fonte de usuarios | 0/3 | Planning complete | - |
 | 3. Metrics Infrastructure | 0/1 | Not started | - |
 | 4. Cursor Integration | 0/2 | Not started | - |
 | 5. Claude Integration | 0/2 | Not started | - |

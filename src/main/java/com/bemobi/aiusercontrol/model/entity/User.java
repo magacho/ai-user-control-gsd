@@ -51,12 +51,18 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    @Column(name = "validation_source")
+    private String validationSource = "GWS_LEGACY";
+
+    @Column(name = "gws_validated_at")
+    private Instant gwsValidatedAt;
+
     public User() {
     }
 
     public User(Long id, String email, String name, String department, String avatarUrl,
                 String githubUsername, UserStatus status, Instant lastLoginAt, Instant createdAt,
-                Instant updatedAt) {
+                Instant updatedAt, String validationSource, Instant gwsValidatedAt) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -67,6 +73,8 @@ public class User {
         this.lastLoginAt = lastLoginAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.validationSource = validationSource;
+        this.gwsValidatedAt = gwsValidatedAt;
     }
 
     @PrePersist
@@ -161,6 +169,22 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
+    public String getValidationSource() {
+        return validationSource;
+    }
+
+    public void setValidationSource(String validationSource) {
+        this.validationSource = validationSource;
+    }
+
+    public Instant getGwsValidatedAt() {
+        return gwsValidatedAt;
+    }
+
+    public void setGwsValidatedAt(Instant gwsValidatedAt) {
+        this.gwsValidatedAt = gwsValidatedAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -186,6 +210,8 @@ public class User {
                 ", lastLoginAt=" + lastLoginAt +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", validationSource='" + validationSource + '\'' +
+                ", gwsValidatedAt=" + gwsValidatedAt +
                 '}';
     }
 
@@ -204,6 +230,8 @@ public class User {
         private Instant lastLoginAt;
         private Instant createdAt;
         private Instant updatedAt;
+        private String validationSource = "GWS_LEGACY";
+        private Instant gwsValidatedAt;
 
         public Builder id(Long id) {
             this.id = id;
@@ -255,8 +283,18 @@ public class User {
             return this;
         }
 
+        public Builder validationSource(String validationSource) {
+            this.validationSource = validationSource;
+            return this;
+        }
+
+        public Builder gwsValidatedAt(Instant gwsValidatedAt) {
+            this.gwsValidatedAt = gwsValidatedAt;
+            return this;
+        }
+
         public User build() {
-            return new User(id, email, name, department, avatarUrl, githubUsername, status, lastLoginAt, createdAt, updatedAt);
+            return new User(id, email, name, department, avatarUrl, githubUsername, status, lastLoginAt, createdAt, updatedAt, validationSource, gwsValidatedAt);
         }
     }
 }

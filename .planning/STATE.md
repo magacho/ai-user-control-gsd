@@ -69,6 +69,10 @@ See: .planning/PROJECT.md
   - Plan 03 (wave 2): Admin report UI with two sections, tool filter, sidebar update
 - Phase 02.2 inserted after Phase 02: Validar integração Cursor API e testar sync end-to-end (URGENT)
 
+### Pending Todos
+
+4 pending todos in `.planning/todos/pending/`
+
 ### Last Session
 
 - **Stopped at:** Completed 02.2-03-PLAN.md (Phase 02.2 gap closure complete)

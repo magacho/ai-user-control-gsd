@@ -9,11 +9,13 @@ public class SyncResultResponse {
 
     private int newUsers;
     private int updatedUsers;
-    private int offboardedUsers;
     private int linkedAccounts;
     private int unmatchedAccounts;
     private int suspendedAccounts;
     private int revokedAccounts;
+    private int externalAccounts;
+    private int archivedLegacyUsers;
+    private int gwsValidatedUsers;
     private List<String> errors;
     private Instant syncedAt;
 
@@ -25,11 +27,13 @@ public class SyncResultResponse {
     private SyncResultResponse(Builder builder) {
         this.newUsers = builder.newUsers;
         this.updatedUsers = builder.updatedUsers;
-        this.offboardedUsers = builder.offboardedUsers;
         this.linkedAccounts = builder.linkedAccounts;
         this.unmatchedAccounts = builder.unmatchedAccounts;
         this.suspendedAccounts = builder.suspendedAccounts;
         this.revokedAccounts = builder.revokedAccounts;
+        this.externalAccounts = builder.externalAccounts;
+        this.archivedLegacyUsers = builder.archivedLegacyUsers;
+        this.gwsValidatedUsers = builder.gwsValidatedUsers;
         this.errors = builder.errors;
         this.syncedAt = builder.syncedAt;
     }
@@ -48,14 +52,6 @@ public class SyncResultResponse {
 
     public void setUpdatedUsers(int updatedUsers) {
         this.updatedUsers = updatedUsers;
-    }
-
-    public int getOffboardedUsers() {
-        return offboardedUsers;
-    }
-
-    public void setOffboardedUsers(int offboardedUsers) {
-        this.offboardedUsers = offboardedUsers;
     }
 
     public int getLinkedAccounts() {
@@ -90,6 +86,30 @@ public class SyncResultResponse {
         this.revokedAccounts = revokedAccounts;
     }
 
+    public int getExternalAccounts() {
+        return externalAccounts;
+    }
+
+    public void setExternalAccounts(int externalAccounts) {
+        this.externalAccounts = externalAccounts;
+    }
+
+    public int getArchivedLegacyUsers() {
+        return archivedLegacyUsers;
+    }
+
+    public void setArchivedLegacyUsers(int archivedLegacyUsers) {
+        this.archivedLegacyUsers = archivedLegacyUsers;
+    }
+
+    public int getGwsValidatedUsers() {
+        return gwsValidatedUsers;
+    }
+
+    public void setGwsValidatedUsers(int gwsValidatedUsers) {
+        this.gwsValidatedUsers = gwsValidatedUsers;
+    }
+
     public List<String> getErrors() {
         return errors;
     }
@@ -120,17 +140,20 @@ public class SyncResultResponse {
         SyncResultResponse that = (SyncResultResponse) o;
         return newUsers == that.newUsers
                 && updatedUsers == that.updatedUsers
-                && offboardedUsers == that.offboardedUsers
                 && linkedAccounts == that.linkedAccounts
                 && unmatchedAccounts == that.unmatchedAccounts
                 && suspendedAccounts == that.suspendedAccounts
-                && revokedAccounts == that.revokedAccounts;
+                && revokedAccounts == that.revokedAccounts
+                && externalAccounts == that.externalAccounts
+                && archivedLegacyUsers == that.archivedLegacyUsers
+                && gwsValidatedUsers == that.gwsValidatedUsers;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(newUsers, updatedUsers, offboardedUsers, linkedAccounts,
-                unmatchedAccounts, suspendedAccounts, revokedAccounts);
+        return Objects.hash(newUsers, updatedUsers, linkedAccounts,
+                unmatchedAccounts, suspendedAccounts, revokedAccounts,
+                externalAccounts, archivedLegacyUsers, gwsValidatedUsers);
     }
 
     @Override
@@ -138,11 +161,13 @@ public class SyncResultResponse {
         return "SyncResultResponse{" +
                 "newUsers=" + newUsers +
                 ", updatedUsers=" + updatedUsers +
-                ", offboardedUsers=" + offboardedUsers +
                 ", linkedAccounts=" + linkedAccounts +
                 ", unmatchedAccounts=" + unmatchedAccounts +
                 ", suspendedAccounts=" + suspendedAccounts +
                 ", revokedAccounts=" + revokedAccounts +
+                ", externalAccounts=" + externalAccounts +
+                ", archivedLegacyUsers=" + archivedLegacyUsers +
+                ", gwsValidatedUsers=" + gwsValidatedUsers +
                 ", errors=" + errors +
                 ", syncedAt=" + syncedAt +
                 '}';
@@ -155,11 +180,13 @@ public class SyncResultResponse {
     public static class Builder {
         private int newUsers;
         private int updatedUsers;
-        private int offboardedUsers;
         private int linkedAccounts;
         private int unmatchedAccounts;
         private int suspendedAccounts;
         private int revokedAccounts;
+        private int externalAccounts;
+        private int archivedLegacyUsers;
+        private int gwsValidatedUsers;
         private List<String> errors = new ArrayList<>();
         private Instant syncedAt = Instant.now();
 
@@ -170,11 +197,6 @@ public class SyncResultResponse {
 
         public Builder updatedUsers(int updatedUsers) {
             this.updatedUsers = updatedUsers;
-            return this;
-        }
-
-        public Builder offboardedUsers(int offboardedUsers) {
-            this.offboardedUsers = offboardedUsers;
             return this;
         }
 
@@ -195,6 +217,21 @@ public class SyncResultResponse {
 
         public Builder revokedAccounts(int revokedAccounts) {
             this.revokedAccounts = revokedAccounts;
+            return this;
+        }
+
+        public Builder externalAccounts(int externalAccounts) {
+            this.externalAccounts = externalAccounts;
+            return this;
+        }
+
+        public Builder archivedLegacyUsers(int archivedLegacyUsers) {
+            this.archivedLegacyUsers = archivedLegacyUsers;
+            return this;
+        }
+
+        public Builder gwsValidatedUsers(int gwsValidatedUsers) {
+            this.gwsValidatedUsers = gwsValidatedUsers;
             return this;
         }
 

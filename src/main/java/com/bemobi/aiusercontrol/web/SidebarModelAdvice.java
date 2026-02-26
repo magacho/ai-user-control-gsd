@@ -15,6 +15,7 @@ public class SidebarModelAdvice {
 
     @ModelAttribute("pendingAccountsCount")
     public long pendingAccountsCount() {
-        return userAIToolAccountRepository.findPendingAccounts().size();
+        return userAIToolAccountRepository.findAccountsToRemove().size()
+                + userAIToolAccountRepository.findExternalAccounts().size();
     }
 }

@@ -11,6 +11,10 @@ public class PendingAccountResponse {
     private String reason;
     private String userName;
     private String userEmail;
+    private String section;
+    private String firstSeenAt;
+    private String lastSeenAt;
+    private String suggestedAction;
 
     public PendingAccountResponse() {
     }
@@ -25,6 +29,10 @@ public class PendingAccountResponse {
         this.reason = builder.reason;
         this.userName = builder.userName;
         this.userEmail = builder.userEmail;
+        this.section = builder.section;
+        this.firstSeenAt = builder.firstSeenAt;
+        this.lastSeenAt = builder.lastSeenAt;
+        this.suggestedAction = builder.suggestedAction;
     }
 
     public Long getId() {
@@ -99,6 +107,38 @@ public class PendingAccountResponse {
         this.userEmail = userEmail;
     }
 
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
+    public String getFirstSeenAt() {
+        return firstSeenAt;
+    }
+
+    public void setFirstSeenAt(String firstSeenAt) {
+        this.firstSeenAt = firstSeenAt;
+    }
+
+    public String getLastSeenAt() {
+        return lastSeenAt;
+    }
+
+    public void setLastSeenAt(String lastSeenAt) {
+        this.lastSeenAt = lastSeenAt;
+    }
+
+    public String getSuggestedAction() {
+        return suggestedAction;
+    }
+
+    public void setSuggestedAction(String suggestedAction) {
+        this.suggestedAction = suggestedAction;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -113,6 +153,10 @@ public class PendingAccountResponse {
         private String reason;
         private String userName;
         private String userEmail;
+        private String section;
+        private String firstSeenAt;
+        private String lastSeenAt;
+        private String suggestedAction;
 
         public Builder id(Long id) {
             this.id = id;
@@ -156,6 +200,26 @@ public class PendingAccountResponse {
 
         public Builder userEmail(String userEmail) {
             this.userEmail = userEmail;
+            return this;
+        }
+
+        public Builder section(String section) {
+            this.section = section;
+            return this;
+        }
+
+        public Builder firstSeenAt(String firstSeenAt) {
+            this.firstSeenAt = firstSeenAt;
+            return this;
+        }
+
+        public Builder lastSeenAt(String lastSeenAt) {
+            this.lastSeenAt = lastSeenAt;
+            return this;
+        }
+
+        public Builder suggestedAction(String suggestedAction) {
+            this.suggestedAction = suggestedAction;
             return this;
         }
 

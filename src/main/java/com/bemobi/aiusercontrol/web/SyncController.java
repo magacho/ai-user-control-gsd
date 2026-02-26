@@ -47,7 +47,7 @@ public class SyncController {
             }
             redirectAttributes.addFlashAttribute("syncMessage",
                     String.format("Sync completo: %d novos, %d atualizados, %d offboarded. Contas: %d vinculadas, %d sem correspondencia.",
-                            result.getNewUsers(), result.getUpdatedUsers(), result.getOffboardedUsers(),
+                            result.getNewUsers(), result.getUpdatedUsers(), result.getArchivedLegacyUsers(),
                             result.getLinkedAccounts(), result.getUnmatchedAccounts()));
         } catch (Exception e) {
             log.error("Full sync failed with unexpected error", e);

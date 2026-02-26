@@ -104,17 +104,18 @@ Plans:
 
 **Goal:** Implementar integração do GitHub Copilot seguindo o padrão do Cursor (fase 02.2), usando git_name do GWS como chave de busca do usuário. Corrigir o campo "Primeiro Acesso" na listagem de seats inválidos e adicionar campo de último login/uso da ferramenta.
 **Depends on:** Phase 02.2
-**Requirements**: TBD (inserted phase from todos, no formal requirement IDs)
+**Requirements**: GHCOP-SYNC, GHCOP-GITNAME, SEAT-DATES, SEAT-UI (inserted phase from todos)
 **Success Criteria** (what must be TRUE):
   1. GitHub Copilot está integrado como ferramenta de IA, seguindo o padrão do Cursor (API client, sync, account linking)
   2. Busca de usuário do GitHub Copilot usa o parâmetro `git_name` do GWS para mapear login do GitHub → usuário corporativo
   3. Campo "Primeiro Acesso" na listagem de seats inválidos é preenchido corretamente
   4. Listagem de seats inválidos exibe também o campo "Último Login/Uso" da ferramenta
   5. `mvn compile` + `mvn test` pass
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02.3-01: TBD
+- [ ] 02.3-01-PLAN.md -- Data foundation: V10 migration, ToolAccountInfo extension, UserAIToolAccount entity, GitHubCopilotClient date parsing, GWS git_name lookup, AccountLinkingService date persistence
+- [ ] 02.3-02-PLAN.md -- SyncOrchestrator GWS git_name enrichment rewrite, pending accounts UI with date columns and inactivity highlight, tests
 
 ### Phase 3: Metrics Infrastructure
 **Goal**: Shared infrastructure for metrics collection — scheduling with distributed locking, persistence with idempotency, circuit breaker and retry — ready for any provider
@@ -227,7 +228,7 @@ Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so
 | 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
 | 02.1. Inverter fonte de usuarios | 3/3 | Complete    | 2026-02-26 |
 | 02.2. Validar Cursor API + sync E2E | 3/3 | Complete    | 2026-02-26 |
-| 02.3. GitHub Copilot + datas seats | 0/1 | Not started | - |
+| 02.3. GitHub Copilot + datas seats | 0/2 | Not started | - |
 | 3. Metrics Infrastructure | 0/1 | Not started | - |
 | 4. Cursor Integration | 0/2 | Not started | - |
 | 5. Claude Integration | 0/2 | Not started | - |

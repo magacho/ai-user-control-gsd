@@ -6,7 +6,7 @@ current_phase: 02.1-inverter-fonte-de-usu-rios-ias-primeiro-gws-depois
 current_plan: 3 of 3 (COMPLETE)
 status: completed
 stopped_at: Completed 02.1-03-PLAN.md (Phase 02.1 complete)
-last_updated: "2026-02-26T14:35:04.730Z"
+last_updated: "2026-02-26T14:35:10.369Z"
 progress:
   total_phases: 3
   completed_phases: 3
@@ -48,6 +48,7 @@ See: .planning/PROJECT.md
 - Used AIToolType.values() dynamically for tool filter dropdown instead of hardcoded list
 - Static DateTimeFormatter constant for thread-safe Brazilian date formatting (America/Sao_Paulo)
 - Separate table fragments (toRemoveTable, externalTable) for independent empty states and column layouts
+- [Phase 02.1]: Used AIToolType.values() dynamically for tool filter dropdown instead of hardcoded list
 
 ### Roadmap Evolution
 

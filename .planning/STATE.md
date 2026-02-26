@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
-current_plan: Not started
-status: completed
-stopped_at: Phase 02.3 context gathered
-last_updated: "2026-02-26T20:11:43.850Z"
+current_phase: 02.3-integra-o-github-copilot-e-corre-o-de-datas-nos-seats
+current_plan: Plan 02 of 02
+status: executing
+stopped_at: Completed 02.3-01-PLAN.md
+last_updated: "2026-02-26T20:45:18.752Z"
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 12
-  completed_plans: 12
+  total_plans: 14
+  completed_plans: 13
 ---
 
 # Session State
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md
 ## Position
 
 **Milestone:** v1.0 milestone
-**Current phase:** 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
-**Current Plan:** Not started
-**Status:** Milestone complete
+**Current phase:** 02.3-integra-o-github-copilot-e-corre-o-de-datas-nos-seats
+**Current Plan:** Plan 02 of 02
+**Status:** In progress
 
 ## Session Log
 
@@ -37,6 +37,7 @@ See: .planning/PROJECT.md
 - 2026-02-26: Plan 02.2-01 executed (3 min, 2 tasks, 8 files) - CursorApiClient rewrite and conditional property removal
 - 2026-02-26: Plan 02.2-02 executed (3 min, 2 tasks, 5 files) - Per-tool sync details and CursorApiClient tests
 - 2026-02-26: Plan 02.2-03 executed (1 min, 2 tasks, 2 files) - LazyInitializationException fix via JOIN FETCH
+- 2026-02-26: Plan 02.3-01 executed (3 min, 2 tasks, 6 files) - Data foundation for GitHub Copilot git_name and seat source dates
 
 ## Accumulated Context
 
@@ -59,6 +60,10 @@ See: .planning/PROJECT.md
 - [Phase 02.2]: JOIN FETCH is the correct fix for LazyInitializationException (not @Transactional on controller) since open-in-view=false
 - [Phase 02.2]: LEFT JOIN FETCH for nullable user relationship, JOIN FETCH for non-null aiTool
 - [Phase 02.2]: COUNT queries for sidebar badge instead of fetching full entity graphs
+- [Phase 02.3]: OffsetDateTime.parse() for GitHub API dates to handle timezone offsets like -06:00
+- [Phase 02.3]: Per-field try-catch in date parsing to avoid crashing entire seat on single bad date
+- [Phase 02.3]: Write-once semantics for createdAtSource, always-overwrite for lastActivityAt
+- [Phase 02.3]: GWS git_name query with sanitizeQueryValue to escape single quotes
 
 ### Roadmap Evolution
 
@@ -76,4 +81,4 @@ See: .planning/PROJECT.md
 
 ### Last Session
 
-- **Stopped at:** Phase 02.3 context gathered
+- **Stopped at:** Completed 02.3-01-PLAN.md

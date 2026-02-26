@@ -9,11 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @ConditionalOnProperty(prefix = "app.google-workspace", name = "enabled", havingValue = "true")
@@ -73,6 +76,27 @@ public class GoogleWorkspaceService {
             String message = "Failed to fetch users from Google Workspace: " + e.getMessage();
             log.error(message, e);
             throw new RuntimeException(message, e);
+        }
+    }
+
+    public Optional<GwsUser> lookupUserByEmail(String email) {
+        String customSchemaName = appProperties.getGoogleWorkspace().getCustomSchemaName();
+        log.debug("Looking up user in GWS: {}", email);
+        try {
+            User user = directory.users().get(email)
+                    .setProjection("full")
+                    .execute();
+            return Optional.of(mapToGwsUser(user, customSchemaName));
+        } catch (GoogleJsonResponseException e) {
+            if (e.getStatusCode() == 404) {
+                log.debug("User not found in GWS: {}", email);
+                return Optional.empty();
+            }
+            log.error("GWS lookup failed for {}: {}", email, e.getMessage());
+            throw new RuntimeException("GWS lookup failed for " + email, e);
+        } catch (IOException e) {
+            log.error("GWS lookup IO error for {}: {}", email, e.getMessage());
+            throw new RuntimeException("GWS lookup failed for " + email, e);
         }
     }
 

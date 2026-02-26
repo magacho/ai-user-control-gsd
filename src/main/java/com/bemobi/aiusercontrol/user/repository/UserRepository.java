@@ -21,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
 
     @Query("SELECT DISTINCT u.department FROM User u WHERE u.department IS NOT NULL ORDER BY u.department")
     List<String> findDistinctDepartments();
+
+    @Query("SELECT u FROM User u WHERE NOT EXISTS (SELECT a FROM UserAIToolAccount a WHERE a.user = u)")
+    List<User> findUsersWithoutAIToolAccounts();
 }

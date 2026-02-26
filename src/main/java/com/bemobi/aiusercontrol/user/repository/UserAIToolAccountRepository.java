@@ -35,4 +35,10 @@ public interface UserAIToolAccountRepository extends JpaRepository<UserAIToolAcc
 
     @Query("SELECT a FROM UserAIToolAccount a LEFT JOIN a.user u WHERE u IS NULL OR u.status = 'OFFBOARDED'")
     List<UserAIToolAccount> findPendingAccounts();
+
+    @Query("SELECT a FROM UserAIToolAccount a WHERE a.status IN ('SUSPENDED', 'REVOKED')")
+    List<UserAIToolAccount> findAccountsToRemove();
+
+    @Query("SELECT a FROM UserAIToolAccount a WHERE a.user IS NULL")
+    List<UserAIToolAccount> findExternalAccounts();
 }

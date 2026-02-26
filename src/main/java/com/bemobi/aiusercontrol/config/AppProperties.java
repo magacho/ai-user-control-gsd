@@ -12,6 +12,7 @@ public class AppProperties {
 
     private List<String> adminEmails = new ArrayList<>();
     private GoogleWorkspace googleWorkspace = new GoogleWorkspace();
+    private Integrations integrations = new Integrations();
 
     public List<String> getAdminEmails() {
         return adminEmails;
@@ -32,11 +33,20 @@ public class AppProperties {
         this.googleWorkspace = googleWorkspace;
     }
 
+    public Integrations getIntegrations() {
+        return integrations;
+    }
+
+    public void setIntegrations(Integrations integrations) {
+        this.integrations = integrations;
+    }
+
     @Override
     public String toString() {
         return "AppProperties{" +
                 "adminEmails=" + adminEmails +
                 ", googleWorkspace=" + googleWorkspace +
+                ", integrations=" + integrations +
                 '}';
     }
 
@@ -99,6 +109,185 @@ public class AppProperties {
                     ", delegatedAdminEmail='" + delegatedAdminEmail + '\'' +
                     ", domain='" + domain + '\'' +
                     ", customSchemaName='" + customSchemaName + '\'' +
+                    '}';
+        }
+    }
+
+    public static class Integrations {
+
+        private Claude claude = new Claude();
+        private GitHubCopilot githubCopilot = new GitHubCopilot();
+        private Cursor cursor = new Cursor();
+
+        public Integrations() {
+        }
+
+        public Claude getClaude() {
+            return claude;
+        }
+
+        public void setClaude(Claude claude) {
+            this.claude = claude;
+        }
+
+        public GitHubCopilot getGithubCopilot() {
+            return githubCopilot;
+        }
+
+        public void setGithubCopilot(GitHubCopilot githubCopilot) {
+            this.githubCopilot = githubCopilot;
+        }
+
+        public Cursor getCursor() {
+            return cursor;
+        }
+
+        public void setCursor(Cursor cursor) {
+            this.cursor = cursor;
+        }
+
+        @Override
+        public String toString() {
+            return "Integrations{" +
+                    "claude=" + claude +
+                    ", githubCopilot=" + githubCopilot +
+                    ", cursor=" + cursor +
+                    '}';
+        }
+    }
+
+    public static class Claude {
+
+        private boolean enabled;
+        private String apiUrl;
+        private String apiKey;
+
+        public Claude() {
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getApiUrl() {
+            return apiUrl;
+        }
+
+        public void setApiUrl(String apiUrl) {
+            this.apiUrl = apiUrl;
+        }
+
+        public String getApiKey() {
+            return apiKey;
+        }
+
+        public void setApiKey(String apiKey) {
+            this.apiKey = apiKey;
+        }
+
+        @Override
+        public String toString() {
+            return "Claude{" +
+                    "enabled=" + enabled +
+                    ", apiUrl='" + apiUrl + '\'' +
+                    '}';
+        }
+    }
+
+    public static class GitHubCopilot {
+
+        private boolean enabled;
+        private String apiUrl;
+        private String apiToken;
+        private String organization;
+
+        public GitHubCopilot() {
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getApiUrl() {
+            return apiUrl;
+        }
+
+        public void setApiUrl(String apiUrl) {
+            this.apiUrl = apiUrl;
+        }
+
+        public String getApiToken() {
+            return apiToken;
+        }
+
+        public void setApiToken(String apiToken) {
+            this.apiToken = apiToken;
+        }
+
+        public String getOrganization() {
+            return organization;
+        }
+
+        public void setOrganization(String organization) {
+            this.organization = organization;
+        }
+
+        @Override
+        public String toString() {
+            return "GitHubCopilot{" +
+                    "enabled=" + enabled +
+                    ", apiUrl='" + apiUrl + '\'' +
+                    ", organization='" + organization + '\'' +
+                    '}';
+        }
+    }
+
+    public static class Cursor {
+
+        private boolean enabled;
+        private String apiUrl;
+        private String apiKey;
+
+        public Cursor() {
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public String getApiUrl() {
+            return apiUrl;
+        }
+
+        public void setApiUrl(String apiUrl) {
+            this.apiUrl = apiUrl;
+        }
+
+        public String getApiKey() {
+            return apiKey;
+        }
+
+        public void setApiKey(String apiKey) {
+            this.apiKey = apiKey;
+        }
+
+        @Override
+        public String toString() {
+            return "Cursor{" +
+                    "enabled=" + enabled +
+                    ", apiUrl='" + apiUrl + '\'' +
                     '}';
         }
     }

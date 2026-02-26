@@ -15,7 +15,7 @@
                 <h3 class="text-sm font-medium text-green-800">Sync completo</h3>
                 <div class="mt-1 text-sm text-green-700">
                     <p th:text="'Usuarios: ' + ${syncResult.newUsers} + ' novos, ' + ${syncResult.updatedUsers} + ' atualizados, ' + ${syncResult.gwsValidatedUsers} + ' validados no GWS'"></p>
-                    <p th:text="'Contas: ' + ${syncResult.linkedAccounts} + ' vinculadas, ' + ${syncResult.unmatchedAccounts} + ' sem correspondencia, ' + ${syncResult.externalAccounts} + ' externas'"></p>
+                    <p th:text="'Contas: ' + ${syncResult.linkedAccounts} + ' vinculadas, ' + ${syncResult.unmatchedAccounts} + ' sem correspondência, ' + ${syncResult.externalAccounts} + ' externas'"></p>
                     <p th:text="'Suspensos: ' + ${syncResult.suspendedAccounts} + ' suspensos, ' + ${syncResult.revokedAccounts} + ' revogados'"></p>
                     <p th:if="${syncResult.archivedLegacyUsers > 0}" th:text="'Legado: ' + ${syncResult.archivedLegacyUsers} + ' usuarios sem IA arquivados'"></p>
                 </div>

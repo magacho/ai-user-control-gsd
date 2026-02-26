@@ -4,7 +4,7 @@
       layout:decorate="~{layout/default}"
       lang="en">
 <head>
-    <title>Report de Acoes</title>
+    <title>Report de Ações</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -12,13 +12,13 @@
     <div class="flex items-center justify-between mb-6">
         <div>
             <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Report de Acoes</h1>
+                <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Report de Ações</h1>
                 <span th:if="${totalPendingCount != null && totalPendingCount > 0}"
                       class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"
                       th:text="${totalPendingCount}">0</span>
             </div>
             <p class="text-sm text-gray-500 mt-1">
-                Acoes pendentes em contas de ferramentas de IA. Use este report para gerenciar seats manualmente nas consoles de cada plataforma.
+                Ações pendentes em contas de ferramentas de IA. Use este report para gerenciar seats manualmente nas consoles de cada plataforma.
             </p>
         </div>
 
@@ -54,7 +54,7 @@
                       th:text="${toRemoveCount}">0</span>
             </div>
             <p class="text-sm text-gray-500 mb-4">
-                Contas que nao existem mais nas plataformas de IA. Remover manualmente nas consoles.
+                Contas que não existem mais nas plataformas de IA. Remover manualmente nas consoles.
             </p>
             <div th:replace="~{pending-accounts/fragments/table :: toRemoveTable}"></div>
         </div>
@@ -62,13 +62,13 @@
         <!-- Section 2: Seats Invalidos / Externos -->
         <div>
             <div class="flex items-center gap-3 mb-3">
-                <h2 class="text-lg font-semibold text-gray-900">Seats Invalidos / Externos</h2>
+                <h2 class="text-lg font-semibold text-gray-900">Seats Inválidos / Externos</h2>
                 <span th:if="${externalCount != null && externalCount > 0}"
                       class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700"
                       th:text="${externalCount}">0</span>
             </div>
             <p class="text-sm text-gray-500 mb-4">
-                Seats de IA sem correspondencia no Google Workspace. Verificar se o email e valido.
+                Seats de IA sem correspondência no Google Workspace. Verificar se o email é válido.
             </p>
             <div th:replace="~{pending-accounts/fragments/table :: externalTable}"></div>
         </div>

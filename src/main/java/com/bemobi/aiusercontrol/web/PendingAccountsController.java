@@ -82,7 +82,7 @@ public class PendingAccountsController {
             suggestedAction = "Remover conta na plataforma "
                     + (account.getAiTool() != null ? account.getAiTool().getName() : "");
         } else {
-            suggestedAction = "Verificar email — nao encontrado no Google Workspace";
+            suggestedAction = "Verificar email \u2014 n\u00e3o encontrado no Google Workspace";
         }
 
         return PendingAccountResponse.builder()
@@ -93,7 +93,7 @@ public class PendingAccountsController {
                 .accountEmail(account.getAccountEmail())
                 .status(account.getStatus() != null ? account.getStatus().name() : null)
                 .section(section)
-                .reason("TO_REMOVE".equals(section) ? "Seat cancelado" : "Sem correspondencia GWS")
+                .reason("TO_REMOVE".equals(section) ? "Seat cancelado" : "Sem correspond\u00eancia GWS")
                 .suggestedAction(suggestedAction)
                 .userName(userName)
                 .userEmail(userEmail)

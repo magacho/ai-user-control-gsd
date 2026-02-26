@@ -4,7 +4,7 @@
       layout:decorate="~{layout/default}"
       lang="en">
 <head>
-    <title>Contas Pendentes</title>
+    <title>Report de Acoes</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -12,20 +12,67 @@
     <div class="flex items-center justify-between mb-6">
         <div>
             <div class="flex items-center gap-3">
-                <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Contas Pendentes</h1>
-                <span th:if="${pendingCount != null && pendingCount > 0}"
-                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"
-                      th:text="${pendingCount}">0</span>
+                <h1 class="text-2xl font-semibold text-gray-900 tracking-tight">Report de Acoes</h1>
+                <span th:if="${totalPendingCount != null && totalPendingCount > 0}"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"
+                      th:text="${totalPendingCount}">0</span>
             </div>
             <p class="text-sm text-gray-500 mt-1">
-                Contas de ferramentas de IA que precisam de atencao. Use esta lista como referencia para cancelar manualmente nas consoles de cada ferramenta.
+                Acoes pendentes em contas de ferramentas de IA. Use este report para gerenciar seats manualmente nas consoles de cada plataforma.
             </p>
+        </div>
+
+        <!-- Tool filter dropdown -->
+        <div class="flex items-center gap-2">
+            <label for="toolFilter" class="text-sm font-medium text-gray-700">Ferramenta:</label>
+            <select id="toolFilter"
+                    name="toolFilter"
+                    hx-get="/pending-accounts"
+                    hx-target="#report-content"
+                    hx-select="#report-content"
+                    hx-swap="outerHTML"
+                    hx-push-url="true"
+                    class="block rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">Todas as ferramentas</option>
+                <option th:each="type : ${toolTypes}"
+                        th:value="${type}"
+                        th:text="${type}"
+                        th:selected="${toolFilter == type}">TYPE</option>
+            </select>
         </div>
     </div>
 
-    <!-- Pending accounts table -->
-    <div id="pending-table">
-        <div th:replace="~{pending-accounts/fragments/table :: pendingAccountsTable}"></div>
+    <!-- Report content (HTMX target) -->
+    <div id="report-content" class="space-y-8">
+
+        <!-- Section 1: Contas a Remover -->
+        <div>
+            <div class="flex items-center gap-3 mb-3">
+                <h2 class="text-lg font-semibold text-gray-900">Contas a Remover</h2>
+                <span th:if="${toRemoveCount != null && toRemoveCount > 0}"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700"
+                      th:text="${toRemoveCount}">0</span>
+            </div>
+            <p class="text-sm text-gray-500 mb-4">
+                Contas que nao existem mais nas plataformas de IA. Remover manualmente nas consoles.
+            </p>
+            <div th:replace="~{pending-accounts/fragments/table :: toRemoveTable}"></div>
+        </div>
+
+        <!-- Section 2: Seats Invalidos / Externos -->
+        <div>
+            <div class="flex items-center gap-3 mb-3">
+                <h2 class="text-lg font-semibold text-gray-900">Seats Invalidos / Externos</h2>
+                <span th:if="${externalCount != null && externalCount > 0}"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700"
+                      th:text="${externalCount}">0</span>
+            </div>
+            <p class="text-sm text-gray-500 mb-4">
+                Seats de IA sem correspondencia no Google Workspace. Verificar se o email e valido.
+            </p>
+            <div th:replace="~{pending-accounts/fragments/table :: externalTable}"></div>
+        </div>
+
     </div>
 </div>
 </body>

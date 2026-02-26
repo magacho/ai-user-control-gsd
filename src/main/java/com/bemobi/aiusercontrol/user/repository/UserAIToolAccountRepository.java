@@ -33,12 +33,18 @@ public interface UserAIToolAccountRepository extends JpaRepository<UserAIToolAcc
 
     long countByUserIsNull();
 
-    @Query("SELECT a FROM UserAIToolAccount a LEFT JOIN a.user u WHERE u IS NULL OR u.status = 'OFFBOARDED'")
+    @Query("SELECT a FROM UserAIToolAccount a JOIN FETCH a.aiTool LEFT JOIN FETCH a.user u WHERE u IS NULL OR u.status = 'OFFBOARDED'")
     List<UserAIToolAccount> findPendingAccounts();
 
-    @Query("SELECT a FROM UserAIToolAccount a WHERE a.status IN ('SUSPENDED', 'REVOKED')")
+    @Query("SELECT a FROM UserAIToolAccount a JOIN FETCH a.aiTool LEFT JOIN FETCH a.user WHERE a.status IN ('SUSPENDED', 'REVOKED')")
     List<UserAIToolAccount> findAccountsToRemove();
 
-    @Query("SELECT a FROM UserAIToolAccount a WHERE a.user IS NULL")
+    @Query("SELECT a FROM UserAIToolAccount a JOIN FETCH a.aiTool WHERE a.user IS NULL")
     List<UserAIToolAccount> findExternalAccounts();
+
+    @Query("SELECT COUNT(a) FROM UserAIToolAccount a WHERE a.status IN ('SUSPENDED', 'REVOKED')")
+    long countAccountsToRemove();
+
+    @Query("SELECT COUNT(a) FROM UserAIToolAccount a WHERE a.user IS NULL")
+    long countExternalAccounts();
 }

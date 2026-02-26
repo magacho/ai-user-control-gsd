@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -126,6 +127,24 @@ class SyncOrchestratorTest {
         assertEquals(3, result.getLinkedAccounts()); // 1 from Claude + 2 from Cursor
         assertEquals(1, result.getUnmatchedAccounts()); // 1 from Claude (external)
 
+        // Verify per-tool details
+        assertNotNull(result.getToolDetails());
+        assertEquals(2, result.getToolDetails().size());
+
+        SyncResultResponse.ToolSyncDetail claudeDetail = result.getToolDetails().get("Claude");
+        assertNotNull(claudeDetail);
+        assertEquals(2, claudeDetail.getSeatsFound());
+        assertNull(claudeDetail.getError());
+        assertEquals(1, claudeDetail.getLinked());
+        assertEquals(1, claudeDetail.getUnmatched());
+
+        SyncResultResponse.ToolSyncDetail cursorDetail = result.getToolDetails().get("Cursor");
+        assertNotNull(cursorDetail);
+        assertEquals(2, cursorDetail.getSeatsFound());
+        assertNull(cursorDetail.getError());
+        assertEquals(2, cursorDetail.getLinked());
+        assertEquals(0, cursorDetail.getUnmatched());
+
         // Verify users were saved
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository, org.mockito.Mockito.atLeast(2)).save(userCaptor.capture());
@@ -178,6 +197,21 @@ class SyncOrchestratorTest {
         assertEquals(1, result.getLinkedAccounts());
         // No error in result because the failure is caught in CompletableFuture, not in linkAccounts
         assertTrue(result.getErrors().isEmpty());
+
+        // Verify per-tool details
+        assertNotNull(result.getToolDetails());
+        assertEquals(2, result.getToolDetails().size());
+
+        SyncResultResponse.ToolSyncDetail claudeDetail = result.getToolDetails().get("Claude");
+        assertNotNull(claudeDetail);
+        assertEquals(1, claudeDetail.getSeatsFound());
+        assertNull(claudeDetail.getError());
+
+        SyncResultResponse.ToolSyncDetail cursorDetail = result.getToolDetails().get("Cursor");
+        assertNotNull(cursorDetail);
+        assertEquals(0, cursorDetail.getSeatsFound());
+        assertNotNull(cursorDetail.getError());
+        assertTrue(cursorDetail.getError().contains("Connection refused"));
     }
 
     @Test

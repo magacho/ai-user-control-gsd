@@ -71,7 +71,7 @@ See: .planning/PROJECT.md
 
 ### Pending Todos
 
-4 pending todos in `.planning/todos/pending/`
+5 pending todos in `.planning/todos/pending/`
 
 ### Last Session
 

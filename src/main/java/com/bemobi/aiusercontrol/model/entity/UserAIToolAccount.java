@@ -59,12 +59,18 @@ public class UserAIToolAccount {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    @Column(name = "created_at_source")
+    private Instant createdAtSource;
+
+    @Column(name = "last_activity_at")
+    private Instant lastActivityAt;
+
     public UserAIToolAccount() {
     }
 
     public UserAIToolAccount(Long id, User user, AITool aiTool, String accountIdentifier, String accountEmail,
                              AccountStatus status, Instant lastSyncedAt, Instant firstSeenAt, Instant lastSeenAt,
-                             Instant createdAt, Instant updatedAt) {
+                             Instant createdAt, Instant updatedAt, Instant createdAtSource, Instant lastActivityAt) {
         this.id = id;
         this.user = user;
         this.aiTool = aiTool;
@@ -76,6 +82,8 @@ public class UserAIToolAccount {
         this.lastSeenAt = lastSeenAt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.createdAtSource = createdAtSource;
+        this.lastActivityAt = lastActivityAt;
     }
 
     @PrePersist
@@ -181,6 +189,22 @@ public class UserAIToolAccount {
         this.updatedAt = updatedAt;
     }
 
+    public Instant getCreatedAtSource() {
+        return createdAtSource;
+    }
+
+    public void setCreatedAtSource(Instant createdAtSource) {
+        this.createdAtSource = createdAtSource;
+    }
+
+    public Instant getLastActivityAt() {
+        return lastActivityAt;
+    }
+
+    public void setLastActivityAt(Instant lastActivityAt) {
+        this.lastActivityAt = lastActivityAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -206,6 +230,8 @@ public class UserAIToolAccount {
                 ", lastSeenAt=" + lastSeenAt +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", createdAtSource=" + createdAtSource +
+                ", lastActivityAt=" + lastActivityAt +
                 '}';
     }
 
@@ -225,6 +251,8 @@ public class UserAIToolAccount {
         private Instant lastSeenAt;
         private Instant createdAt;
         private Instant updatedAt;
+        private Instant createdAtSource;
+        private Instant lastActivityAt;
 
         public Builder id(Long id) {
             this.id = id;
@@ -281,9 +309,20 @@ public class UserAIToolAccount {
             return this;
         }
 
+        public Builder createdAtSource(Instant createdAtSource) {
+            this.createdAtSource = createdAtSource;
+            return this;
+        }
+
+        public Builder lastActivityAt(Instant lastActivityAt) {
+            this.lastActivityAt = lastActivityAt;
+            return this;
+        }
+
         public UserAIToolAccount build() {
             return new UserAIToolAccount(id, user, aiTool, accountIdentifier, accountEmail,
-                    status, lastSyncedAt, firstSeenAt, lastSeenAt, createdAt, updatedAt);
+                    status, lastSyncedAt, firstSeenAt, lastSeenAt, createdAt, updatedAt,
+                    createdAtSource, lastActivityAt);
         }
     }
 }

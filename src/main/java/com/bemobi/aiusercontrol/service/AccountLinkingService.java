@@ -56,21 +56,38 @@ public class AccountLinkingService {
                 account.setLastSeenAt(Instant.now());
                 account.setStatus(AccountStatus.ACTIVE);
                 account.setAccountEmail(accountInfo.getEmail());
+
+                // Persist source dates: createdAtSource is write-once, lastActivityAt always overwrites with non-null
+                if (accountInfo.getCreatedAtSource() != null && account.getCreatedAtSource() == null) {
+                    account.setCreatedAtSource(accountInfo.getCreatedAtSource());
+                }
+                if (accountInfo.getLastActivityAt() != null) {
+                    account.setLastActivityAt(accountInfo.getLastActivityAt());
+                }
+
                 userAIToolAccountRepository.save(account);
                 log.debug("Updated existing account: {} for tool: {}", accountInfo.getIdentifier(), tool.getName());
             } else {
                 // New account - try to match by email
                 User matchedUser = findUserByEmail(accountInfo.getEmail());
 
-                UserAIToolAccount newAccount = UserAIToolAccount.builder()
+                UserAIToolAccount.Builder accountBuilder = UserAIToolAccount.builder()
                         .user(matchedUser)
                         .aiTool(tool)
                         .accountIdentifier(accountInfo.getIdentifier())
                         .accountEmail(accountInfo.getEmail())
                         .status(AccountStatus.ACTIVE)
                         .firstSeenAt(Instant.now())
-                        .lastSeenAt(Instant.now())
-                        .build();
+                        .lastSeenAt(Instant.now());
+
+                if (accountInfo.getCreatedAtSource() != null) {
+                    accountBuilder.createdAtSource(accountInfo.getCreatedAtSource());
+                }
+                if (accountInfo.getLastActivityAt() != null) {
+                    accountBuilder.lastActivityAt(accountInfo.getLastActivityAt());
+                }
+
+                UserAIToolAccount newAccount = accountBuilder.build();
 
                 userAIToolAccountRepository.save(newAccount);
 

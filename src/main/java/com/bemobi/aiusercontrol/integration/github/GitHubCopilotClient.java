@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -85,7 +87,9 @@ public class GitHubCopilotClient {
                     if (assignee != null) {
                         String login = (String) assignee.get("login");
                         if (login != null && !login.isBlank()) {
-                            allSeats.add(new ToolAccountInfo(login, null));
+                            Instant createdAtSource = parseDateField(seat, "created_at", login);
+                            Instant lastActivityAt = parseDateField(seat, "last_activity_at", login);
+                            allSeats.add(new ToolAccountInfo(login, null, createdAtSource, lastActivityAt));
                         }
                     }
                 }
@@ -101,5 +105,17 @@ public class GitHubCopilotClient {
             log.error("Failed to fetch Copilot seats from GitHub API for organization {}: {}", orgName, e.getMessage(), e);
             return Collections.emptyList();
         }
+    }
+
+    private Instant parseDateField(Map<String, Object> seat, String fieldName, String login) {
+        try {
+            String dateStr = (String) seat.get(fieldName);
+            if (dateStr != null && !dateStr.isBlank()) {
+                return OffsetDateTime.parse(dateStr).toInstant();
+            }
+        } catch (Exception e) {
+            log.warn("Failed to parse {} for seat {}: {}", fieldName, login, e.getMessage());
+        }
+        return null;
     }
 }

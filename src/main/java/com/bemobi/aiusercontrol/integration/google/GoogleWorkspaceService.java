@@ -79,6 +79,36 @@ public class GoogleWorkspaceService {
         }
     }
 
+    public Optional<GwsUser> lookupUserByGitName(String gitName) {
+        String domain = appProperties.getGoogleWorkspace().getDomain();
+        String customSchemaName = appProperties.getGoogleWorkspace().getCustomSchemaName();
+        log.debug("Looking up user in GWS by git_name: {}", gitName);
+        try {
+            Directory.Users.List request = directory.users().list()
+                    .setDomain(domain)
+                    .setQuery(customSchemaName + ".git_name='" + sanitizeQueryValue(gitName) + "'")
+                    .setProjection("full")
+                    .setMaxResults(2);
+
+            Users response = request.execute();
+            List<User> users = response.getUsers();
+
+            if (users == null || users.isEmpty()) {
+                log.debug("No GWS user found with git_name: {}", gitName);
+                return Optional.empty();
+            }
+
+            if (users.size() > 1) {
+                log.warn("Multiple GWS users found with git_name={}, using first match", gitName);
+            }
+
+            return Optional.of(mapToGwsUser(users.get(0), customSchemaName));
+        } catch (IOException e) {
+            log.error("GWS lookup by git_name failed for {}: {}", gitName, e.getMessage(), e);
+            throw new RuntimeException("GWS lookup by git_name failed for " + gitName, e);
+        }
+    }
+
     public Optional<GwsUser> lookupUserByEmail(String email) {
         String customSchemaName = appProperties.getGoogleWorkspace().getCustomSchemaName();
         log.debug("Looking up user in GWS: {}", email);
@@ -98,6 +128,10 @@ public class GoogleWorkspaceService {
             log.error("GWS lookup IO error for {}: {}", email, e.getMessage());
             throw new RuntimeException("GWS lookup failed for " + email, e);
         }
+    }
+
+    private String sanitizeQueryValue(String value) {
+        return value.replace("'", "\\'");
     }
 
     @SuppressWarnings("unchecked")

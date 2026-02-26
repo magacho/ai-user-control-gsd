@@ -29,6 +29,19 @@
                 </button>
             </div>
         </div>
+        <!-- Per-tool breakdown -->
+        <div th:if="${syncResult.toolDetails != null and !syncResult.toolDetails.isEmpty()}"
+             class="mt-2 pt-2 border-t border-green-200">
+            <p class="text-xs font-medium text-green-800 mb-1">Detalhes por ferramenta:</p>
+            <div class="space-y-0.5">
+                <div th:each="entry : ${syncResult.toolDetails}" class="text-xs">
+                    <span th:if="${entry.value.error == null}" class="text-green-700"
+                          th:text="${entry.key + ': ' + entry.value.seatsFound + ' assentos, ' + entry.value.linked + ' vinculados'}"></span>
+                    <span th:if="${entry.value.error != null}" class="text-red-600"
+                          th:text="${entry.key + ': erro - ' + entry.value.error}"></span>
+                </div>
+            </div>
+        </div>
         <!-- Show non-critical errors in success state -->
         <div th:if="${syncResult.errors != null && !syncResult.errors.isEmpty()}" class="mt-3 border-t border-green-200 pt-3">
             <p class="text-sm font-medium text-yellow-700">Avisos:</p>
@@ -62,6 +75,19 @@
                         <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
                     </svg>
                 </button>
+            </div>
+        </div>
+        <!-- Per-tool breakdown in error toast -->
+        <div th:if="${syncResult.toolDetails != null and !syncResult.toolDetails.isEmpty()}"
+             class="mt-2 pt-2 border-t border-red-200">
+            <p class="text-xs font-medium text-red-700 mb-1">Detalhes por ferramenta:</p>
+            <div class="space-y-0.5">
+                <div th:each="entry : ${syncResult.toolDetails}" class="text-xs">
+                    <span th:if="${entry.value.error == null}" class="text-green-700"
+                          th:text="${entry.key + ': ' + entry.value.seatsFound + ' assentos, ' + entry.value.linked + ' vinculados'}"></span>
+                    <span th:if="${entry.value.error != null}" class="text-red-600"
+                          th:text="${entry.key + ': erro - ' + entry.value.error}"></span>
+                </div>
             </div>
         </div>
     </div>

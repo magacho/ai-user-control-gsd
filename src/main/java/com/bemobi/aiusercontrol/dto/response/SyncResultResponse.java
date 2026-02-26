@@ -2,7 +2,9 @@ package com.bemobi.aiusercontrol.dto.response;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class SyncResultResponse {
@@ -18,10 +20,12 @@ public class SyncResultResponse {
     private int gwsValidatedUsers;
     private List<String> errors;
     private Instant syncedAt;
+    private Map<String, ToolSyncDetail> toolDetails;
 
     public SyncResultResponse() {
         this.errors = new ArrayList<>();
         this.syncedAt = Instant.now();
+        this.toolDetails = new LinkedHashMap<>();
     }
 
     private SyncResultResponse(Builder builder) {
@@ -36,6 +40,7 @@ public class SyncResultResponse {
         this.gwsValidatedUsers = builder.gwsValidatedUsers;
         this.errors = builder.errors;
         this.syncedAt = builder.syncedAt;
+        this.toolDetails = new LinkedHashMap<>(builder.toolDetails);
     }
 
     public int getNewUsers() {
@@ -126,6 +131,14 @@ public class SyncResultResponse {
         this.syncedAt = syncedAt;
     }
 
+    public Map<String, ToolSyncDetail> getToolDetails() {
+        return toolDetails;
+    }
+
+    public void setToolDetails(Map<String, ToolSyncDetail> toolDetails) {
+        this.toolDetails = toolDetails;
+    }
+
     public void addError(String error) {
         if (this.errors == null) {
             this.errors = new ArrayList<>();
@@ -170,6 +183,7 @@ public class SyncResultResponse {
                 ", gwsValidatedUsers=" + gwsValidatedUsers +
                 ", errors=" + errors +
                 ", syncedAt=" + syncedAt +
+                ", toolDetails=" + toolDetails +
                 '}';
     }
 
@@ -189,6 +203,7 @@ public class SyncResultResponse {
         private int gwsValidatedUsers;
         private List<String> errors = new ArrayList<>();
         private Instant syncedAt = Instant.now();
+        private Map<String, ToolSyncDetail> toolDetails = new LinkedHashMap<>();
 
         public Builder newUsers(int newUsers) {
             this.newUsers = newUsers;
@@ -250,8 +265,110 @@ public class SyncResultResponse {
             return this;
         }
 
+        public Builder addToolDetail(String toolName, ToolSyncDetail detail) {
+            this.toolDetails.put(toolName, detail);
+            return this;
+        }
+
+        public ToolSyncDetail getToolDetail(String toolName) {
+            return this.toolDetails.get(toolName);
+        }
+
         public SyncResultResponse build() {
             return new SyncResultResponse(this);
+        }
+    }
+
+    public static class ToolSyncDetail {
+        private String toolName;
+        private int seatsFound;
+        private int linked;
+        private int unmatched;
+        private int suspended;
+        private int revoked;
+        private String error; // null if successful
+
+        public ToolSyncDetail() {
+        }
+
+        public ToolSyncDetail(String toolName, int seatsFound, int linked, int unmatched,
+                              int suspended, int revoked, String error) {
+            this.toolName = toolName;
+            this.seatsFound = seatsFound;
+            this.linked = linked;
+            this.unmatched = unmatched;
+            this.suspended = suspended;
+            this.revoked = revoked;
+            this.error = error;
+        }
+
+        public String getToolName() {
+            return toolName;
+        }
+
+        public void setToolName(String toolName) {
+            this.toolName = toolName;
+        }
+
+        public int getSeatsFound() {
+            return seatsFound;
+        }
+
+        public void setSeatsFound(int seatsFound) {
+            this.seatsFound = seatsFound;
+        }
+
+        public int getLinked() {
+            return linked;
+        }
+
+        public void setLinked(int linked) {
+            this.linked = linked;
+        }
+
+        public int getUnmatched() {
+            return unmatched;
+        }
+
+        public void setUnmatched(int unmatched) {
+            this.unmatched = unmatched;
+        }
+
+        public int getSuspended() {
+            return suspended;
+        }
+
+        public void setSuspended(int suspended) {
+            this.suspended = suspended;
+        }
+
+        public int getRevoked() {
+            return revoked;
+        }
+
+        public void setRevoked(int revoked) {
+            this.revoked = revoked;
+        }
+
+        public String getError() {
+            return error;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+
+        @Override
+        public String toString() {
+            return "ToolSyncDetail{" +
+                    "toolName='" + toolName + '\'' +
+                    ", seatsFound=" + seatsFound +
+                    ", linked=" + linked +
+                    ", unmatched=" + unmatched +
+                    ", suspended=" + suspended +
+                    ", revoked=" + revoked +
+                    ", error='" + error + '\'' +
+                    '}';
         }
     }
 }

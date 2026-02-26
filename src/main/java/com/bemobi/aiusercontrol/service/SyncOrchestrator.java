@@ -65,7 +65,7 @@ public class SyncOrchestrator {
         SyncResultResponse.Builder resultBuilder = SyncResultResponse.builder();
 
         // Step 1: Fetch all AI tool seats in parallel
-        Map<AITool, List<ToolAccountInfo>> seatsByTool = fetchAllToolSeatsInParallel();
+        Map<AITool, List<ToolAccountInfo>> seatsByTool = fetchAllToolSeatsInParallel(resultBuilder);
 
         // Step 2: Consolidate unique emails across all tools
         Set<String> uniqueEmails = extractUniqueEmails(seatsByTool);
@@ -87,29 +87,41 @@ public class SyncOrchestrator {
         return result;
     }
 
-    private Map<AITool, List<ToolAccountInfo>> fetchAllToolSeatsInParallel() {
+    private Map<AITool, List<ToolAccountInfo>> fetchAllToolSeatsInParallel(SyncResultResponse.Builder resultBuilder) {
         List<AITool> enabledTools = aiToolRepository.findByEnabled(true);
         Map<AITool, CompletableFuture<List<ToolAccountInfo>>> futures = new LinkedHashMap<>();
 
         for (AITool tool : enabledTools) {
-            futures.put(tool, CompletableFuture.supplyAsync(() -> {
-                try {
-                    return fetchToolUsers(tool);
-                } catch (Exception e) {
-                    log.error("Failed to fetch seats for tool {}: {}", tool.getName(), e.getMessage());
-                    return Collections.<ToolAccountInfo>emptyList();
-                }
-            }));
+            futures.put(tool, CompletableFuture.supplyAsync(() -> fetchToolUsers(tool)));
         }
 
         // Wait for all to complete
-        CompletableFuture.allOf(futures.values().toArray(new CompletableFuture[0])).join();
+        CompletableFuture.allOf(futures.values().toArray(new CompletableFuture[0]))
+                .exceptionally(ex -> null) // Don't throw if some futures failed
+                .join();
 
         Map<AITool, List<ToolAccountInfo>> result = new LinkedHashMap<>();
         for (Map.Entry<AITool, CompletableFuture<List<ToolAccountInfo>>> entry : futures.entrySet()) {
-            List<ToolAccountInfo> seats = entry.getValue().join();
-            if (seats != null && !seats.isEmpty()) {
-                result.put(entry.getKey(), seats);
+            AITool tool = entry.getKey();
+            CompletableFuture<List<ToolAccountInfo>> future = entry.getValue();
+
+            try {
+                List<ToolAccountInfo> seats = future.join();
+                SyncResultResponse.ToolSyncDetail detail = new SyncResultResponse.ToolSyncDetail();
+                detail.setToolName(tool.getName());
+                detail.setSeatsFound(seats != null ? seats.size() : 0);
+                resultBuilder.addToolDetail(tool.getName(), detail);
+
+                if (seats != null && !seats.isEmpty()) {
+                    result.put(tool, seats);
+                }
+            } catch (Exception e) {
+                log.error("Failed to fetch seats for tool {}: {}", tool.getName(), e.getMessage());
+                SyncResultResponse.ToolSyncDetail detail = new SyncResultResponse.ToolSyncDetail();
+                detail.setToolName(tool.getName());
+                detail.setSeatsFound(0);
+                detail.setError(e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+                resultBuilder.addToolDetail(tool.getName(), detail);
             }
         }
         return result;
@@ -235,10 +247,25 @@ public class SyncOrchestrator {
                 totalSuspended += linkResult.getSuspended();
                 totalRevoked += linkResult.getRevoked();
 
+                // Enrich existing ToolSyncDetail with link results
+                SyncResultResponse.ToolSyncDetail detail = resultBuilder.getToolDetail(tool.getName());
+                if (detail != null) {
+                    detail.setLinked(linkResult.getLinked());
+                    detail.setUnmatched(linkResult.getUnmatched());
+                    detail.setSuspended(linkResult.getSuspended());
+                    detail.setRevoked(linkResult.getRevoked());
+                }
+
             } catch (Exception e) {
                 String error = "Failed to link accounts for tool " + tool.getName() + ": " + e.getMessage();
                 log.error(error, e);
                 resultBuilder.addError(error);
+
+                // Update tool detail with error
+                SyncResultResponse.ToolSyncDetail detail = resultBuilder.getToolDetail(tool.getName());
+                if (detail != null) {
+                    detail.setError(e.getMessage());
+                }
             }
         }
 

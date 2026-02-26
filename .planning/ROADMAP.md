@@ -71,11 +71,12 @@ Plans:
   4. Sync toast shows per-tool breakdown (seats found, linked, errors per tool)
   5. CursorApiClient has dedicated unit tests
   6. `mvn compile` + `mvn test` pass
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02.2-01-PLAN.md -- Rewrite CursorApiClient for real Cursor Admin API, remove @ConditionalOnProperty from all clients, clean up config
-- [ ] 02.2-02-PLAN.md -- Per-tool sync result details in SyncResultResponse and toast UI, CursorApiClient unit tests, SyncOrchestratorTest update
+- [x] 02.2-01-PLAN.md -- Rewrite CursorApiClient for real Cursor Admin API, remove @ConditionalOnProperty from all clients, clean up config
+- [x] 02.2-02-PLAN.md -- Per-tool sync result details in SyncResultResponse and toast UI, CursorApiClient unit tests, SyncOrchestratorTest update
+- [ ] 02.2-03-PLAN.md -- Gap closure: Fix LazyInitializationException in PendingAccountsController with JOIN FETCH queries
 
 ### Phase 02.1: Inverter fonte de usuários — IAs primeiro, GWS depois (INSERTED)
 
@@ -208,7 +209,7 @@ Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so
 | 1. Auth & User Management | 3/3 | Complete | 2026-02-24 |
 | 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
 | 02.1. Inverter fonte de usuarios | 3/3 | Complete    | 2026-02-26 |
-| 02.2. Validar Cursor API + sync E2E | 2/2 | Complete    | 2026-02-26 |
+| 02.2. Validar Cursor API + sync E2E | 2/3 | In progress | 2026-02-26 |
 | 3. Metrics Infrastructure | 0/1 | Not started | - |
 | 4. Cursor Integration | 0/2 | Not started | - |
 | 5. Claude Integration | 0/2 | Not started | - |

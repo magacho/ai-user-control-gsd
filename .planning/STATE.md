@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
-current_plan: Plan 1 of 2
-status: in-progress
-stopped_at: Completed 02.2-01-PLAN.md
-last_updated: "2026-02-26T18:37:05Z"
+current_plan: Plan 2 of 2
+status: phase-complete
+stopped_at: Completed 02.2-02-PLAN.md
+last_updated: "2026-02-26T18:43:29Z"
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Session State
@@ -24,8 +24,8 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
-**Current Plan:** Plan 1 of 2
-**Status:** In progress
+**Current Plan:** Plan 2 of 2
+**Status:** Phase complete
 
 ## Session Log
 
@@ -35,6 +35,7 @@ See: .planning/PROJECT.md
 - 2026-02-26: Plan 02.1-02 executed (5 min, 2 tasks, 6 files) - SyncOrchestrator AI-first rewrite complete
 - 2026-02-26: Plan 02.1-03 executed (5 min, 2 tasks, 6 files) - Admin report UI with two sections complete
 - 2026-02-26: Plan 02.2-01 executed (3 min, 2 tasks, 8 files) - CursorApiClient rewrite and conditional property removal
+- 2026-02-26: Plan 02.2-02 executed (3 min, 2 tasks, 5 files) - Per-tool sync details and CursorApiClient tests
 
 ## Accumulated Context
 
@@ -52,6 +53,8 @@ See: .planning/PROJECT.md
 - [Phase 02.1]: Used AIToolType.values() dynamically for tool filter dropdown instead of hardcoded list
 - [Phase 02.2]: DB-driven tool enablement is sole source of truth; YAML enabled flags removed entirely
 - [Phase 02.2]: Constructor injection for all 3 API clients since beans are always available; GoogleWorkspaceService remains @Autowired(required=false)
+- [Phase 02.2]: ToolSyncDetail populated in two phases: seatsFound/error during fetch, linked/unmatched/suspended/revoked during link
+- [Phase 02.2]: Per-tool breakdown shown in both success and error toasts for full visibility in partial failure scenarios
 
 ### Roadmap Evolution
 
@@ -64,4 +67,4 @@ See: .planning/PROJECT.md
 
 ### Last Session
 
-- **Stopped at:** Completed 02.2-01-PLAN.md
+- **Stopped at:** Completed 02.2-02-PLAN.md (Phase 02.2 complete)

@@ -5,13 +5,13 @@ milestone_name: milestone
 current_phase: 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
 current_plan: Not started
 status: completed
-stopped_at: Completed 02.2-02-PLAN.md (Phase 02.2 complete)
-last_updated: "2026-02-26T18:49:06.581Z"
+stopped_at: Completed 02.2-03-PLAN.md (Phase 02.2 gap closure complete)
+last_updated: "2026-02-26T19:26:09.000Z"
 progress:
   total_phases: 4
   completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
+  total_plans: 12
+  completed_plans: 12
 ---
 
 # Session State
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md
 **Milestone:** v1.0 milestone
 **Current phase:** 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
 **Current Plan:** Not started
-**Status:** Milestone complete
+**Status:** Milestone complete (including gap closure)
 
 ## Session Log
 
@@ -36,6 +36,7 @@ See: .planning/PROJECT.md
 - 2026-02-26: Plan 02.1-03 executed (5 min, 2 tasks, 6 files) - Admin report UI with two sections complete
 - 2026-02-26: Plan 02.2-01 executed (3 min, 2 tasks, 8 files) - CursorApiClient rewrite and conditional property removal
 - 2026-02-26: Plan 02.2-02 executed (3 min, 2 tasks, 5 files) - Per-tool sync details and CursorApiClient tests
+- 2026-02-26: Plan 02.2-03 executed (1 min, 2 tasks, 2 files) - LazyInitializationException fix via JOIN FETCH
 
 ## Accumulated Context
 
@@ -55,6 +56,9 @@ See: .planning/PROJECT.md
 - [Phase 02.2]: Constructor injection for all 3 API clients since beans are always available; GoogleWorkspaceService remains @Autowired(required=false)
 - [Phase 02.2]: ToolSyncDetail populated in two phases: seatsFound/error during fetch, linked/unmatched/suspended/revoked during link
 - [Phase 02.2]: Per-tool breakdown shown in both success and error toasts for full visibility in partial failure scenarios
+- [Phase 02.2]: JOIN FETCH is the correct fix for LazyInitializationException (not @Transactional on controller) since open-in-view=false
+- [Phase 02.2]: LEFT JOIN FETCH for nullable user relationship, JOIN FETCH for non-null aiTool
+- [Phase 02.2]: COUNT queries for sidebar badge instead of fetching full entity graphs
 
 ### Roadmap Evolution
 
@@ -67,4 +71,4 @@ See: .planning/PROJECT.md
 
 ### Last Session
 
-- **Stopped at:** Completed 02.2-02-PLAN.md (Phase 02.2 complete)
+- **Stopped at:** Completed 02.2-03-PLAN.md (Phase 02.2 gap closure complete)

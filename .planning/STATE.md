@@ -68,10 +68,11 @@ See: .planning/PROJECT.md
   - Plan 02 (wave 2): SyncOrchestrator rewrite with AI-first flow, parallel seat fetch, unit tests
   - Plan 03 (wave 2): Admin report UI with two sections, tool filter, sidebar update
 - Phase 02.2 inserted after Phase 02: Validar integração Cursor API e testar sync end-to-end (URGENT)
+- Phase 02.3 inserted after Phase 02.2: Integração GitHub Copilot e correção de datas nos seats (from todos)
 
 ### Pending Todos
 
-4 pending todos in `.planning/todos/pending/`
+2 pending todos in `.planning/todos/pending/`
 
 ### Last Session
 

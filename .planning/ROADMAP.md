@@ -14,6 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Auth & User Management** - Secure access with role-based control and corporate user registry
 - [x] **Phase 2: Identity Resolution & Account Linking** - Google Workspace sync and tool account mapping per user
+- [ ] **Phase 02.3: Integração GitHub Copilot e correção de datas nos seats** - GitHub Copilot integration (via git_name) e datas de primeiro acesso/último uso nos seats
 - [ ] **Phase 3: Metrics Infrastructure** - ShedLock, scheduling, persistence, circuit breaker, retry — shared infra for all providers
 - [ ] **Phase 4: Cursor Integration** - Collect Cursor usage metrics via API, scheduled job, normalized storage
 - [ ] **Phase 5: Claude Integration** - Collect Claude usage metrics via API, scheduled job, normalized storage
@@ -98,6 +99,22 @@ Plans:
 - [x] 02.1-01-PLAN.md -- Data foundation: V9 migration, User entity updates, GWS single-user lookup, GitHub Copilot client, repository queries
 - [x] 02.1-02-PLAN.md -- SyncOrchestrator rewrite: AI-first flow with parallel seat fetch, GWS validation, GitHub matching, legacy cleanup, unit tests
 - [x] 02.1-03-PLAN.md -- Admin report UI: Two-section report page (seats to remove + external seats), tool filter, sidebar update
+
+### Phase 02.3: Integração GitHub Copilot e correção de datas nos seats (INSERTED)
+
+**Goal:** Implementar integração do GitHub Copilot seguindo o padrão do Cursor (fase 02.2), usando git_name do GWS como chave de busca do usuário. Corrigir o campo "Primeiro Acesso" na listagem de seats inválidos e adicionar campo de último login/uso da ferramenta.
+**Depends on:** Phase 02.2
+**Requirements**: TBD (inserted phase from todos, no formal requirement IDs)
+**Success Criteria** (what must be TRUE):
+  1. GitHub Copilot está integrado como ferramenta de IA, seguindo o padrão do Cursor (API client, sync, account linking)
+  2. Busca de usuário do GitHub Copilot usa o parâmetro `git_name` do GWS para mapear login do GitHub → usuário corporativo
+  3. Campo "Primeiro Acesso" na listagem de seats inválidos é preenchido corretamente
+  4. Listagem de seats inválidos exibe também o campo "Último Login/Uso" da ferramenta
+  5. `mvn compile` + `mvn test` pass
+**Plans**: TBD
+
+Plans:
+- [ ] 02.3-01: TBD
 
 ### Phase 3: Metrics Infrastructure
 **Goal**: Shared infrastructure for metrics collection — scheduling with distributed locking, persistence with idempotency, circuit breaker and retry — ready for any provider
@@ -210,6 +227,7 @@ Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so
 | 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
 | 02.1. Inverter fonte de usuarios | 3/3 | Complete    | 2026-02-26 |
 | 02.2. Validar Cursor API + sync E2E | 3/3 | Complete    | 2026-02-26 |
+| 02.3. GitHub Copilot + datas seats | 0/1 | Not started | - |
 | 3. Metrics Infrastructure | 0/1 | Not started | - |
 | 4. Cursor Integration | 0/2 | Not started | - |
 | 5. Claude Integration | 0/2 | Not started | - |

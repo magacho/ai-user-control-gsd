@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 02.1-inverter-fonte-de-usu-rios-ias-primeiro-gws-depois
-current_plan: Not started
-status: completed
-stopped_at: Completed 02.1-03-PLAN.md (Phase 02.1 complete)
-last_updated: "2026-02-26T14:41:14.522Z"
+current_phase: 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
+current_plan: Plan 1 of 2
+status: in-progress
+stopped_at: Completed 02.2-01-PLAN.md
+last_updated: "2026-02-26T18:37:05Z"
 progress:
-  total_phases: 3
+  total_phases: 5
   completed_phases: 3
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 11
+  completed_plans: 10
 ---
 
 # Session State
@@ -23,9 +23,9 @@ See: .planning/PROJECT.md
 ## Position
 
 **Milestone:** v1.0 milestone
-**Current phase:** 02.1-inverter-fonte-de-usu-rios-ias-primeiro-gws-depois
-**Current Plan:** Not started
-**Status:** Milestone complete
+**Current phase:** 02.2-validar-integra-o-cursor-api-e-testar-sync-end-to-end
+**Current Plan:** Plan 1 of 2
+**Status:** In progress
 
 ## Session Log
 
@@ -34,6 +34,7 @@ See: .planning/PROJECT.md
 - 2026-02-26: Plan 02.1-01 executed (4 min, 2 tasks, 7 files) - Data foundation complete
 - 2026-02-26: Plan 02.1-02 executed (5 min, 2 tasks, 6 files) - SyncOrchestrator AI-first rewrite complete
 - 2026-02-26: Plan 02.1-03 executed (5 min, 2 tasks, 6 files) - Admin report UI with two sections complete
+- 2026-02-26: Plan 02.2-01 executed (3 min, 2 tasks, 8 files) - CursorApiClient rewrite and conditional property removal
 
 ## Accumulated Context
 
@@ -49,6 +50,8 @@ See: .planning/PROJECT.md
 - Static DateTimeFormatter constant for thread-safe Brazilian date formatting (America/Sao_Paulo)
 - Separate table fragments (toRemoveTable, externalTable) for independent empty states and column layouts
 - [Phase 02.1]: Used AIToolType.values() dynamically for tool filter dropdown instead of hardcoded list
+- [Phase 02.2]: DB-driven tool enablement is sole source of truth; YAML enabled flags removed entirely
+- [Phase 02.2]: Constructor injection for all 3 API clients since beans are always available; GoogleWorkspaceService remains @Autowired(required=false)
 
 ### Roadmap Evolution
 
@@ -57,7 +60,8 @@ See: .planning/PROJECT.md
   - Plan 01 (wave 1): V9 migration, GWS single-user lookup, GitHub Copilot client, repository queries
   - Plan 02 (wave 2): SyncOrchestrator rewrite with AI-first flow, parallel seat fetch, unit tests
   - Plan 03 (wave 2): Admin report UI with two sections, tool filter, sidebar update
+- Phase 02.2 inserted after Phase 02: Validar integração Cursor API e testar sync end-to-end (URGENT)
 
 ### Last Session
 
-- **Stopped at:** Completed 02.1-03-PLAN.md (Phase 02.1 complete)
+- **Stopped at:** Completed 02.2-01-PLAN.md

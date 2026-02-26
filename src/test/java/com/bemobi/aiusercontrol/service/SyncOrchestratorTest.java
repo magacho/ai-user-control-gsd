@@ -62,11 +62,9 @@ class SyncOrchestratorTest {
 
     @BeforeEach
     void setUp() {
-        syncOrchestrator = new SyncOrchestrator(userRepository, aiToolRepository, accountLinkingService);
+        syncOrchestrator = new SyncOrchestrator(userRepository, aiToolRepository, accountLinkingService,
+                claudeApiClient, cursorApiClient, gitHubCopilotClient);
         syncOrchestrator.setGoogleWorkspaceService(googleWorkspaceService);
-        syncOrchestrator.setClaudeApiClient(claudeApiClient);
-        syncOrchestrator.setCursorApiClient(cursorApiClient);
-        syncOrchestrator.setGitHubCopilotClient(gitHubCopilotClient);
     }
 
     @Test

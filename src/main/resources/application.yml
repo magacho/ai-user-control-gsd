@@ -123,18 +123,15 @@ app:
     claude:
       api-url: ${CLAUDE_API_URL:https://api.anthropic.com/v1}
       api-key: ${CLAUDE_API_KEY:}
-      enabled: ${CLAUDE_INTEGRATION_ENABLED:false}
 
     github-copilot:
       api-url: ${GITHUB_API_URL:https://api.github.com}
       api-token: ${GITHUB_API_TOKEN:}
       organization: ${GITHUB_ORG:}
-      enabled: ${GITHUB_INTEGRATION_ENABLED:false}
 
     cursor:
       api-url: ${CURSOR_API_URL:}
       api-key: ${CURSOR_API_KEY:}
-      enabled: ${CURSOR_INTEGRATION_ENABLED:false}
 
   # Scheduled Tasks
   scheduler:

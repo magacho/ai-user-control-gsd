@@ -158,19 +158,10 @@ public class AppProperties {
 
     public static class Claude {
 
-        private boolean enabled;
         private String apiUrl;
         private String apiKey;
 
         public Claude() {
-        }
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
         }
 
         public String getApiUrl() {
@@ -192,28 +183,18 @@ public class AppProperties {
         @Override
         public String toString() {
             return "Claude{" +
-                    "enabled=" + enabled +
-                    ", apiUrl='" + apiUrl + '\'' +
+                    "apiUrl='" + apiUrl + '\'' +
                     '}';
         }
     }
 
     public static class GitHubCopilot {
 
-        private boolean enabled;
         private String apiUrl;
         private String apiToken;
         private String organization;
 
         public GitHubCopilot() {
-        }
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
         }
 
         public String getApiUrl() {
@@ -243,8 +224,7 @@ public class AppProperties {
         @Override
         public String toString() {
             return "GitHubCopilot{" +
-                    "enabled=" + enabled +
-                    ", apiUrl='" + apiUrl + '\'' +
+                    "apiUrl='" + apiUrl + '\'' +
                     ", organization='" + organization + '\'' +
                     '}';
         }
@@ -252,19 +232,10 @@ public class AppProperties {
 
     public static class Cursor {
 
-        private boolean enabled;
         private String apiUrl;
         private String apiKey;
 
         public Cursor() {
-        }
-
-        public boolean isEnabled() {
-            return enabled;
-        }
-
-        public void setEnabled(boolean enabled) {
-            this.enabled = enabled;
         }
 
         public String getApiUrl() {
@@ -286,8 +257,7 @@ public class AppProperties {
         @Override
         public String toString() {
             return "Cursor{" +
-                    "enabled=" + enabled +
-                    ", apiUrl='" + apiUrl + '\'' +
+                    "apiUrl='" + apiUrl + '\'' +
                     '}';
         }
     }

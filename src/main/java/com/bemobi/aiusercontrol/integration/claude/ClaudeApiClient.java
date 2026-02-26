@@ -3,7 +3,6 @@ package com.bemobi.aiusercontrol.integration.claude;
 import com.bemobi.aiusercontrol.dto.response.ToolAccountInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@ConditionalOnProperty(prefix = "app.integrations.claude", name = "enabled", havingValue = "true")
 public class ClaudeApiClient {
 
     private static final Logger log = LoggerFactory.getLogger(ClaudeApiClient.class);

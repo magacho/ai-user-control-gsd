@@ -39,25 +39,25 @@ public class SyncOrchestrator {
     private final UserRepository userRepository;
     private final AIToolRepository aiToolRepository;
     private final AccountLinkingService accountLinkingService;
+    private final ClaudeApiClient claudeApiClient;
+    private final CursorApiClient cursorApiClient;
+    private final GitHubCopilotClient gitHubCopilotClient;
 
     @Autowired(required = false)
     private GoogleWorkspaceService googleWorkspaceService;
 
-    @Autowired(required = false)
-    private ClaudeApiClient claudeApiClient;
-
-    @Autowired(required = false)
-    private CursorApiClient cursorApiClient;
-
-    @Autowired(required = false)
-    private GitHubCopilotClient gitHubCopilotClient;
-
     public SyncOrchestrator(UserRepository userRepository,
                             AIToolRepository aiToolRepository,
-                            AccountLinkingService accountLinkingService) {
+                            AccountLinkingService accountLinkingService,
+                            ClaudeApiClient claudeApiClient,
+                            CursorApiClient cursorApiClient,
+                            GitHubCopilotClient gitHubCopilotClient) {
         this.userRepository = userRepository;
         this.aiToolRepository = aiToolRepository;
         this.accountLinkingService = accountLinkingService;
+        this.claudeApiClient = claudeApiClient;
+        this.cursorApiClient = cursorApiClient;
+        this.gitHubCopilotClient = gitHubCopilotClient;
     }
 
     public SyncResultResponse executeFullSync() {
@@ -318,20 +318,8 @@ public class SyncOrchestrator {
         return Collections.emptyList();
     }
 
-    // Setter methods for optional dependencies (used in tests)
+    // Setter for optional dependency (used in tests where GWS may be null)
     void setGoogleWorkspaceService(GoogleWorkspaceService googleWorkspaceService) {
         this.googleWorkspaceService = googleWorkspaceService;
-    }
-
-    void setClaudeApiClient(ClaudeApiClient claudeApiClient) {
-        this.claudeApiClient = claudeApiClient;
-    }
-
-    void setCursorApiClient(CursorApiClient cursorApiClient) {
-        this.cursorApiClient = cursorApiClient;
-    }
-
-    void setGitHubCopilotClient(GitHubCopilotClient gitHubCopilotClient) {
-        this.gitHubCopilotClient = gitHubCopilotClient;
     }
 }

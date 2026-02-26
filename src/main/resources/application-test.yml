@@ -35,10 +35,3 @@ app:
     inactive-accounts-check:
       enabled: false
 
-  integrations:
-    claude:
-      enabled: false
-    github-copilot:
-      enabled: false
-    cursor:
-      enabled: false

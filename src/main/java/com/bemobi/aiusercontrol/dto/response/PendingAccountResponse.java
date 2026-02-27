@@ -5,6 +5,7 @@ public class PendingAccountResponse {
     private Long id;
     private String toolName;
     private String toolType;
+    private String toolTypeIcon;
     private String accountIdentifier;
     private String accountEmail;
     private String status;
@@ -26,6 +27,7 @@ public class PendingAccountResponse {
         this.id = builder.id;
         this.toolName = builder.toolName;
         this.toolType = builder.toolType;
+        this.toolTypeIcon = builder.toolTypeIcon;
         this.accountIdentifier = builder.accountIdentifier;
         this.accountEmail = builder.accountEmail;
         this.status = builder.status;
@@ -63,6 +65,14 @@ public class PendingAccountResponse {
 
     public void setToolType(String toolType) {
         this.toolType = toolType;
+    }
+
+    public String getToolTypeIcon() {
+        return toolTypeIcon;
+    }
+
+    public void setToolTypeIcon(String toolTypeIcon) {
+        this.toolTypeIcon = toolTypeIcon;
     }
 
     public String getAccountIdentifier() {
@@ -177,6 +187,7 @@ public class PendingAccountResponse {
         private Long id;
         private String toolName;
         private String toolType;
+        private String toolTypeIcon;
         private String accountIdentifier;
         private String accountEmail;
         private String status;
@@ -203,6 +214,11 @@ public class PendingAccountResponse {
 
         public Builder toolType(String toolType) {
             this.toolType = toolType;
+            return this;
+        }
+
+        public Builder toolTypeIcon(String toolTypeIcon) {
+            this.toolTypeIcon = toolTypeIcon;
             return this;
         }
 

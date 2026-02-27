@@ -106,6 +106,7 @@ public class UserService {
                 .id(account.getId())
                 .toolName(account.getAiTool() != null ? account.getAiTool().getName() : "Unknown")
                 .toolType(account.getAiTool() != null ? account.getAiTool().getToolType().getDisplayName() : "Unknown")
+                .toolTypeIcon(account.getAiTool() != null ? account.getAiTool().getToolType().getIconPath() : null)
                 .accountIdentifier(account.getAccountIdentifier())
                 .accountEmail(account.getAccountEmail())
                 .status(account.getStatus() != null ? account.getStatus().name() : null)

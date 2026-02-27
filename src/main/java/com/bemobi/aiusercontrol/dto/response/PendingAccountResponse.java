@@ -15,6 +15,9 @@ public class PendingAccountResponse {
     private String firstSeenAt;
     private String lastSeenAt;
     private String suggestedAction;
+    private String createdAtSource;
+    private String lastActivityAt;
+    private boolean inactive;
 
     public PendingAccountResponse() {
     }
@@ -33,6 +36,9 @@ public class PendingAccountResponse {
         this.firstSeenAt = builder.firstSeenAt;
         this.lastSeenAt = builder.lastSeenAt;
         this.suggestedAction = builder.suggestedAction;
+        this.createdAtSource = builder.createdAtSource;
+        this.lastActivityAt = builder.lastActivityAt;
+        this.inactive = builder.inactive;
     }
 
     public Long getId() {
@@ -139,6 +145,30 @@ public class PendingAccountResponse {
         this.suggestedAction = suggestedAction;
     }
 
+    public String getCreatedAtSource() {
+        return createdAtSource;
+    }
+
+    public void setCreatedAtSource(String createdAtSource) {
+        this.createdAtSource = createdAtSource;
+    }
+
+    public String getLastActivityAt() {
+        return lastActivityAt;
+    }
+
+    public void setLastActivityAt(String lastActivityAt) {
+        this.lastActivityAt = lastActivityAt;
+    }
+
+    public boolean isInactive() {
+        return inactive;
+    }
+
+    public void setInactive(boolean inactive) {
+        this.inactive = inactive;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -157,6 +187,9 @@ public class PendingAccountResponse {
         private String firstSeenAt;
         private String lastSeenAt;
         private String suggestedAction;
+        private String createdAtSource;
+        private String lastActivityAt;
+        private boolean inactive;
 
         public Builder id(Long id) {
             this.id = id;
@@ -220,6 +253,21 @@ public class PendingAccountResponse {
 
         public Builder suggestedAction(String suggestedAction) {
             this.suggestedAction = suggestedAction;
+            return this;
+        }
+
+        public Builder createdAtSource(String createdAtSource) {
+            this.createdAtSource = createdAtSource;
+            return this;
+        }
+
+        public Builder lastActivityAt(String lastActivityAt) {
+            this.lastActivityAt = lastActivityAt;
+            return this;
+        }
+
+        public Builder inactive(boolean inactive) {
+            this.inactive = inactive;
             return this;
         }
 

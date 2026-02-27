@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 current_phase: 02.3-integra-o-github-copilot-e-corre-o-de-datas-nos-seats
-current_plan: Plan 02 of 02
-status: executing
-stopped_at: Completed 02.3-01-PLAN.md
-last_updated: "2026-02-26T20:45:18.752Z"
+current_plan: Plan 02 of 02 (COMPLETE)
+status: completed
+stopped_at: Completed 02.3-02-PLAN.md
+last_updated: "2026-02-27T13:22:57.955Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # Session State
@@ -24,8 +24,8 @@ See: .planning/PROJECT.md
 
 **Milestone:** v1.0 milestone
 **Current phase:** 02.3-integra-o-github-copilot-e-corre-o-de-datas-nos-seats
-**Current Plan:** Plan 02 of 02
-**Status:** In progress
+**Current Plan:** Plan 02 of 02 (COMPLETE)
+**Status:** Phase complete
 
 ## Session Log
 
@@ -38,6 +38,7 @@ See: .planning/PROJECT.md
 - 2026-02-26: Plan 02.2-02 executed (3 min, 2 tasks, 5 files) - Per-tool sync details and CursorApiClient tests
 - 2026-02-26: Plan 02.2-03 executed (1 min, 2 tasks, 2 files) - LazyInitializationException fix via JOIN FETCH
 - 2026-02-26: Plan 02.3-01 executed (3 min, 2 tasks, 6 files) - Data foundation for GitHub Copilot git_name and seat source dates
+- 2026-02-27: Plan 02.3-02 executed (6 min, 2 tasks, 6 files) - GWS git_name enrichment, date columns with inactivity highlight, sortable headers
 
 ## Accumulated Context
 
@@ -64,6 +65,10 @@ See: .planning/PROJECT.md
 - [Phase 02.3]: Per-field try-catch in date parsing to avoid crashing entire seat on single bad date
 - [Phase 02.3]: Write-once semantics for createdAtSource, always-overwrite for lastActivityAt
 - [Phase 02.3]: GWS git_name query with sanitizeQueryValue to escape single quotes
+- [Phase 02.3]: Lenient stubbing in SyncOrchestratorTest for shared setUp stubs
+- [Phase 02.3]: DATE_ONLY_FORMATTER (dd/MM/yyyy) for source dates separate from FORMATTER (dd/MM/yyyy HH:mm) for DB dates
+- [Phase 02.3]: 60-day inactivity threshold as named constant INACTIVITY_THRESHOLD_DAYS
+- [Phase 02.3]: Comparator.nullsLast for null dates to sort to end regardless of direction
 
 ### Roadmap Evolution
 
@@ -81,4 +86,4 @@ See: .planning/PROJECT.md
 
 ### Last Session
 
-- **Stopped at:** Completed 02.3-01-PLAN.md
+- **Stopped at:** Completed 02.3-02-PLAN.md

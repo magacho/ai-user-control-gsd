@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Auth & User Management** - Secure access with role-based control and corporate user registry
 - [x] **Phase 2: Identity Resolution & Account Linking** - Google Workspace sync and tool account mapping per user
-- [ ] **Phase 02.3: Integração GitHub Copilot e correção de datas nos seats** - GitHub Copilot integration (via git_name) e datas de primeiro acesso/último uso nos seats
+- [x] **Phase 02.3: Integração GitHub Copilot e correção de datas nos seats** - GitHub Copilot integration (via git_name) e datas de primeiro acesso/último uso nos seats (completed 2026-02-27)
 - [ ] **Phase 3: Metrics Infrastructure** - ShedLock, scheduling, persistence, circuit breaker, retry — shared infra for all providers
 - [ ] **Phase 4: Cursor Integration** - Collect Cursor usage metrics via API, scheduled job, normalized storage
 - [ ] **Phase 5: Claude Integration** - Collect Claude usage metrics via API, scheduled job, normalized storage
@@ -228,7 +228,7 @@ Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so
 | 2. Identity Resolution & Account Linking | 3/3 | Complete | 2026-02-24 |
 | 02.1. Inverter fonte de usuarios | 3/3 | Complete    | 2026-02-26 |
 | 02.2. Validar Cursor API + sync E2E | 3/3 | Complete    | 2026-02-26 |
-| 02.3. GitHub Copilot + datas seats | 1/2 | In Progress|  |
+| 02.3. GitHub Copilot + datas seats | 2/2 | Complete   | 2026-02-27 |
 | 3. Metrics Infrastructure | 0/1 | Not started | - |
 | 4. Cursor Integration | 0/2 | Not started | - |
 | 5. Claude Integration | 0/2 | Not started | - |

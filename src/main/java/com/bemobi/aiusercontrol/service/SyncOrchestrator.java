@@ -1,5 +1,6 @@
 package com.bemobi.aiusercontrol.service;
 
+import com.bemobi.aiusercontrol.config.AppProperties;
 import com.bemobi.aiusercontrol.dto.response.SyncResultResponse;
 import com.bemobi.aiusercontrol.dto.response.ToolAccountInfo;
 import com.bemobi.aiusercontrol.enums.AIToolType;
@@ -42,6 +43,7 @@ public class SyncOrchestrator {
     private final ClaudeApiClient claudeApiClient;
     private final CursorApiClient cursorApiClient;
     private final GitHubCopilotClient gitHubCopilotClient;
+    private final AppProperties appProperties;
 
     @Autowired(required = false)
     private GoogleWorkspaceService googleWorkspaceService;
@@ -51,13 +53,15 @@ public class SyncOrchestrator {
                             AccountLinkingService accountLinkingService,
                             ClaudeApiClient claudeApiClient,
                             CursorApiClient cursorApiClient,
-                            GitHubCopilotClient gitHubCopilotClient) {
+                            GitHubCopilotClient gitHubCopilotClient,
+                            AppProperties appProperties) {
         this.userRepository = userRepository;
         this.aiToolRepository = aiToolRepository;
         this.accountLinkingService = accountLinkingService;
         this.claudeApiClient = claudeApiClient;
         this.cursorApiClient = cursorApiClient;
         this.gitHubCopilotClient = gitHubCopilotClient;
+        this.appProperties = appProperties;
     }
 
     public SyncResultResponse executeFullSync() {
@@ -282,9 +286,35 @@ public class SyncOrchestrator {
         List<ToolAccountInfo> enriched = new ArrayList<>();
         for (ToolAccountInfo seat : seats) {
             // seat.identifier = GitHub login, seat.email = null
-            Optional<User> user = userRepository.findByGithubUsername(seat.getIdentifier());
-            if (user.isPresent()) {
-                enriched.add(new ToolAccountInfo(seat.getIdentifier(), user.get().getEmail()));
+            String email = null;
+
+            // Step 1: Primary lookup -- GWS git_name query (case-insensitive at GWS level)
+            if (googleWorkspaceService != null) {
+                try {
+                    Optional<GoogleWorkspaceService.GwsUser> gwsUser =
+                            googleWorkspaceService.lookupUserByGitName(seat.getIdentifier());
+                    if (gwsUser.isPresent()) {
+                        email = gwsUser.get().getEmail();
+                        log.debug("GitHub Copilot seat {} matched to {} via GWS git_name", seat.getIdentifier(), email);
+                    }
+                } catch (Exception e) {
+                    log.warn("GWS git_name lookup failed for {}, trying DB fallback: {}", seat.getIdentifier(), e.getMessage());
+                }
+            }
+
+            // Step 2: Fallback -- email match (construct login@domain, lookup in DB by email)
+            if (email == null) {
+                String candidateEmail = seat.getIdentifier() + "@" + appProperties.getGoogleWorkspace().getDomain();
+                Optional<User> user = userRepository.findByEmail(candidateEmail.toLowerCase());
+                if (user.isPresent()) {
+                    email = user.get().getEmail();
+                    log.debug("GitHub Copilot seat {} matched to {} via email fallback", seat.getIdentifier(), email);
+                }
+            }
+
+            if (email != null) {
+                // Preserve the original date fields from the seat
+                enriched.add(new ToolAccountInfo(seat.getIdentifier(), email, seat.getCreatedAtSource(), seat.getLastActivityAt()));
             } else {
                 enriched.add(seat); // stays with email=null, will be unmatched
             }

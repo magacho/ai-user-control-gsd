@@ -1,6 +1,7 @@
 package com.bemobi.aiusercontrol.service;
 
 import com.bemobi.aiusercontrol.aitool.repository.AIToolRepository;
+import com.bemobi.aiusercontrol.config.AppProperties;
 import com.bemobi.aiusercontrol.dto.response.SyncResultResponse;
 import com.bemobi.aiusercontrol.dto.response.ToolAccountInfo;
 import com.bemobi.aiusercontrol.enums.AIToolType;
@@ -18,7 +19,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.quality.Strictness;
+import org.mockito.junit.jupiter.MockitoSettings;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +40,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class SyncOrchestratorTest {
 
     @Mock
@@ -59,12 +64,20 @@ class SyncOrchestratorTest {
     @Mock
     private GitHubCopilotClient gitHubCopilotClient;
 
+    @Mock
+    private AppProperties appProperties;
+
+    @Mock
+    private AppProperties.GoogleWorkspace googleWorkspaceProps;
+
     private SyncOrchestrator syncOrchestrator;
 
     @BeforeEach
     void setUp() {
+        when(appProperties.getGoogleWorkspace()).thenReturn(googleWorkspaceProps);
+        when(googleWorkspaceProps.getDomain()).thenReturn("bemobi.com");
         syncOrchestrator = new SyncOrchestrator(userRepository, aiToolRepository, accountLinkingService,
-                claudeApiClient, cursorApiClient, gitHubCopilotClient);
+                claudeApiClient, cursorApiClient, gitHubCopilotClient, appProperties);
         syncOrchestrator.setGoogleWorkspaceService(googleWorkspaceService);
     }
 
@@ -357,8 +370,8 @@ class SyncOrchestratorTest {
     }
 
     @Test
-    void testGitHubCopilotSeats_matchedByGithubUsername() {
-        // Given: GitHub Copilot returns seats with login identifiers, users in DB have matching githubUsername
+    void testGitHubCopilotSeats_matchedByGwsGitName() {
+        // Given: GitHub Copilot returns seats with login identifiers, GWS has matching git_name
         AITool copilotTool = AITool.builder()
                 .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
                 .apiKey("ghp-key").apiOrgId("bemobi-org")
@@ -371,16 +384,16 @@ class SyncOrchestratorTest {
         when(aiToolRepository.findByEnabled(true)).thenReturn(List.of(copilotTool));
         when(gitHubCopilotClient.fetchSeats("ghp-key", "bemobi-org")).thenReturn(copilotSeats);
 
-        // Alice exists in DB with matching githubUsername
-        User aliceUser = User.builder()
-                .id(1L).email("alice@bemobi.com").name("Alice Smith")
-                .githubUsername("alicegh").status(UserStatus.ACTIVE)
-                .validationSource("AI_SEAT_GWS_VALIDATED").build();
+        // GWS returns a match for alicegh
+        GoogleWorkspaceService.GwsUser aliceGws = new GoogleWorkspaceService.GwsUser(
+                "alice@bemobi.com", "Alice Smith", "https://photo/alice", "alicegh", "Engineering");
+        when(googleWorkspaceService.lookupUserByGitName("alicegh")).thenReturn(Optional.of(aliceGws));
+        when(googleWorkspaceService.lookupUserByGitName("unknowngh")).thenReturn(Optional.empty());
 
-        when(userRepository.findByGithubUsername("alicegh")).thenReturn(Optional.of(aliceUser));
-        when(userRepository.findByGithubUsername("unknowngh")).thenReturn(Optional.empty());
+        // Email fallback for unknowngh: no match in DB
+        when(userRepository.findByEmail("unknowngh@bemobi.com")).thenReturn(Optional.empty());
 
-        // AccountLinkingService receives enriched seats (alice has email, unknown stays null)
+        // AccountLinkingService receives enriched seats
         ArgumentCaptor<List<ToolAccountInfo>> seatsCaptor = ArgumentCaptor.forClass(List.class);
         when(accountLinkingService.linkAccounts(eq(copilotTool), seatsCaptor.capture()))
                 .thenReturn(new AccountLinkingService.LinkResult(1, 1, 0, 0));
@@ -390,15 +403,19 @@ class SyncOrchestratorTest {
         // When
         SyncResultResponse result = syncOrchestrator.executeFullSync();
 
-        // Then: GitHub seats enriched, linking performed
+        // Then: GitHub seats enriched via GWS, linking performed
         assertEquals(1, result.getLinkedAccounts());
         assertEquals(1, result.getUnmatchedAccounts());
+
+        // Verify GWS lookupUserByGitName was called (primary lookup)
+        verify(googleWorkspaceService).lookupUserByGitName("alicegh");
+        verify(googleWorkspaceService).lookupUserByGitName("unknowngh");
 
         // Verify the enriched seats were passed to AccountLinkingService
         List<ToolAccountInfo> enrichedSeats = seatsCaptor.getValue();
         assertEquals(2, enrichedSeats.size());
 
-        // Alice's seat should be enriched with her email
+        // Alice's seat should be enriched with her email from GWS
         ToolAccountInfo aliceSeat = enrichedSeats.stream()
                 .filter(s -> "alicegh".equals(s.getIdentifier()))
                 .findFirst().orElseThrow();
@@ -408,7 +425,198 @@ class SyncOrchestratorTest {
         ToolAccountInfo unknownSeat = enrichedSeats.stream()
                 .filter(s -> "unknowngh".equals(s.getIdentifier()))
                 .findFirst().orElseThrow();
-        assertEquals(null, unknownSeat.getEmail());
+        assertNull(unknownSeat.getEmail());
+    }
+
+    @Test
+    void testGitHubCopilotSeats_gwsEmpty_fallsBackToEmailMatch() {
+        // Given: GWS returns empty for a seat, but email fallback finds a match in DB
+        AITool copilotTool = AITool.builder()
+                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .apiKey("ghp-key").apiOrgId("bemobi-org")
+                .enabled(true).build();
+
+        List<ToolAccountInfo> copilotSeats = List.of(
+                new ToolAccountInfo("bobgh", null));
+
+        when(aiToolRepository.findByEnabled(true)).thenReturn(List.of(copilotTool));
+        when(gitHubCopilotClient.fetchSeats("ghp-key", "bemobi-org")).thenReturn(copilotSeats);
+
+        // GWS returns empty for bobgh
+        when(googleWorkspaceService.lookupUserByGitName("bobgh")).thenReturn(Optional.empty());
+
+        // Email fallback: bobgh@bemobi.com matches a user in DB
+        User bobUser = User.builder()
+                .id(2L).email("bobgh@bemobi.com").name("Bob").status(UserStatus.ACTIVE).build();
+        when(userRepository.findByEmail("bobgh@bemobi.com")).thenReturn(Optional.of(bobUser));
+
+        ArgumentCaptor<List<ToolAccountInfo>> seatsCaptor = ArgumentCaptor.forClass(List.class);
+        when(accountLinkingService.linkAccounts(eq(copilotTool), seatsCaptor.capture()))
+                .thenReturn(new AccountLinkingService.LinkResult(1, 0, 0, 0));
+
+        when(userRepository.findUsersWithoutAIToolAccounts()).thenReturn(Collections.emptyList());
+
+        // When
+        syncOrchestrator.executeFullSync();
+
+        // Then: Email fallback used, seat enriched
+        List<ToolAccountInfo> enrichedSeats = seatsCaptor.getValue();
+        assertEquals(1, enrichedSeats.size());
+        assertEquals("bobgh@bemobi.com", enrichedSeats.get(0).getEmail());
+    }
+
+    @Test
+    void testGitHubCopilotSeats_gwsThrows_fallsBackToEmailMatch() {
+        // Given: GWS throws exception, fallback to email match
+        AITool copilotTool = AITool.builder()
+                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .apiKey("ghp-key").apiOrgId("bemobi-org")
+                .enabled(true).build();
+
+        List<ToolAccountInfo> copilotSeats = List.of(
+                new ToolAccountInfo("charlie", null));
+
+        when(aiToolRepository.findByEnabled(true)).thenReturn(List.of(copilotTool));
+        when(gitHubCopilotClient.fetchSeats("ghp-key", "bemobi-org")).thenReturn(copilotSeats);
+
+        // GWS throws exception
+        when(googleWorkspaceService.lookupUserByGitName("charlie"))
+                .thenThrow(new RuntimeException("GWS transient error"));
+
+        // Email fallback: charlie@bemobi.com matches
+        User charlieUser = User.builder()
+                .id(3L).email("charlie@bemobi.com").name("Charlie").status(UserStatus.ACTIVE).build();
+        when(userRepository.findByEmail("charlie@bemobi.com")).thenReturn(Optional.of(charlieUser));
+
+        ArgumentCaptor<List<ToolAccountInfo>> seatsCaptor = ArgumentCaptor.forClass(List.class);
+        when(accountLinkingService.linkAccounts(eq(copilotTool), seatsCaptor.capture()))
+                .thenReturn(new AccountLinkingService.LinkResult(1, 0, 0, 0));
+
+        when(userRepository.findUsersWithoutAIToolAccounts()).thenReturn(Collections.emptyList());
+
+        // When (should not throw)
+        syncOrchestrator.executeFullSync();
+
+        // Then: Fallback used successfully
+        List<ToolAccountInfo> enrichedSeats = seatsCaptor.getValue();
+        assertEquals(1, enrichedSeats.size());
+        assertEquals("charlie@bemobi.com", enrichedSeats.get(0).getEmail());
+    }
+
+    @Test
+    void testGitHubCopilotSeats_bothGwsAndFallbackNoMatch_staysNull() {
+        // Given: Neither GWS nor email fallback finds a match
+        AITool copilotTool = AITool.builder()
+                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .apiKey("ghp-key").apiOrgId("bemobi-org")
+                .enabled(true).build();
+
+        List<ToolAccountInfo> copilotSeats = List.of(
+                new ToolAccountInfo("externaluser", null));
+
+        when(aiToolRepository.findByEnabled(true)).thenReturn(List.of(copilotTool));
+        when(gitHubCopilotClient.fetchSeats("ghp-key", "bemobi-org")).thenReturn(copilotSeats);
+
+        // GWS returns empty
+        when(googleWorkspaceService.lookupUserByGitName("externaluser")).thenReturn(Optional.empty());
+
+        // Email fallback: no match
+        when(userRepository.findByEmail("externaluser@bemobi.com")).thenReturn(Optional.empty());
+
+        ArgumentCaptor<List<ToolAccountInfo>> seatsCaptor = ArgumentCaptor.forClass(List.class);
+        when(accountLinkingService.linkAccounts(eq(copilotTool), seatsCaptor.capture()))
+                .thenReturn(new AccountLinkingService.LinkResult(0, 1, 0, 0));
+
+        when(userRepository.findUsersWithoutAIToolAccounts()).thenReturn(Collections.emptyList());
+
+        // When
+        syncOrchestrator.executeFullSync();
+
+        // Then: Seat stays with null email
+        List<ToolAccountInfo> enrichedSeats = seatsCaptor.getValue();
+        assertEquals(1, enrichedSeats.size());
+        assertNull(enrichedSeats.get(0).getEmail());
+    }
+
+    @Test
+    void testGitHubCopilotSeats_gwsMatch_preservesSourceDates() {
+        // Given: Seat has source dates, GWS matches
+        AITool copilotTool = AITool.builder()
+                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .apiKey("ghp-key").apiOrgId("bemobi-org")
+                .enabled(true).build();
+
+        Instant createdAt = Instant.parse("2024-08-03T18:00:00Z");
+        Instant lastActivity = Instant.parse("2025-01-15T10:30:00Z");
+
+        List<ToolAccountInfo> copilotSeats = List.of(
+                new ToolAccountInfo("alicegh", null, createdAt, lastActivity));
+
+        when(aiToolRepository.findByEnabled(true)).thenReturn(List.of(copilotTool));
+        when(gitHubCopilotClient.fetchSeats("ghp-key", "bemobi-org")).thenReturn(copilotSeats);
+
+        // GWS matches
+        GoogleWorkspaceService.GwsUser aliceGws = new GoogleWorkspaceService.GwsUser(
+                "alice@bemobi.com", "Alice Smith", null, "alicegh", "Engineering");
+        when(googleWorkspaceService.lookupUserByGitName("alicegh")).thenReturn(Optional.of(aliceGws));
+
+        ArgumentCaptor<List<ToolAccountInfo>> seatsCaptor = ArgumentCaptor.forClass(List.class);
+        when(accountLinkingService.linkAccounts(eq(copilotTool), seatsCaptor.capture()))
+                .thenReturn(new AccountLinkingService.LinkResult(1, 0, 0, 0));
+
+        when(userRepository.findUsersWithoutAIToolAccounts()).thenReturn(Collections.emptyList());
+
+        // When
+        syncOrchestrator.executeFullSync();
+
+        // Then: Dates preserved through enrichment
+        List<ToolAccountInfo> enrichedSeats = seatsCaptor.getValue();
+        assertEquals(1, enrichedSeats.size());
+        assertEquals("alice@bemobi.com", enrichedSeats.get(0).getEmail());
+        assertEquals(createdAt, enrichedSeats.get(0).getCreatedAtSource());
+        assertEquals(lastActivity, enrichedSeats.get(0).getLastActivityAt());
+    }
+
+    @Test
+    void testGitHubCopilotSeats_emailFallback_preservesSourceDates() {
+        // Given: Seat has source dates, GWS returns empty, email fallback matches
+        AITool copilotTool = AITool.builder()
+                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .apiKey("ghp-key").apiOrgId("bemobi-org")
+                .enabled(true).build();
+
+        Instant createdAt = Instant.parse("2024-06-01T12:00:00Z");
+        Instant lastActivity = Instant.parse("2025-02-20T08:45:00Z");
+
+        List<ToolAccountInfo> copilotSeats = List.of(
+                new ToolAccountInfo("bobgh", null, createdAt, lastActivity));
+
+        when(aiToolRepository.findByEnabled(true)).thenReturn(List.of(copilotTool));
+        when(gitHubCopilotClient.fetchSeats("ghp-key", "bemobi-org")).thenReturn(copilotSeats);
+
+        // GWS returns empty
+        when(googleWorkspaceService.lookupUserByGitName("bobgh")).thenReturn(Optional.empty());
+
+        // Email fallback matches
+        User bobUser = User.builder()
+                .id(2L).email("bobgh@bemobi.com").name("Bob").status(UserStatus.ACTIVE).build();
+        when(userRepository.findByEmail("bobgh@bemobi.com")).thenReturn(Optional.of(bobUser));
+
+        ArgumentCaptor<List<ToolAccountInfo>> seatsCaptor = ArgumentCaptor.forClass(List.class);
+        when(accountLinkingService.linkAccounts(eq(copilotTool), seatsCaptor.capture()))
+                .thenReturn(new AccountLinkingService.LinkResult(1, 0, 0, 0));
+
+        when(userRepository.findUsersWithoutAIToolAccounts()).thenReturn(Collections.emptyList());
+
+        // When
+        syncOrchestrator.executeFullSync();
+
+        // Then: Dates preserved through email fallback enrichment path
+        List<ToolAccountInfo> enrichedSeats = seatsCaptor.getValue();
+        assertEquals(1, enrichedSeats.size());
+        assertEquals("bobgh@bemobi.com", enrichedSeats.get(0).getEmail());
+        assertEquals(createdAt, enrichedSeats.get(0).getCreatedAtSource());
+        assertEquals(lastActivity, enrichedSeats.get(0).getLastActivityAt());
     }
 
     @Test

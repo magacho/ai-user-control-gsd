@@ -35,9 +35,9 @@
                     class="block rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                 <option value="">Todas as ferramentas</option>
                 <option th:each="type : ${toolTypes}"
-                        th:value="${type}"
-                        th:text="${type}"
-                        th:selected="${toolFilter == type}">TYPE</option>
+                        th:value="${type.name()}"
+                        th:text="${type.displayName}"
+                        th:selected="${toolFilter == type.name()}">TYPE</option>
             </select>
         </div>
     </div>

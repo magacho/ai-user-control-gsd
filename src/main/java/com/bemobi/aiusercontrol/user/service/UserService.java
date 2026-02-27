@@ -105,7 +105,7 @@ public class UserService {
         return UserAccountResponse.builder()
                 .id(account.getId())
                 .toolName(account.getAiTool() != null ? account.getAiTool().getName() : "Unknown")
-                .toolType(account.getAiTool() != null ? account.getAiTool().getToolType().name() : "UNKNOWN")
+                .toolType(account.getAiTool() != null ? account.getAiTool().getToolType().getDisplayName() : "Unknown")
                 .accountIdentifier(account.getAccountIdentifier())
                 .accountEmail(account.getAccountEmail())
                 .status(account.getStatus() != null ? account.getStatus().name() : null)

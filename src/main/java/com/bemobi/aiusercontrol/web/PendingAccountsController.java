@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,9 +95,7 @@ public class PendingAccountsController {
         model.addAttribute("toolFilter", toolFilter);
         model.addAttribute("currentSort", sort);
         // Provide available tool types for filter dropdown
-        model.addAttribute("toolTypes", Arrays.stream(AIToolType.values())
-                .map(AIToolType::name)
-                .collect(Collectors.toList()));
+        model.addAttribute("toolTypes", AIToolType.values());
 
         return "pending-accounts/list";
     }
@@ -131,7 +128,7 @@ public class PendingAccountsController {
         return PendingAccountResponse.builder()
                 .id(account.getId())
                 .toolName(account.getAiTool() != null ? account.getAiTool().getName() : "Unknown")
-                .toolType(account.getAiTool() != null ? account.getAiTool().getToolType().name() : "UNKNOWN")
+                .toolType(account.getAiTool() != null ? account.getAiTool().getToolType().getDisplayName() : "Unknown")
                 .accountIdentifier(account.getAccountIdentifier())
                 .accountEmail(account.getAccountEmail())
                 .status(account.getStatus() != null ? account.getStatus().name() : null)

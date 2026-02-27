@@ -48,7 +48,7 @@
                     <select id="toolType-edit" th:field="*{toolType}"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white">
                         <option value="">Select a type</option>
-                        <option th:each="type : ${toolTypes}" th:value="${type}" th:text="${type}">TYPE</option>
+                        <option th:each="type : ${toolTypes}" th:value="${type}" th:text="${type.displayName}">TYPE</option>
                     </select>
                     <p th:if="${#fields.hasErrors('toolType')}" th:errors="*{toolType}" class="mt-1 text-xs text-red-600">Error</p>
                 </div>
@@ -137,7 +137,7 @@
                     <select id="toolType-new" th:field="*{toolType}"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent bg-white">
                         <option value="">Select a type</option>
-                        <option th:each="type : ${toolTypes}" th:value="${type}" th:text="${type}">TYPE</option>
+                        <option th:each="type : ${toolTypes}" th:value="${type}" th:text="${type.displayName}">TYPE</option>
                     </select>
                     <p th:if="${#fields.hasErrors('toolType')}" th:errors="*{toolType}" class="mt-1 text-xs text-red-600">Error</p>
                 </div>

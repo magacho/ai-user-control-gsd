@@ -31,11 +31,11 @@ mapeia identidades (git_name → email), vincula contas e sincroniza dados.
 
 ---
 
-## Mapeamento git_name → Email (GitHub Copilot)
+## Mapeamento git_name → Email (Copilot)
 
 ### BR-MAP-04: Lookup primario via GWS custom schema
 
-- **Regra**: Para seats do GitHub Copilot (que tem `login` mas nao email), o sistema busca o email no Google Workspace usando o custom schema `GitHub.git_name`.
+- **Regra**: Para seats do Copilot (que tem `login` mas nao email), o sistema busca o email no Google Workspace usando o custom schema `GitHub.git_name`.
 - **Query**: `GitHub.git_name='<login>'` na Directory API do Google.
 - **Config**: Schema name configuravel (default: `"GitHub"`), domain: `${GWS_DOMAIN:bemobi.com}`.
 - **Match multiplo**: Se encontrar mais de um usuario GWS com o mesmo git_name, usa o primeiro e loga warning.
@@ -53,7 +53,7 @@ mapeia identidades (git_name → email), vincula contas e sincroniza dados.
 - **Onde**: `SyncOrchestrator.enrichGitHubSeatsWithEmails()`
 
 ```
-GitHub Copilot Seat (login: "joao.silva")
+Copilot Seat (login: "joao.silva")
     │
     ├─ GWS lookup: GitHub.git_name = 'joao.silva'  (BR-MAP-04)
     │   ├─ Encontrou? → Usa email do GWS
@@ -84,9 +84,9 @@ GitHub Copilot Seat (login: "joao.silva")
 - **Campo**: `validationSource` na entidade User.
 - **Onde**: `SyncOrchestrator`, `User` entity
 
-### BR-MAP-09: Enrichment especifico do GitHub Copilot
+### BR-MAP-09: Enrichment especifico do Copilot
 
-- **Regra**: Seats do GitHub Copilot passam por enrichment de email (BR-MAP-04, BR-MAP-05) ANTES do linking geral.
+- **Regra**: Seats do Copilot passam por enrichment de email (BR-MAP-04, BR-MAP-05) ANTES do linking geral.
 - **Adicional**: Apos enrichment, `ensureUsersExistForEnrichedSeats()` cria usuarios para seats que agora tem email mas cujo usuario ainda nao existe.
 - **Onde**: `SyncOrchestrator` (linhas 242-248)
 
@@ -102,7 +102,7 @@ GitHub Copilot Seat (login: "joao.silva")
 ### BR-MAP-11: Re-linking de conta
 
 - **Regra**: Se uma conta existente tinha `user = null` (sem match) e agora tem email disponivel, o sistema tenta re-linkar a conta a um usuario.
-- **Cenario**: Seat do GitHub Copilot que antes nao tinha match, mas agora o git_name foi adicionado ao GWS.
+- **Cenario**: Seat do Copilot que antes nao tinha match, mas agora o git_name foi adicionado ao GWS.
 - **Onde**: `AccountLinkingService` (linhas 53-79)
 
 ---
@@ -121,7 +121,7 @@ GitHub Copilot Seat (login: "joao.silva")
 |------------------|---------------------|---------------|------------------------------|
 | **Claude**       | email               | Sim           | Cursor-based (`after_id`)    |
 | **Cursor**       | email               | Sim           | Sem paginacao (TODO >100)    |
-| **GitHub Copilot** | login (git_name)  | Nao           | Page-based (`per_page=100`)  |
+| **Copilot**        | login (git_name)  | Nao           | Page-based (`per_page=100`)  |
 
 ### BR-MAP-14: Filtro de membros removidos (Cursor)
 
@@ -150,7 +150,7 @@ Sync Trigger (manual ou scheduler)
     │   ├─ Cursor API    → [email, id] (filtra removed)
     │   └─ GitHub API    → [login, id] (sem email!)
     │
-    ├─ 2. Enrichment GitHub Copilot  (BR-MAP-04 → BR-MAP-05 → BR-MAP-06)
+    ├─ 2. Enrichment Copilot  (BR-MAP-04 → BR-MAP-05 → BR-MAP-06)
     │   └─ git_name → GWS lookup → fallback email → ou sem match
     │
     ├─ 3. Extrair emails unicos + normalizar  (BR-MAP-03)

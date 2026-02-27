@@ -371,9 +371,9 @@ class SyncOrchestratorTest {
 
     @Test
     void testGitHubCopilotSeats_matchedByGwsGitName() {
-        // Given: GitHub Copilot returns seats with login identifiers, GWS has matching git_name
+        // Given: Copilot returns seats with login identifiers, GWS has matching git_name
         AITool copilotTool = AITool.builder()
-                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .id(3L).name("Copilot").toolType(AIToolType.GITHUB_COPILOT)
                 .apiKey("ghp-key").apiOrgId("bemobi-org")
                 .enabled(true).build();
 
@@ -432,7 +432,7 @@ class SyncOrchestratorTest {
     void testGitHubCopilotSeats_gwsEmpty_fallsBackToEmailMatch() {
         // Given: GWS returns empty for a seat, but email fallback finds a match in DB
         AITool copilotTool = AITool.builder()
-                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .id(3L).name("Copilot").toolType(AIToolType.GITHUB_COPILOT)
                 .apiKey("ghp-key").apiOrgId("bemobi-org")
                 .enabled(true).build();
 
@@ -469,7 +469,7 @@ class SyncOrchestratorTest {
     void testGitHubCopilotSeats_gwsThrows_fallsBackToEmailMatch() {
         // Given: GWS throws exception, fallback to email match
         AITool copilotTool = AITool.builder()
-                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .id(3L).name("Copilot").toolType(AIToolType.GITHUB_COPILOT)
                 .apiKey("ghp-key").apiOrgId("bemobi-org")
                 .enabled(true).build();
 
@@ -507,7 +507,7 @@ class SyncOrchestratorTest {
     void testGitHubCopilotSeats_bothGwsAndFallbackNoMatch_staysNull() {
         // Given: Neither GWS nor email fallback finds a match
         AITool copilotTool = AITool.builder()
-                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .id(3L).name("Copilot").toolType(AIToolType.GITHUB_COPILOT)
                 .apiKey("ghp-key").apiOrgId("bemobi-org")
                 .enabled(true).build();
 
@@ -542,7 +542,7 @@ class SyncOrchestratorTest {
     void testGitHubCopilotSeats_gwsMatch_preservesSourceDates() {
         // Given: Seat has source dates, GWS matches
         AITool copilotTool = AITool.builder()
-                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .id(3L).name("Copilot").toolType(AIToolType.GITHUB_COPILOT)
                 .apiKey("ghp-key").apiOrgId("bemobi-org")
                 .enabled(true).build();
 
@@ -581,7 +581,7 @@ class SyncOrchestratorTest {
     void testGitHubCopilotSeats_emailFallback_preservesSourceDates() {
         // Given: Seat has source dates, GWS returns empty, email fallback matches
         AITool copilotTool = AITool.builder()
-                .id(3L).name("GitHub Copilot").toolType(AIToolType.GITHUB_COPILOT)
+                .id(3L).name("Copilot").toolType(AIToolType.GITHUB_COPILOT)
                 .apiKey("ghp-key").apiOrgId("bemobi-org")
                 .enabled(true).build();
 

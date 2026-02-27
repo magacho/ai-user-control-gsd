@@ -4,7 +4,7 @@ Sistema de gestão e controle de uso de ferramentas de IA para empresas.
 
 ## 📋 Descrição
 
-O **AI User Control** é uma aplicação desenvolvida para centralizar a gestão e o controle de ferramentas de IA utilizadas em empresas, como Claude, GitHub Copilot e Cursor. O sistema permite:
+O **AI User Control** é uma aplicação desenvolvida para centralizar a gestão e o controle de ferramentas de IA utilizadas em empresas, como Claude, Copilot e Cursor. O sistema permite:
 
 - ✅ Gerenciar usuários/colaboradores e suas contas em ferramentas de IA
 - ✅ Vincular logins de ferramentas com emails corporativos
@@ -144,7 +144,7 @@ Após iniciar a aplicação, acesse:
 - Status (ativo/inativo)
 
 ### 2. Gestão de Ferramentas de IA
-- Cadastro de ferramentas (Claude, GitHub Copilot, Cursor, etc.)
+- Cadastro de ferramentas (Claude, Copilot, Cursor, etc.)
 - Configuração de integrações
 
 ### 3. Contas de Usuário
@@ -176,7 +176,7 @@ app:
       enabled: true
 ```
 
-### GitHub Copilot
+### Copilot
 
 ```yaml
 app:

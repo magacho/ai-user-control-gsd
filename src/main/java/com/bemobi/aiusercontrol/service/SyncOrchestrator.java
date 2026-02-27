@@ -239,7 +239,7 @@ public class SyncOrchestrator {
             List<ToolAccountInfo> seats = entry.getValue();
 
             try {
-                // For GitHub Copilot, enrich seats with emails by matching github_username
+                // For Copilot, enrich seats with emails by matching github_username
                 if (tool.getToolType() == AIToolType.GITHUB_COPILOT) {
                     seats = enrichGitHubSeatsWithEmails(seats);
                     // Enriched seats now have emails that weren't in the initial extractUniqueEmails pass.
@@ -298,7 +298,7 @@ public class SyncOrchestrator {
                             googleWorkspaceService.lookupUserByGitName(seat.getIdentifier());
                     if (gwsUser.isPresent()) {
                         email = gwsUser.get().getEmail();
-                        log.debug("GitHub Copilot seat {} matched to {} via GWS git_name", seat.getIdentifier(), email);
+                        log.debug("Copilot seat {} matched to {} via GWS git_name", seat.getIdentifier(), email);
                     }
                 } catch (Exception e) {
                     log.warn("GWS git_name lookup failed for {}, trying DB fallback: {}", seat.getIdentifier(), e.getMessage());
@@ -311,7 +311,7 @@ public class SyncOrchestrator {
                 Optional<User> user = userRepository.findByEmail(candidateEmail.toLowerCase());
                 if (user.isPresent()) {
                     email = user.get().getEmail();
-                    log.debug("GitHub Copilot seat {} matched to {} via email fallback", seat.getIdentifier(), email);
+                    log.debug("Copilot seat {} matched to {} via email fallback", seat.getIdentifier(), email);
                 }
             }
 
@@ -354,7 +354,7 @@ public class SyncOrchestrator {
                             .status(UserStatus.ACTIVE)
                             .build();
                     userRepository.save(newUser);
-                    log.debug("Created user from enriched GitHub Copilot seat + GWS validation: {}", email);
+                    log.debug("Created user from enriched Copilot seat + GWS validation: {}", email);
                 }
             } catch (Exception e) {
                 log.warn("GWS email validation failed for enriched seat {}, skipping: {}", email, e.getMessage());
@@ -405,7 +405,7 @@ public class SyncOrchestrator {
 
         if (toolType == AIToolType.GITHUB_COPILOT) {
             if (gitHubCopilotClient == null) {
-                log.warn("GitHub Copilot client is not available, skipping tool: {}", tool.getName());
+                log.warn("Copilot client is not available, skipping tool: {}", tool.getName());
                 return Collections.emptyList();
             }
             return gitHubCopilotClient.fetchSeats(tool.getApiKey(), tool.getApiOrgId());

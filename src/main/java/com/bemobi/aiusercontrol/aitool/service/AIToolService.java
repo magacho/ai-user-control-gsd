@@ -98,6 +98,8 @@ public class AIToolService {
                 .id(tool.getId())
                 .name(tool.getName())
                 .toolType(tool.getToolType() != null ? tool.getToolType().name() : null)
+                .toolTypeDisplay(tool.getToolType() != null ? tool.getToolType().getDisplayName() : null)
+                .toolTypeIcon(tool.getToolType() != null ? tool.getToolType().getIconPath() : null)
                 .description(tool.getDescription())
                 .apiBaseUrl(tool.getApiBaseUrl())
                 .enabled(tool.isEnabled())

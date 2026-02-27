@@ -7,6 +7,8 @@ public class AIToolResponse {
     private Long id;
     private String name;
     private String toolType;
+    private String toolTypeDisplay;
+    private String toolTypeIcon;
     private String description;
     private String apiBaseUrl;
     private boolean enabled;
@@ -20,12 +22,15 @@ public class AIToolResponse {
     public AIToolResponse() {
     }
 
-    public AIToolResponse(Long id, String name, String toolType, String description, String apiBaseUrl,
+    public AIToolResponse(Long id, String name, String toolType, String toolTypeDisplay, String toolTypeIcon,
+                          String description, String apiBaseUrl,
                           boolean enabled, String apiKey, String apiOrgId, boolean hasApiKey,
                           String iconUrl, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.name = name;
         this.toolType = toolType;
+        this.toolTypeDisplay = toolTypeDisplay;
+        this.toolTypeIcon = toolTypeIcon;
         this.description = description;
         this.apiBaseUrl = apiBaseUrl;
         this.enabled = enabled;
@@ -59,6 +64,22 @@ public class AIToolResponse {
 
     public void setToolType(String toolType) {
         this.toolType = toolType;
+    }
+
+    public String getToolTypeDisplay() {
+        return toolTypeDisplay;
+    }
+
+    public void setToolTypeDisplay(String toolTypeDisplay) {
+        this.toolTypeDisplay = toolTypeDisplay;
+    }
+
+    public String getToolTypeIcon() {
+        return toolTypeIcon;
+    }
+
+    public void setToolTypeIcon(String toolTypeIcon) {
+        this.toolTypeIcon = toolTypeIcon;
     }
 
     public String getDescription() {
@@ -141,6 +162,8 @@ public class AIToolResponse {
         private Long id;
         private String name;
         private String toolType;
+        private String toolTypeDisplay;
+        private String toolTypeIcon;
         private String description;
         private String apiBaseUrl;
         private boolean enabled;
@@ -163,6 +186,16 @@ public class AIToolResponse {
 
         public Builder toolType(String toolType) {
             this.toolType = toolType;
+            return this;
+        }
+
+        public Builder toolTypeDisplay(String toolTypeDisplay) {
+            this.toolTypeDisplay = toolTypeDisplay;
+            return this;
+        }
+
+        public Builder toolTypeIcon(String toolTypeIcon) {
+            this.toolTypeIcon = toolTypeIcon;
             return this;
         }
 
@@ -212,7 +245,7 @@ public class AIToolResponse {
         }
 
         public AIToolResponse build() {
-            return new AIToolResponse(id, name, toolType, description, apiBaseUrl, enabled, apiKey, apiOrgId, hasApiKey, iconUrl, createdAt, updatedAt);
+            return new AIToolResponse(id, name, toolType, toolTypeDisplay, toolTypeIcon, description, apiBaseUrl, enabled, apiKey, apiOrgId, hasApiKey, iconUrl, createdAt, updatedAt);
         }
     }
 }

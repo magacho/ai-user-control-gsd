@@ -39,7 +39,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center gap-3">
                             <div class="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                                <img th:src="${tool.toolType.iconPath}" th:alt="${tool.toolType.displayName}"
+                                <img th:if="${tool.toolTypeIcon}" th:src="${tool.toolTypeIcon}" th:alt="${tool.toolTypeDisplay}"
                                      class="h-5 w-5" />
                             </div>
                             <div>
@@ -50,9 +50,9 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center gap-1.5">
-                            <img th:src="${tool.toolType.iconPath}" th:alt="${tool.toolType.displayName}"
+                            <img th:if="${tool.toolTypeIcon}" th:src="${tool.toolTypeIcon}" th:alt="${tool.toolTypeDisplay}"
                                  class="h-5 w-5 flex-shrink-0" />
-                            <span class="text-xs font-medium text-gray-700" th:text="${tool.toolType.displayName}">TYPE</span>
+                            <span class="text-xs font-medium text-gray-700" th:text="${tool.toolTypeDisplay}">TYPE</span>
                         </div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">

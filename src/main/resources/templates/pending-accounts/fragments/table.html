@@ -24,15 +24,15 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conta</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
-                        hx-get="/pending-accounts" hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML"
-                        th:attr="hx-vals=${'{ \u0022sort\u0022: \u0022' + (currentSort == 'createdAtSource' ? '-createdAtSource' : 'createdAtSource') + '\u0022' + (toolFilter != null ? ', \u0022toolFilter\u0022: \u0022' + toolFilter + '\u0022' : '') + '}'}">
+                        th:hx-get="${'/pending-accounts?sort=' + (currentSort == 'createdAtSource' ? '-createdAtSource' : 'createdAtSource') + (toolFilter != null ? '&toolFilter=' + toolFilter : '')}"
+                        hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML">
                         Primeiro Acesso
                         <span th:if="${currentSort == 'createdAtSource'}" class="ml-1">&#9650;</span>
                         <span th:if="${currentSort == '-createdAtSource'}" class="ml-1">&#9660;</span>
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
-                        hx-get="/pending-accounts" hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML"
-                        th:attr="hx-vals=${'{ \u0022sort\u0022: \u0022' + (currentSort == 'lastActivityAt' ? '-lastActivityAt' : 'lastActivityAt') + '\u0022' + (toolFilter != null ? ', \u0022toolFilter\u0022: \u0022' + toolFilter + '\u0022' : '') + '}'}">
+                        th:hx-get="${'/pending-accounts?sort=' + (currentSort == 'lastActivityAt' ? '-lastActivityAt' : 'lastActivityAt') + (toolFilter != null ? '&toolFilter=' + toolFilter : '')}"
+                        hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML">
                         Ultimo Uso
                         <span th:if="${currentSort == 'lastActivityAt'}" class="ml-1">&#9650;</span>
                         <span th:if="${currentSort == '-lastActivityAt'}" class="ml-1">&#9660;</span>
@@ -53,10 +53,10 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${account.accountIdentifier}">identifier</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${account.accountEmail ?: '-'}">email</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${account.createdAtSource ?: '-'}">date</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${!#strings.isEmpty(account.createdAtSource) ? account.createdAtSource : '-'}">date</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm"
                         th:classappend="${account.inactive ? 'text-red-600 font-semibold' : 'text-gray-500'}">
-                        <span th:text="${account.lastActivityAt ?: '-'}">date</span>
+                        <span th:text="${!#strings.isEmpty(account.lastActivityAt) ? account.lastActivityAt : '-'}">date</span>
                         <span th:if="${account.inactive}" class="ml-1 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Inativo</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
@@ -102,15 +102,15 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
-                        hx-get="/pending-accounts" hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML"
-                        th:attr="hx-vals=${'{ \u0022sort\u0022: \u0022' + (currentSort == 'createdAtSource' ? '-createdAtSource' : 'createdAtSource') + '\u0022' + (toolFilter != null ? ', \u0022toolFilter\u0022: \u0022' + toolFilter + '\u0022' : '') + '}'}">
+                        th:hx-get="${'/pending-accounts?sort=' + (currentSort == 'createdAtSource' ? '-createdAtSource' : 'createdAtSource') + (toolFilter != null ? '&toolFilter=' + toolFilter : '')}"
+                        hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML">
                         Primeiro Acesso
                         <span th:if="${currentSort == 'createdAtSource'}" class="ml-1">&#9650;</span>
                         <span th:if="${currentSort == '-createdAtSource'}" class="ml-1">&#9660;</span>
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:text-gray-700"
-                        hx-get="/pending-accounts" hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML"
-                        th:attr="hx-vals=${'{ \u0022sort\u0022: \u0022' + (currentSort == 'lastActivityAt' ? '-lastActivityAt' : 'lastActivityAt') + '\u0022' + (toolFilter != null ? ', \u0022toolFilter\u0022: \u0022' + toolFilter + '\u0022' : '') + '}'}">
+                        th:hx-get="${'/pending-accounts?sort=' + (currentSort == 'lastActivityAt' ? '-lastActivityAt' : 'lastActivityAt') + (toolFilter != null ? '&toolFilter=' + toolFilter : '')}"
+                        hx-target="#report-content" hx-select="#report-content" hx-swap="outerHTML">
                         Ultimo Uso
                         <span th:if="${currentSort == 'lastActivityAt'}" class="ml-1">&#9650;</span>
                         <span th:if="${currentSort == '-lastActivityAt'}" class="ml-1">&#9660;</span>
@@ -132,10 +132,10 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">Externo</span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${account.createdAtSource ?: '-'}">date</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${!#strings.isEmpty(account.createdAtSource) ? account.createdAtSource : '-'}">date</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm"
                         th:classappend="${account.inactive ? 'text-red-600 font-semibold' : 'text-gray-500'}">
-                        <span th:text="${account.lastActivityAt ?: '-'}">date</span>
+                        <span th:text="${!#strings.isEmpty(account.lastActivityAt) ? account.lastActivityAt : '-'}">date</span>
                         <span th:if="${account.inactive}" class="ml-1 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Inativo</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${account.suggestedAction}">action</td>

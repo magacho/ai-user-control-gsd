@@ -75,16 +75,9 @@ public class CustomOidcUserService extends OidcUserService {
             user = existingUser.get();
         }
 
-        // Deactivated check
-        if (user.getStatus() == UserStatus.INACTIVE || user.getStatus() == UserStatus.OFFBOARDED) {
-            log.warn("Deactivated user attempted login: {} (status: {})", email, user.getStatus());
-            throw new OAuth2AuthenticationException(
-                new OAuth2Error(ERROR_USER_DEACTIVATED,
-                    "Your account has been deactivated. Contact an administrator.", null)
-            );
-        }
-
         // Profile sync on every login
+        // Note: user status (INACTIVE/OFFBOARDED) reflects AI tool account state only,
+        // it does NOT block login access to this admin system.
         user.setName(oidcUser.getFullName());
         user.setAvatarUrl(oidcUser.getPicture());
         user.setLastLoginAt(Instant.now());

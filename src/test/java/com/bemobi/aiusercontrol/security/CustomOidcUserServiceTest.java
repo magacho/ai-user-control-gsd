@@ -181,7 +181,7 @@ class CustomOidcUserServiceTest {
     }
 
     @Test
-    void testRejectsDeactivatedUser() {
+    void testAllowsInactiveUserLogin() {
         String email = "inactive@bemobi.com";
         User inactiveUser = User.builder()
             .id(1L)
@@ -195,19 +195,17 @@ class CustomOidcUserServiceTest {
 
         when(appProperties.getAdminEmails()).thenReturn(Collections.emptyList());
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(inactiveUser));
+        when(userRepository.save(any(User.class))).thenReturn(inactiveUser);
 
         OidcUserRequest mockRequest = mock(OidcUserRequest.class);
 
-        OAuth2AuthenticationException exception = assertThrows(
-            OAuth2AuthenticationException.class,
-            () -> customOidcUserService.loadUser(mockRequest)
-        );
-
-        assertEquals("user_deactivated", exception.getError().getErrorCode());
+        // User status reflects AI tool account state only, not system access
+        OidcUser result = customOidcUserService.loadUser(mockRequest);
+        assertNotNull(result);
     }
 
     @Test
-    void testRejectsOffboardedUser() {
+    void testAllowsOffboardedUserLogin() {
         String email = "offboarded@bemobi.com";
         User offboardedUser = User.builder()
             .id(2L)
@@ -221,15 +219,13 @@ class CustomOidcUserServiceTest {
 
         when(appProperties.getAdminEmails()).thenReturn(Collections.emptyList());
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(offboardedUser));
+        when(userRepository.save(any(User.class))).thenReturn(offboardedUser);
 
         OidcUserRequest mockRequest = mock(OidcUserRequest.class);
 
-        OAuth2AuthenticationException exception = assertThrows(
-            OAuth2AuthenticationException.class,
-            () -> customOidcUserService.loadUser(mockRequest)
-        );
-
-        assertEquals("user_deactivated", exception.getError().getErrorCode());
+        // User status reflects AI tool account state only, not system access
+        OidcUser result = customOidcUserService.loadUser(mockRequest);
+        assertNotNull(result);
     }
 
     // --- Helper methods ---

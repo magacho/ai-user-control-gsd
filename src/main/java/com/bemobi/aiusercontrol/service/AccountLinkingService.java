@@ -57,6 +57,17 @@ public class AccountLinkingService {
                 account.setStatus(AccountStatus.ACTIVE);
                 account.setAccountEmail(accountInfo.getEmail());
 
+                // Re-link user if previously unmatched and email is now available
+                if (account.getUser() == null && accountInfo.getEmail() != null) {
+                    User matchedUser = findUserByEmail(accountInfo.getEmail());
+                    if (matchedUser != null) {
+                        account.setUser(matchedUser);
+                        linked++;
+                        log.debug("Re-linked previously unmatched account {} to user {} for tool: {}",
+                                accountInfo.getIdentifier(), matchedUser.getEmail(), tool.getName());
+                    }
+                }
+
                 // Persist source dates: createdAtSource is write-once, lastActivityAt always overwrites with non-null
                 if (accountInfo.getCreatedAtSource() != null && account.getCreatedAtSource() == null) {
                     account.setCreatedAtSource(accountInfo.getCreatedAtSource());

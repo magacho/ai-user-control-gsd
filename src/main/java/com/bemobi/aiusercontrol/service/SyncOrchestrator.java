@@ -242,6 +242,9 @@ public class SyncOrchestrator {
                 // For GitHub Copilot, enrich seats with emails by matching github_username
                 if (tool.getToolType() == AIToolType.GITHUB_COPILOT) {
                     seats = enrichGitHubSeatsWithEmails(seats);
+                    // Enriched seats now have emails that weren't in the initial extractUniqueEmails pass.
+                    // Validate and create/update users for these newly discovered emails so they don't end up as "external".
+                    ensureUsersExistForEnrichedSeats(seats, resultBuilder);
                 }
 
                 AccountLinkingService.LinkResult linkResult = accountLinkingService.linkAccounts(tool, seats);
@@ -320,6 +323,43 @@ public class SyncOrchestrator {
             }
         }
         return enriched;
+    }
+
+    private void ensureUsersExistForEnrichedSeats(List<ToolAccountInfo> seats, SyncResultResponse.Builder resultBuilder) {
+        if (googleWorkspaceService == null) {
+            return;
+        }
+        for (ToolAccountInfo seat : seats) {
+            if (seat.getEmail() == null || seat.getEmail().isBlank()) {
+                continue;
+            }
+            String email = seat.getEmail().toLowerCase().trim();
+            // Skip if user already exists in DB
+            if (userRepository.findByEmail(email).isPresent()) {
+                continue;
+            }
+            // Validate against GWS and create user
+            try {
+                Optional<GoogleWorkspaceService.GwsUser> gwsUser = googleWorkspaceService.lookupUserByEmail(email);
+                if (gwsUser.isPresent()) {
+                    GoogleWorkspaceService.GwsUser gws = gwsUser.get();
+                    User newUser = User.builder()
+                            .email(email)
+                            .name(gws.getName())
+                            .department(gws.getDepartment())
+                            .avatarUrl(gws.getAvatarUrl())
+                            .githubUsername(gws.getGithubUsername())
+                            .validationSource("AI_SEAT_GWS_VALIDATED")
+                            .gwsValidatedAt(Instant.now())
+                            .status(UserStatus.ACTIVE)
+                            .build();
+                    userRepository.save(newUser);
+                    log.debug("Created user from enriched GitHub Copilot seat + GWS validation: {}", email);
+                }
+            } catch (Exception e) {
+                log.warn("GWS email validation failed for enriched seat {}, skipping: {}", email, e.getMessage());
+            }
+        }
     }
 
     private void archiveLegacyUsersWithoutSeats(SyncResultResponse.Builder resultBuilder) {

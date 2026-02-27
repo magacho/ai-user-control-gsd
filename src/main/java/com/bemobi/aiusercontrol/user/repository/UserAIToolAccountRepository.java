@@ -47,4 +47,7 @@ public interface UserAIToolAccountRepository extends JpaRepository<UserAIToolAcc
 
     @Query("SELECT COUNT(a) FROM UserAIToolAccount a WHERE a.user IS NULL")
     long countExternalAccounts();
+
+    @Query("SELECT a FROM UserAIToolAccount a JOIN FETCH a.aiTool WHERE a.user.id IN :userIds")
+    List<UserAIToolAccount> findByUserIdIn(List<Long> userIds);
 }

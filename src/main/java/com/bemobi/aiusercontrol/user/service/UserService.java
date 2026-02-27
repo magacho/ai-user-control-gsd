@@ -15,7 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,9 +50,45 @@ public class UserService {
         return userRepository.count();
     }
 
-    public Page<UserResponse> findFiltered(String name, String email, String department, String status, Pageable pageable) {
-        Specification<User> spec = UserSpecification.withFilters(name, email, department, status);
-        return userRepository.findAll(spec, pageable).map(this::toResponse);
+    public Page<UserResponse> findFiltered(String name, String email, String department, String toolType, Pageable pageable) {
+        Specification<User> spec = UserSpecification.withFilters(name, email, department, toolType);
+        Page<UserResponse> page = userRepository.findAll(spec, pageable).map(this::toResponse);
+
+        List<Long> userIds = page.getContent().stream()
+                .map(UserResponse::getId)
+                .collect(Collectors.toList());
+
+        if (!userIds.isEmpty()) {
+            List<UserAIToolAccount> accounts = userAIToolAccountRepository.findByUserIdIn(userIds);
+
+            Map<Long, List<UserResponse.UserToolIcon>> iconsByUserId = new LinkedHashMap<>();
+            for (UserAIToolAccount account : accounts) {
+                if (account.getAiTool() != null && account.getAiTool().getToolType() != null) {
+                    Long userId = account.getUser().getId();
+                    iconsByUserId.computeIfAbsent(userId, k -> new ArrayList<>());
+                    UserResponse.UserToolIcon icon = new UserResponse.UserToolIcon(
+                            account.getAiTool().getToolType().name(),
+                            account.getAiTool().getToolType().getIconPath(),
+                            account.getAiTool().getToolType().getDisplayName()
+                    );
+                    List<UserResponse.UserToolIcon> icons = iconsByUserId.get(userId);
+                    boolean alreadyPresent = icons.stream()
+                            .anyMatch(i -> i.getToolType().equals(icon.getToolType()));
+                    if (!alreadyPresent) {
+                        icons.add(icon);
+                    }
+                }
+            }
+
+            for (UserResponse user : page.getContent()) {
+                List<UserResponse.UserToolIcon> icons = iconsByUserId.get(user.getId());
+                if (icons != null) {
+                    user.setToolIcons(icons);
+                }
+            }
+        }
+
+        return page;
     }
 
     public List<String> findAllDepartments() {
@@ -66,8 +105,6 @@ public class UserService {
                 .map(this::toAccountResponse)
                 .collect(Collectors.toList());
 
-        String statusLabel = getStatusLabel(user.getStatus() != null ? user.getStatus().name() : null);
-
         return UserDetailResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -76,7 +113,7 @@ public class UserService {
                 .avatarUrl(user.getAvatarUrl())
                 .githubUsername(user.getGithubUsername())
                 .status(user.getStatus() != null ? user.getStatus().name() : null)
-                .statusLabel(statusLabel)
+                .statusLabel(getStatusLabel(user.getStatus() != null ? user.getStatus().name() : null))
                 .lastLoginAt(user.getLastLoginAt())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
@@ -92,9 +129,6 @@ public class UserService {
                 .department(user.getDepartment())
                 .avatarUrl(user.getAvatarUrl())
                 .githubUsername(user.getGithubUsername())
-                .status(user.getStatus() != null ? user.getStatus().name() : null)
-                .lastLoginAt(user.getLastLoginAt())
-                .createdAt(user.getCreatedAt())
                 .build();
     }
 

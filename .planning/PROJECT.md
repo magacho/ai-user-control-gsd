@@ -21,14 +21,13 @@ Transparent AI tool costs with zero wasted spending on orphaned accounts.
 
 ### Active
 
-- [ ] User management with corporate email as primary key (@bemobi.com)
+- [ ] User directory (read-only, sourced from Google Workspace) showing GWS users and their tool licenses
 - [ ] AI tool catalog (Claude Code, Cursor, GitHub Copilot)
 - [ ] Account linking: map user email to tool-specific identifiers
 - [ ] GitHub username resolution via Google Workspace custom properties
 - [ ] Automated daily metrics collection from provider APIs
 - [ ] Usage dashboard showing last access, tokens, estimated costs, frequency
 - [ ] Admin view: full visibility across all users and tools
-- [ ] Developer view: personal usage statistics only
 - [ ] Inactive account detection (identify orphaned accounts after employee offboarding)
 - [ ] Cost estimation and reporting by user, tool, and time period
 - [ ] Integration with Claude API (Anthropic)

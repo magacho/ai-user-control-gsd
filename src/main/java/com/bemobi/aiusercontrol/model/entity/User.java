@@ -5,14 +5,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -56,6 +60,9 @@ public class User {
 
     @Column(name = "gws_validated_at")
     private Instant gwsValidatedAt;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<UserAIToolAccount> toolAccounts = new ArrayList<>();
 
     public User() {
     }
@@ -183,6 +190,14 @@ public class User {
 
     public void setGwsValidatedAt(Instant gwsValidatedAt) {
         this.gwsValidatedAt = gwsValidatedAt;
+    }
+
+    public List<UserAIToolAccount> getToolAccounts() {
+        return toolAccounts;
+    }
+
+    public void setToolAccounts(List<UserAIToolAccount> toolAccounts) {
+        this.toolAccounts = toolAccounts;
     }
 
     @Override

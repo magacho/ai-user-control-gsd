@@ -2,6 +2,7 @@ package com.bemobi.aiusercontrol.user.controller;
 
 import com.bemobi.aiusercontrol.dto.response.UserDetailResponse;
 import com.bemobi.aiusercontrol.dto.response.UserResponse;
+import com.bemobi.aiusercontrol.enums.AIToolType;
 import com.bemobi.aiusercontrol.service.AccountLinkingService;
 import com.bemobi.aiusercontrol.user.service.UserService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
@@ -41,12 +42,12 @@ public class UserController {
     public String table(@RequestParam(required = false) String name,
                         @RequestParam(required = false) String email,
                         @RequestParam(required = false) String department,
-                        @RequestParam(required = false) String status,
+                        @RequestParam(required = false) String toolType,
                         @RequestParam(defaultValue = "0") int page,
                         @RequestParam(defaultValue = "20") int size,
                         Model model) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
-        Page<UserResponse> usersPage = userService.findFiltered(name, email, department, status, pageable);
+        Page<UserResponse> usersPage = userService.findFiltered(name, email, department, toolType, pageable);
 
         model.addAttribute("users", usersPage.getContent());
         model.addAttribute("currentPage", usersPage.getNumber());
@@ -54,11 +55,12 @@ public class UserController {
         model.addAttribute("totalElements", usersPage.getTotalElements());
         model.addAttribute("pageSize", size);
         model.addAttribute("departments", userService.findAllDepartments());
+        model.addAttribute("toolTypes", AIToolType.values());
 
         model.addAttribute("filterName", name);
         model.addAttribute("filterEmail", email);
         model.addAttribute("filterDepartment", department);
-        model.addAttribute("filterStatus", status);
+        model.addAttribute("filterToolType", toolType);
 
         return "users/fragments/table :: userTable";
     }

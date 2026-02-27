@@ -1,6 +1,6 @@
 package com.bemobi.aiusercontrol.user.repository;
 
-import com.bemobi.aiusercontrol.enums.UserStatus;
+import com.bemobi.aiusercontrol.enums.AIToolType;
 import com.bemobi.aiusercontrol.model.entity.User;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -9,12 +9,12 @@ public final class UserSpecification {
     private UserSpecification() {
     }
 
-    public static Specification<User> withFilters(String name, String email, String department, String status) {
+    public static Specification<User> withFilters(String name, String email, String department, String toolType) {
         return Specification
                 .where(nameContains(name))
                 .and(emailContains(email))
                 .and(departmentEquals(department))
-                .and(statusEquals(status));
+                .and(hasToolType(toolType));
     }
 
     private static Specification<User> nameContains(String name) {
@@ -38,10 +38,15 @@ public final class UserSpecification {
         return (root, query, cb) -> cb.equal(root.get("department"), department);
     }
 
-    private static Specification<User> statusEquals(String status) {
-        if (status == null || status.isBlank()) {
+    private static Specification<User> hasToolType(String toolType) {
+        if (toolType == null || toolType.isBlank()) {
             return null;
         }
-        return (root, query, cb) -> cb.equal(root.get("status"), UserStatus.valueOf(status));
+        return (root, query, cb) -> {
+            query.distinct(true);
+            var accounts = root.join("toolAccounts");
+            var aiTool = accounts.join("aiTool");
+            return cb.equal(aiTool.get("toolType"), AIToolType.valueOf(toolType));
+        };
     }
 }

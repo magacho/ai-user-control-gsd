@@ -34,22 +34,21 @@
             </select>
         </div>
         <div>
-            <label for="filter-status" class="block text-xs font-medium text-gray-500 mb-1">Status</label>
-            <select id="filter-status" name="status"
+            <label for="filter-tool-type" class="block text-xs font-medium text-gray-500 mb-1">Ferramenta</label>
+            <select id="filter-tool-type" name="toolType"
                     class="w-full rounded-md border border-gray-300 px-3 py-1.5 text-sm focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
                     hx-trigger="change" hx-include="#user-filters">
-                <option value="">All statuses</option>
-                <option value="ACTIVE" th:selected="${filterStatus == 'ACTIVE'}">Active</option>
-                <option value="INACTIVE" th:selected="${filterStatus == 'INACTIVE'}">Inactive</option>
-                <option value="OFFBOARDED" th:selected="${filterStatus == 'OFFBOARDED'}">Offboarded</option>
+                <option value="">Todas as ferramentas</option>
+                <option th:each="tt : ${toolTypes}" th:value="${tt.name()}" th:text="${tt.displayName}"
+                        th:selected="${tt.name() == filterToolType}">Tool</option>
             </select>
         </div>
         <div class="flex items-end">
             <button type="button"
                     class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     hx-get="/users/table" hx-target="#user-table" hx-swap="innerHTML"
-                    onclick="document.getElementById('filter-name').value='';document.getElementById('filter-email').value='';document.getElementById('filter-department').value='';document.getElementById('filter-status').value='';document.getElementById('filter-page').value='0';">
+                    onclick="document.getElementById('filter-name').value='';document.getElementById('filter-email').value='';document.getElementById('filter-department').value='';document.getElementById('filter-tool-type').value='';document.getElementById('filter-page').value='0';">
                 Clear
             </button>
         </div>
@@ -83,8 +82,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Git Login</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Licenças</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -108,15 +106,14 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${user.department ?: '-'}">Department</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" th:text="${user.githubUsername ?: '-'}">Git Login</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span th:if="${user.status == 'ACTIVE'}"
-                              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Active</span>
-                        <span th:if="${user.status == 'INACTIVE'}"
-                              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Inactive</span>
-                        <span th:if="${user.status == 'OFFBOARDED'}"
-                              class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Offboarded</span>
+                        <div class="flex items-center gap-1.5">
+                            <img th:each="tool : ${user.toolIcons}"
+                                 th:src="${tool.iconPath}" th:alt="${tool.displayName}"
+                                 th:title="${tool.displayName}"
+                                 class="h-5 w-5" />
+                            <span th:if="${#lists.isEmpty(user.toolIcons)}" class="text-gray-400 text-xs">&mdash;</span>
+                        </div>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                        th:text="${user.lastLoginFormatted}">Never</td>
                 </tr>
             </tbody>
         </table>

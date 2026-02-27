@@ -42,12 +42,6 @@
             <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-3 mb-1">
                     <h1 class="text-xl font-semibold text-gray-900 truncate" th:text="${user.name ?: 'Unknown'}">User Name</h1>
-                    <span th:if="${user.status == 'ACTIVE'}"
-                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Active</span>
-                    <span th:if="${user.status == 'INACTIVE'}"
-                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Inactive</span>
-                    <span th:if="${user.status == 'OFFBOARDED'}"
-                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Offboarded</span>
                 </div>
                 <p class="text-sm text-gray-500 mb-4" th:text="${user.email}">email@example.com</p>
 
@@ -64,10 +58,6 @@
                     <div>
                         <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Created</dt>
                         <dd class="mt-1 text-sm text-gray-900" th:text="${user.createdAtFormatted}">-</dd>
-                    </div>
-                    <div>
-                        <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</dt>
-                        <dd class="mt-1 text-sm text-gray-900" th:text="${user.lastLoginFormatted}">Never</dd>
                     </div>
                 </div>
             </div>

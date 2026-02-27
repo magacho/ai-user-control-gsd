@@ -1,13 +1,9 @@
 package com.bemobi.aiusercontrol.dto.response;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserResponse {
-
-    private static final DateTimeFormatter DISPLAY_FORMAT =
-            DateTimeFormatter.ofPattern("MMM d, yyyy HH:mm").withZone(ZoneId.systemDefault());
 
     private Long id;
     private String email;
@@ -15,28 +11,21 @@ public class UserResponse {
     private String department;
     private String avatarUrl;
     private String githubUsername;
-    private String status;
-    private Instant lastLoginAt;
-    private Instant createdAt;
+    private List<UserToolIcon> toolIcons;
 
     public UserResponse() {
+        this.toolIcons = new ArrayList<>();
     }
 
     public UserResponse(Long id, String email, String name, String department, String avatarUrl,
-                        String githubUsername, String status, Instant lastLoginAt, Instant createdAt) {
+                        String githubUsername) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.department = department;
         this.avatarUrl = avatarUrl;
         this.githubUsername = githubUsername;
-        this.status = status;
-        this.lastLoginAt = lastLoginAt;
-        this.createdAt = createdAt;
-    }
-
-    public String getLastLoginFormatted() {
-        return lastLoginAt != null ? DISPLAY_FORMAT.format(lastLoginAt) : "Never";
+        this.toolIcons = new ArrayList<>();
     }
 
     public Long getId() {
@@ -87,28 +76,12 @@ public class UserResponse {
         this.githubUsername = githubUsername;
     }
 
-    public String getStatus() {
-        return status;
+    public List<UserToolIcon> getToolIcons() {
+        return toolIcons;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Instant getLastLoginAt() {
-        return lastLoginAt;
-    }
-
-    public void setLastLoginAt(Instant lastLoginAt) {
-        this.lastLoginAt = lastLoginAt;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
+    public void setToolIcons(List<UserToolIcon> toolIcons) {
+        this.toolIcons = toolIcons;
     }
 
     public static Builder builder() {
@@ -122,9 +95,6 @@ public class UserResponse {
         private String department;
         private String avatarUrl;
         private String githubUsername;
-        private String status;
-        private Instant lastLoginAt;
-        private Instant createdAt;
 
         public Builder id(Long id) {
             this.id = id;
@@ -156,23 +126,47 @@ public class UserResponse {
             return this;
         }
 
-        public Builder status(String status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder lastLoginAt(Instant lastLoginAt) {
-            this.lastLoginAt = lastLoginAt;
-            return this;
-        }
-
-        public Builder createdAt(Instant createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
         public UserResponse build() {
-            return new UserResponse(id, email, name, department, avatarUrl, githubUsername, status, lastLoginAt, createdAt);
+            return new UserResponse(id, email, name, department, avatarUrl, githubUsername);
+        }
+    }
+
+    public static class UserToolIcon {
+        private String toolType;
+        private String iconPath;
+        private String displayName;
+
+        public UserToolIcon() {
+        }
+
+        public UserToolIcon(String toolType, String iconPath, String displayName) {
+            this.toolType = toolType;
+            this.iconPath = iconPath;
+            this.displayName = displayName;
+        }
+
+        public String getToolType() {
+            return toolType;
+        }
+
+        public void setToolType(String toolType) {
+            this.toolType = toolType;
+        }
+
+        public String getIconPath() {
+            return iconPath;
+        }
+
+        public void setIconPath(String iconPath) {
+            this.iconPath = iconPath;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        public void setDisplayName(String displayName) {
+            this.displayName = displayName;
         }
     }
 }

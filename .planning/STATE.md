@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 02.3-integra-o-github-copilot-e-corre-o-de-datas-nos-seats
+current_phase: 02.4-padronizacao-ui-icones-nomenclatura-visao-licenca
 current_plan: Plan 02 of 02 (COMPLETE)
 status: completed
-stopped_at: Completed 02.3-02-PLAN.md
-last_updated: "2026-02-27T13:22:57.955Z"
+stopped_at: Completed 02.4-02-PLAN.md
+last_updated: "2026-03-03T12:00:00.000Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 14
-  completed_plans: 14
+  total_phases: 6
+  completed_phases: 6
+  total_plans: 16
+  completed_plans: 16
 ---
 
 # Session State
@@ -23,7 +23,7 @@ See: .planning/PROJECT.md
 ## Position
 
 **Milestone:** v1.0 milestone
-**Current phase:** 02.3-integra-o-github-copilot-e-corre-o-de-datas-nos-seats
+**Current phase:** 02.4-padronizacao-ui-icones-nomenclatura-visao-licenca
 **Current Plan:** Plan 02 of 02 (COMPLETE)
 **Status:** Phase complete
 
@@ -39,6 +39,9 @@ See: .planning/PROJECT.md
 - 2026-02-26: Plan 02.2-03 executed (1 min, 2 tasks, 2 files) - LazyInitializationException fix via JOIN FETCH
 - 2026-02-26: Plan 02.3-01 executed (3 min, 2 tasks, 6 files) - Data foundation for GitHub Copilot git_name and seat source dates
 - 2026-02-27: Plan 02.3-02 executed (6 min, 2 tasks, 6 files) - GWS git_name enrichment, date columns with inactivity highlight, sortable headers
+- 2026-02-28: Plan 02.4-01 executed (~15 min, 2 tasks, 7 files) - Business rules documentation (33 rules) + rename "Copilot"
+- 2026-02-28: Plan 02.4-02 executed (~20 min, 2 tasks, 20 files) - SVG icons + reframe user list to license inventory
+- 2026-03-03: Phase 02.4 retroactively formalized in GSD
 
 ## Accumulated Context
 
@@ -69,6 +72,13 @@ See: .planning/PROJECT.md
 - [Phase 02.3]: DATE_ONLY_FORMATTER (dd/MM/yyyy) for source dates separate from FORMATTER (dd/MM/yyyy HH:mm) for DB dates
 - [Phase 02.3]: 60-day inactivity threshold as named constant INACTIVITY_THRESHOLD_DAYS
 - [Phase 02.3]: Comparator.nullsLast for null dates to sort to end regardless of direction
+- [Phase 02.4]: Business rules documented with BR-prefixed IDs in 3 domains (login, inactivity, mapping)
+- [Phase 02.4]: "Copilot" chosen over "GitHub Copilot" for cleaner UI; V11 migration with case-insensitive match
+- [Phase 02.4]: AIToolType enriched with displayName and iconPath; SVG icons for all 4 types
+- [Phase 02.4]: User list reframed: Status/Last Login → Licenças (tool icons); filter by tool type
+- [Phase 02.4]: Batch loading via findByUserIdIn() with JOIN FETCH to avoid N+1 queries
+- [Phase 02.4]: User entity gained @OneToMany toolAccounts for JPA join support in UserSpecification
+- [Phase 02.4]: Deduplication of tool icons per user (multiple accounts of same type → single icon)
 
 ### Roadmap Evolution
 
@@ -79,6 +89,7 @@ See: .planning/PROJECT.md
   - Plan 03 (wave 2): Admin report UI with two sections, tool filter, sidebar update
 - Phase 02.2 inserted after Phase 02: Validar integração Cursor API e testar sync end-to-end (URGENT)
 - Phase 02.3 inserted after Phase 02.2: Integração GitHub Copilot e correção de datas nos seats (from todos)
+- Phase 02.4 inserted after Phase 02.3: Padronização de UI — ícones, nomenclatura e visão por licença (retroactive formalization of post-02.3 work)
 
 ### Pending Todos
 
@@ -86,4 +97,4 @@ See: .planning/PROJECT.md
 
 ### Last Session
 
-- **Stopped at:** Completed 02.3-02-PLAN.md
+- **Stopped at:** Completed 02.4-02-PLAN.md (retroactive formalization)

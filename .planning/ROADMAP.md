@@ -15,6 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Auth & User Management** - Secure access with role-based control and corporate user registry
 - [x] **Phase 2: Identity Resolution & Account Linking** - Google Workspace sync and tool account mapping per user
 - [x] **Phase 02.3: Integração GitHub Copilot e correção de datas nos seats** - GitHub Copilot integration (via git_name) e datas de primeiro acesso/último uso nos seats (completed 2026-02-27)
+- [x] **Phase 02.4: Padronização de UI — ícones, nomenclatura e visão por licença** - Business rules docs, rename "Copilot", SVG icons, reframe user list to show tool licenses (completed 2026-02-28)
 - [ ] **Phase 3: Metrics Infrastructure** - ShedLock, scheduling, persistence, circuit breaker, retry — shared infra for all providers
 - [ ] **Phase 4: Cursor Integration** - Collect Cursor usage metrics via API, scheduled job, normalized storage
 - [ ] **Phase 5: Claude Integration** - Collect Claude usage metrics via API, scheduled job, normalized storage
@@ -114,8 +115,26 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02.3-01-PLAN.md -- Data foundation: V10 migration, ToolAccountInfo extension, UserAIToolAccount entity, GitHubCopilotClient date parsing, GWS git_name lookup, AccountLinkingService date persistence
-- [ ] 02.3-02-PLAN.md -- SyncOrchestrator GWS git_name enrichment rewrite, pending accounts UI with date columns and inactivity highlight, tests
+- [x] 02.3-01-PLAN.md -- Data foundation: V10 migration, ToolAccountInfo extension, UserAIToolAccount entity, GitHubCopilotClient date parsing, GWS git_name lookup, AccountLinkingService date persistence
+- [x] 02.3-02-PLAN.md -- SyncOrchestrator GWS git_name enrichment rewrite, pending accounts UI with date columns and inactivity highlight, tests
+
+### Phase 02.4: Padronização de UI — ícones, nomenclatura e visão por licença (INSERTED)
+
+**Goal:** Documentar regras de negócio, padronizar nomenclatura "Copilot", adicionar identidade visual (SVG icons) às ferramentas, e refatorar a listagem de usuários de "gestão operacional" para "inventário de licenças"
+**Depends on:** Phase 02.3
+**Requirements**: DOC-RULES, UI-NAMING, UI-ICONS, UI-REFRAME (inserted phase, retroactive formalization)
+**Success Criteria** (what must be TRUE):
+  1. Regras de negócio documentadas em docs/ com 33 regras em 3 domínios (login, inatividade, mapeamento)
+  2. "Copilot" é o nome consistente em toda a aplicação (DB V11 migration + código)
+  3. Cada AIToolType tem displayName e iconPath com ícones SVG
+  4. Listagem de usuários mostra coluna "Licenças" (ícones de ferramentas) em vez de Status/Last Login
+  5. Filtro por ferramenta substitui filtro por status na listagem de usuários
+  6. Batch loading via findByUserIdIn() evita N+1 queries
+**Plans**: 2 plans
+
+Plans:
+- [x] 02.4-01-PLAN.md -- Documentação de regras de negócio (33 regras, 3 domínios) + rename "GitHub Copilot" → "Copilot" (V11 migration + strings)
+- [x] 02.4-02-PLAN.md -- AIToolType displayName/iconPath + SVG icons + reframe user area (Licenças column, tool filter, batch loading)
 
 ### Phase 3: Metrics Infrastructure
 **Goal**: Shared infrastructure for metrics collection — scheduling with distributed locking, persistence with idempotency, circuit breaker and retry — ready for any provider
@@ -229,6 +248,7 @@ Note: Phases 4, 5, and 6 (Cursor, Claude, GitHub) all depend on Phase 3 only, so
 | 02.1. Inverter fonte de usuarios | 3/3 | Complete    | 2026-02-26 |
 | 02.2. Validar Cursor API + sync E2E | 3/3 | Complete    | 2026-02-26 |
 | 02.3. GitHub Copilot + datas seats | 2/2 | Complete   | 2026-02-27 |
+| 02.4. Padronização UI + docs regras | 2/2 | Complete   | 2026-02-28 |
 | 3. Metrics Infrastructure | 0/1 | Not started | - |
 | 4. Cursor Integration | 0/2 | Not started | - |
 | 5. Claude Integration | 0/2 | Not started | - |

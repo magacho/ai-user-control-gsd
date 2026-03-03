@@ -37,16 +37,16 @@
             <tbody class="divide-y divide-gray-200">
                 <tr th:each="tool : ${tools}" class="hover:bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center gap-3">
+                        <a th:href="@{/ai-tools/{id}(id=${tool.id})}" class="flex items-center gap-3 group">
                             <div class="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
                                 <img th:if="${tool.toolTypeIcon}" th:src="${tool.toolTypeIcon}" th:alt="${tool.toolTypeDisplay}"
                                      class="h-5 w-5" />
                             </div>
                             <div>
-                                <div class="text-sm font-medium text-gray-900" th:text="${tool.name}">Tool Name</div>
+                                <div class="text-sm font-medium text-indigo-600 group-hover:text-indigo-500" th:text="${tool.name}">Tool Name</div>
                                 <div th:if="${tool.description}" class="text-xs text-gray-500 truncate max-w-xs" th:text="${tool.description}">Description</div>
                             </div>
-                        </div>
+                        </a>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center gap-1.5">

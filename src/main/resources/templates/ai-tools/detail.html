@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}"
+      lang="en">
+<head>
+    <title th:text="${tool.name}">Tool Detail</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Breadcrumb -->
+    <div class="mb-6">
+        <nav class="flex items-center gap-2 text-sm text-gray-500">
+            <a th:href="@{/ai-tools}" class="hover:text-gray-700 transition-colors duration-150">Ferramentas de IA</a>
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <span class="text-gray-900" th:text="${tool.name}">Tool Name</span>
+        </nav>
+    </div>
+
+    <!-- Tool header -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div class="flex items-start gap-4">
+            <div class="h-14 w-14 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                <img th:if="${tool.toolTypeIcon}" th:src="${tool.toolTypeIcon}" th:alt="${tool.toolTypeDisplay}"
+                     class="h-8 w-8" />
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-1">
+                    <h1 class="text-xl font-semibold text-gray-900" th:text="${tool.name}">Tool Name</h1>
+                    <span th:if="${tool.enabled}"
+                          class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Ativa</span>
+                    <span th:if="${!tool.enabled}"
+                          class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">Desativada</span>
+                </div>
+                <p class="text-sm text-gray-500" th:if="${tool.description}" th:text="${tool.description}">Description</p>
+                <p class="text-xs text-gray-400 mt-1">
+                    Tipo: <span th:text="${tool.toolTypeDisplay}">TYPE</span>
+                    &middot; Cadastrada em: <span th:text="${tool.createdAtFormatted}">date</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Seats</dt>
+            <dd class="mt-1 text-2xl font-semibold text-gray-900" th:text="${tool.totalSeats}">0</dd>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ativos</dt>
+            <dd class="mt-1 text-2xl font-semibold text-green-600" th:text="${tool.activeSeats}">0</dd>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Suspensos</dt>
+            <dd class="mt-1 text-2xl font-semibold" th:classappend="${tool.suspendedSeats > 0 ? 'text-yellow-600' : 'text-gray-400'}" th:text="${tool.suspendedSeats}">0</dd>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Revogados</dt>
+            <dd class="mt-1 text-2xl font-semibold" th:classappend="${tool.revokedSeats > 0 ? 'text-red-600' : 'text-gray-400'}" th:text="${tool.revokedSeats}">0</dd>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Externos</dt>
+            <dd class="mt-1 text-2xl font-semibold" th:classappend="${tool.externalSeats > 0 ? 'text-orange-600' : 'text-gray-400'}" th:text="${tool.externalSeats}">0</dd>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Inativos 60d+</dt>
+            <dd class="mt-1 text-2xl font-semibold" th:classappend="${tool.inactiveSeats > 0 ? 'text-red-600' : 'text-gray-400'}" th:text="${tool.inactiveSeats}">0</dd>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <dt class="text-xs font-medium text-gray-500 uppercase tracking-wider">Offboarded</dt>
+            <dd class="mt-1 text-2xl font-semibold" th:classappend="${tool.offboardedUserSeats > 0 ? 'text-red-600' : 'text-gray-400'}" th:text="${tool.offboardedUserSeats}">0</dd>
+        </div>
+    </div>
+
+    <!-- Seats table -->
+    <div class="mb-6">
+        <div class="flex items-center gap-3 mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">Todos os Seats</h2>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                  th:text="${tool.totalSeats}">0</span>
+        </div>
+
+        <!-- Empty state -->
+        <div th:if="${#lists.isEmpty(tool.seats)}" class="bg-white rounded-lg border border-gray-200 p-8 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+            </svg>
+            <h3 class="text-base font-medium text-gray-900 mb-1">Nenhum seat encontrado</h3>
+            <p class="text-sm text-gray-500 max-w-sm mx-auto">
+                Execute uma sincronizacao para buscar os seats desta ferramenta.
+            </p>
+        </div>
+
+        <!-- Data table -->
+        <div th:if="${!#lists.isEmpty(tool.seats)}" class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flags</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conta / Identifier</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email da Conta</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario Vinculado</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departamento</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">GitHub Username</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Primeiro Acesso</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ultimo Uso</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Primeira Deteccao</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ultimo Sync</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr th:each="seat : ${tool.seats}" class="hover:bg-gray-50"
+                            th:classappend="${seat.external ? 'bg-orange-50' : (seat.userOffboarded ? 'bg-red-50' : '')}">
+                            <!-- Flags column -->
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <div class="flex flex-wrap gap-1">
+                                    <span th:if="${seat.external}"
+                                          class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700">Externo</span>
+                                    <span th:if="${seat.inactive}"
+                                          class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Inativo</span>
+                                    <span th:if="${seat.userOffboarded}"
+                                          class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-red-100 text-red-700">Offboarded</span>
+                                    <span th:if="${!seat.external and !seat.inactive and !seat.userOffboarded and seat.status == 'ACTIVE'}"
+                                          class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">OK</span>
+                                </div>
+                            </td>
+                            <!-- Account identifier -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900" th:text="${seat.accountIdentifier}">identifier</td>
+                            <!-- Account email -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500" th:text="${seat.accountEmail ?: '-'}">email</td>
+                            <!-- Status -->
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <span th:if="${seat.status == 'ACTIVE'}"
+                                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Active</span>
+                                <span th:if="${seat.status == 'SUSPENDED'}"
+                                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Suspenso</span>
+                                <span th:if="${seat.status == 'REVOKED'}"
+                                      class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Revogado</span>
+                            </td>
+                            <!-- Linked user -->
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <div th:if="${seat.userId != null}">
+                                    <a th:href="@{/users/{id}(id=${seat.userId})}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500" th:text="${seat.userName ?: seat.userEmail}">User</a>
+                                    <div class="text-xs text-gray-500" th:text="${seat.userEmail}">email</div>
+                                </div>
+                                <span th:if="${seat.userId == null}" class="text-sm text-orange-600 font-medium">Sem usuario</span>
+                            </td>
+                            <!-- Department -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500" th:text="${seat.userDepartment ?: '-'}">-</td>
+                            <!-- GitHub username -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm"
+                                th:classappend="${seat.userId != null and seat.userGithubUsername == null ? 'text-orange-600 font-medium' : 'text-gray-500'}">
+                                <span th:if="${seat.userGithubUsername != null}" th:text="${seat.userGithubUsername}">username</span>
+                                <span th:if="${seat.userId != null and seat.userGithubUsername == null}">Nao configurado</span>
+                                <span th:if="${seat.userId == null}">-</span>
+                            </td>
+                            <!-- Created at source (first access on provider) -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500" th:text="${seat.createdAtSourceFormatted}">-</td>
+                            <!-- Last activity -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm"
+                                th:classappend="${seat.inactive ? 'text-red-600 font-semibold' : 'text-gray-500'}"
+                                th:text="${seat.lastActivityAtFormatted}">-</td>
+                            <!-- First seen at (our detection) -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-400" th:text="${seat.firstSeenAtFormatted}">-</td>
+                            <!-- Last synced at -->
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-400" th:text="${seat.lastSyncedAtFormatted}">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

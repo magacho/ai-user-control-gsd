@@ -3,10 +3,19 @@ package com.bemobi.aiusercontrol.aitool.service;
 import com.bemobi.aiusercontrol.aitool.repository.AIToolRepository;
 import com.bemobi.aiusercontrol.dto.request.AIToolRequest;
 import com.bemobi.aiusercontrol.dto.response.AIToolResponse;
+import com.bemobi.aiusercontrol.dto.response.ToolDetailResponse;
+import com.bemobi.aiusercontrol.dto.response.ToolSeatResponse;
+import com.bemobi.aiusercontrol.enums.AccountStatus;
+import com.bemobi.aiusercontrol.enums.UserStatus;
 import com.bemobi.aiusercontrol.model.entity.AITool;
+import com.bemobi.aiusercontrol.model.entity.User;
+import com.bemobi.aiusercontrol.model.entity.UserAIToolAccount;
+import com.bemobi.aiusercontrol.user.repository.UserAIToolAccountRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -15,10 +24,14 @@ import java.util.stream.Collectors;
 @Transactional
 public class AIToolService {
 
-    private final AIToolRepository aiToolRepository;
+    private static final long INACTIVITY_THRESHOLD_DAYS = 60;
 
-    public AIToolService(AIToolRepository aiToolRepository) {
+    private final AIToolRepository aiToolRepository;
+    private final UserAIToolAccountRepository userAIToolAccountRepository;
+
+    public AIToolService(AIToolRepository aiToolRepository, UserAIToolAccountRepository userAIToolAccountRepository) {
         this.aiToolRepository = aiToolRepository;
+        this.userAIToolAccountRepository = userAIToolAccountRepository;
     }
 
     @Transactional(readOnly = true)
@@ -88,6 +101,83 @@ public class AIToolService {
     @Transactional(readOnly = true)
     public long count() {
         return aiToolRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public ToolDetailResponse getToolDetail(Long toolId) {
+        AITool tool = aiToolRepository.findById(toolId)
+                .orElseThrow(() -> new IllegalArgumentException("AI tool not found with id: " + toolId));
+
+        List<UserAIToolAccount> accounts = userAIToolAccountRepository.findByAiToolId(toolId);
+        Instant inactivityCutoff = Instant.now().minus(INACTIVITY_THRESHOLD_DAYS, ChronoUnit.DAYS);
+
+        List<ToolSeatResponse> seats = accounts.stream()
+                .map(account -> toSeatResponse(account, inactivityCutoff))
+                .collect(Collectors.toList());
+
+        long activeSeats = accounts.stream().filter(a -> a.getStatus() == AccountStatus.ACTIVE).count();
+        long suspendedSeats = accounts.stream().filter(a -> a.getStatus() == AccountStatus.SUSPENDED).count();
+        long revokedSeats = accounts.stream().filter(a -> a.getStatus() == AccountStatus.REVOKED).count();
+        long externalSeats = accounts.stream().filter(a -> a.getUser() == null).count();
+        long inactiveSeats = accounts.stream()
+                .filter(a -> a.getLastActivityAt() != null && a.getLastActivityAt().isBefore(inactivityCutoff))
+                .count();
+        long offboardedUserSeats = accounts.stream()
+                .filter(a -> a.getUser() != null && a.getUser().getStatus() == UserStatus.OFFBOARDED)
+                .count();
+
+        return ToolDetailResponse.builder()
+                .id(tool.getId())
+                .name(tool.getName())
+                .toolType(tool.getToolType() != null ? tool.getToolType().name() : null)
+                .toolTypeDisplay(tool.getToolType() != null ? tool.getToolType().getDisplayName() : null)
+                .toolTypeIcon(tool.getToolType() != null ? tool.getToolType().getIconPath() : null)
+                .description(tool.getDescription())
+                .enabled(tool.isEnabled())
+                .createdAt(tool.getCreatedAt())
+                .totalSeats(accounts.size())
+                .activeSeats(activeSeats)
+                .suspendedSeats(suspendedSeats)
+                .revokedSeats(revokedSeats)
+                .externalSeats(externalSeats)
+                .inactiveSeats(inactiveSeats)
+                .offboardedUserSeats(offboardedUserSeats)
+                .seats(seats)
+                .build();
+    }
+
+    private ToolSeatResponse toSeatResponse(UserAIToolAccount account, Instant inactivityCutoff) {
+        User user = account.getUser();
+        boolean isExternal = user == null;
+        boolean isInactive = account.getLastActivityAt() != null
+                && account.getLastActivityAt().isBefore(inactivityCutoff);
+        boolean isOffboarded = user != null && user.getStatus() == UserStatus.OFFBOARDED;
+
+        ToolSeatResponse.Builder builder = ToolSeatResponse.builder()
+                .id(account.getId())
+                .accountIdentifier(account.getAccountIdentifier())
+                .accountEmail(account.getAccountEmail())
+                .status(account.getStatus() != null ? account.getStatus().name() : null)
+                .createdAtSource(account.getCreatedAtSource())
+                .lastActivityAt(account.getLastActivityAt())
+                .firstSeenAt(account.getFirstSeenAt())
+                .lastSeenAt(account.getLastSeenAt())
+                .lastSyncedAt(account.getLastSyncedAt())
+                .createdAt(account.getCreatedAt())
+                .external(isExternal)
+                .inactive(isInactive)
+                .userOffboarded(isOffboarded);
+
+        if (user != null) {
+            builder.userId(user.getId())
+                    .userName(user.getName())
+                    .userEmail(user.getEmail())
+                    .userDepartment(user.getDepartment())
+                    .userGithubUsername(user.getGithubUsername())
+                    .userStatus(user.getStatus() != null ? user.getStatus().name() : null);
+        }
+
+        return builder.build();
     }
 
     private AIToolResponse toResponse(AITool tool) {

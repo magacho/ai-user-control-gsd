@@ -3,6 +3,7 @@ package com.bemobi.aiusercontrol.aitool.controller;
 import com.bemobi.aiusercontrol.aitool.service.AIToolService;
 import com.bemobi.aiusercontrol.dto.request.AIToolRequest;
 import com.bemobi.aiusercontrol.dto.response.AIToolResponse;
+import com.bemobi.aiusercontrol.dto.response.ToolDetailResponse;
 import com.bemobi.aiusercontrol.enums.AIToolType;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import jakarta.validation.Valid;
@@ -49,6 +50,13 @@ public class AIToolController {
         model.addAttribute("toolTypes", AIToolType.values());
         model.addAttribute("editMode", false);
         return "ai-tools/fragments/form-modal :: toolForm";
+    }
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable Long id, Model model) {
+        ToolDetailResponse tool = aiToolService.getToolDetail(id);
+        model.addAttribute("tool", tool);
+        return "ai-tools/detail";
     }
 
     @GetMapping("/{id}/edit")
